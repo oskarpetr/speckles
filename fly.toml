@@ -11,7 +11,7 @@ app = "speckles-api"
   POSTGRES_USER = "web"
   POSTGRES_PASSWORD = "JCCnyw0melL5S2O-nkiXK4IvTH-1AFx4MMim-Q6S0uo"
   POSTGRES_DB = "specklesDb"
-  DATABASE_URL = "postgres://web:JCCnyw0melL5S2O-nkiXK4IvTH-1AFx4MMim-Q6S0uo@your-db-app.internal:5432/specklesDb" # Replace with the actual URL from Fly managed PostgreSQL
+  DATABASE_URL = "postgres://web:JCCnyw0melL5S2O-nkiXK4IvTH-1AFx4MMim-Q6S0uo@speckles.internal:5432/specklesDb" # Replace with the actual URL from Fly managed PostgreSQL
 
 [[services]]
   internal_port = 80

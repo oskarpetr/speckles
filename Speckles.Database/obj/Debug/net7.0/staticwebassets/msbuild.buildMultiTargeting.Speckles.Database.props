@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Speckles.Database.props" />
+</Project>

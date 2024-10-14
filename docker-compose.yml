@@ -1,0 +1,25 @@
+services:
+  database:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: web
+      POSTGRES_PASSWORD: JCCnyw0melL5S2O-nkiXK4IvTH-1AFx4MMim-Q6S0uo
+      POSTGRES_DB: specklesDb
+    volumes:
+      - "db_storage:/var/lib/postgresql/data/"
+    ports:
+      - "5432:5432"
+  api:
+    build:
+      context: ./
+      dockerfile: ./Speckles.Api/Dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+volumes:
+  db_storage:
+    driver: local

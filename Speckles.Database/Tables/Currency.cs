@@ -4,4 +4,5 @@ public class Currency
 {
     public string CurrencyId { get; set; } = Guid.NewGuid().ToString();
     public string Name { get; set; }
+    public string Locale { get; set; }
 }

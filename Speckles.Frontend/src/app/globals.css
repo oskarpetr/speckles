@@ -1,6 +1,24 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  /* background-color: #FFF5E7; */
+}
+
+* {
+  font-family: "Manrope";
+  font-weight: 500;
+  letter-spacing: -0.02rem !important;
+}
+
+.heading {
+  font-family: "DM Serif Display";
+}
 
 :root {
   --background: #ffffff;
@@ -12,12 +30,6 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

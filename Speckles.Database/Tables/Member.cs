@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Speckles.Database.Tables;
 
 public class Member
@@ -7,7 +9,7 @@ public class Member
     public string Password { get; set; }
     public string Email { get; set; }
     
-    public ICollection<Purchase> Purchases { get; set; }
+    public ICollection<Order> Purchases { get; set; }
     public ICollection<Recommendation> Recommendations { get; set; }
     public ICollection<BasketAsset> BasketAssets { get; set; }
     public ICollection<SavedAsset> SavedAssets { get; set; }

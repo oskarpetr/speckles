@@ -18,7 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Member> Members { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<Purchase> Purchases { get; set; }
+    public DbSet<Order> Orders { get; set; }
     public DbSet<Recommendation> Recommendations { get; set; }
     public DbSet<SavedAsset> SavedAssets { get; set; }
     public DbSet<Studio> Studios { get; set; }

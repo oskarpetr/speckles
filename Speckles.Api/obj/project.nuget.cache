@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "cVj1mL/r06sSQWV69zZZifsH3ol20CgrDHBaG7689IKzwQVvU1J1uNtVVUK2zLWDAMRq4kl0VotObOLaTzPrrw==",
+  "dgSpecHash": "WkJMAOdxYQE8q3DzT3NtqfFtIlYJHVvq+5CNIVY4nJytEN1F6pQrmBUc863SYObF0irPP8b4R8FGw4qRUGP0mg==",
   "success": true,
   "projectFilePath": "/Users/oskarpetr/Developer/React/Speckles/Speckles.Api/Speckles.Api.csproj",
   "expectedPackageFiles": [
+    "/Users/oskarpetr/.nuget/packages/mapster/7.4.1-pre01/mapster.7.4.1-pre01.nupkg.sha512",
+    "/Users/oskarpetr/.nuget/packages/mapster.core/1.2.2-pre01/mapster.core.1.2.2-pre01.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/microsoft.aspnetcore.openapi/7.0.5/microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/microsoft.entityframeworkcore/7.0.11/microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/microsoft.entityframeworkcore.abstractions/7.0.11/microsoft.entityframeworkcore.abstractions.7.0.11.nupkg.sha512",

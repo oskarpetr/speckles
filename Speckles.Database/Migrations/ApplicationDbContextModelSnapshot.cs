@@ -57,7 +57,7 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("AssetId")
                         .HasColumnType("text");
 
-                    b.Property<string>("Currency")
+                    b.Property<string>("CurrencyId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -77,10 +77,11 @@ namespace Speckles.Database.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("StudioId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("AssetId");
+
+                    b.HasIndex("CurrencyId");
 
                     b.HasIndex("LicenseId");
 
@@ -180,6 +181,10 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("CurrencyId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Locale")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -229,21 +234,11 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("ProjectId")
                         .HasColumnType("text");
 
-                    b.Property<string>("StudioId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("ImageId");
 
                     b.HasIndex("AssetId");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("StudioId")
-                        .IsUnique();
 
                     b.ToTable("Images");
                 });
@@ -257,8 +252,9 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("LicenseId");
 
@@ -291,6 +287,35 @@ namespace Speckles.Database.Migrations
                     b.HasIndex("AddressId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("Speckles.Database.Tables.Order", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AssetId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Portfolio", b =>
@@ -334,35 +359,6 @@ namespace Speckles.Database.Migrations
                     b.HasIndex("PortfolioId");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("Speckles.Database.Tables.Purchase", b =>
-                {
-                    b.Property<string>("PurchaseId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AssetId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("PurchaseId");
-
-                    b.HasIndex("AssetId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("Purchases");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Recommendation", b =>
@@ -432,6 +428,10 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("StudioId");
 
                     b.HasIndex("AddressId");
@@ -479,17 +479,23 @@ namespace Speckles.Database.Migrations
 
             modelBuilder.Entity("Speckles.Database.Tables.Asset", b =>
                 {
+                    b.HasOne("Speckles.Database.Tables.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Speckles.Database.Tables.License", "License")
-                        .WithMany("Assets")
+                        .WithMany()
                         .HasForeignKey("LicenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Speckles.Database.Tables.Studio", "Studio")
                         .WithMany("Assets")
-                        .HasForeignKey("StudioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudioId");
+
+                    b.Navigation("Currency");
 
                     b.Navigation("License");
 
@@ -499,7 +505,7 @@ namespace Speckles.Database.Migrations
             modelBuilder.Entity("Speckles.Database.Tables.AssetTag", b =>
                 {
                     b.HasOne("Speckles.Database.Tables.Asset", "Asset")
-                        .WithMany()
+                        .WithMany("Tags")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -570,15 +576,9 @@ namespace Speckles.Database.Migrations
                         .WithMany("Images")
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("Speckles.Database.Tables.Studio", "Studio")
-                        .WithOne("Logo")
-                        .HasForeignKey("Speckles.Database.Tables.Image", "StudioId");
-
                     b.Navigation("Asset");
 
                     b.Navigation("Project");
-
-                    b.Navigation("Studio");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Member", b =>
@@ -592,14 +592,7 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("Speckles.Database.Tables.Project", b =>
-                {
-                    b.HasOne("Speckles.Database.Tables.Portfolio", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("PortfolioId");
-                });
-
-            modelBuilder.Entity("Speckles.Database.Tables.Purchase", b =>
+            modelBuilder.Entity("Speckles.Database.Tables.Order", b =>
                 {
                     b.HasOne("Speckles.Database.Tables.Asset", "Asset")
                         .WithMany()
@@ -616,6 +609,13 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Asset");
 
                     b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("Speckles.Database.Tables.Project", b =>
+                {
+                    b.HasOne("Speckles.Database.Tables.Portfolio", null)
+                        .WithMany("Projects")
+                        .HasForeignKey("PortfolioId");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Recommendation", b =>
@@ -697,11 +697,8 @@ namespace Speckles.Database.Migrations
                     b.Navigation("CustomLicense");
 
                     b.Navigation("Images");
-                });
 
-            modelBuilder.Entity("Speckles.Database.Tables.License", b =>
-                {
-                    b.Navigation("Assets");
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Member", b =>
@@ -730,9 +727,6 @@ namespace Speckles.Database.Migrations
             modelBuilder.Entity("Speckles.Database.Tables.Studio", b =>
                 {
                     b.Navigation("Assets");
-
-                    b.Navigation("Logo")
-                        .IsRequired();
 
                     b.Navigation("Members");
                 });

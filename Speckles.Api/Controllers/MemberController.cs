@@ -9,6 +9,7 @@ using Speckles.Database;
 namespace Speckles.Api.Controllers;
 
 [ApiController]
+[Route("api/members")]
 public class MemberController : Controller
 {
     private readonly ApplicationDbContext _database;
@@ -18,15 +19,15 @@ public class MemberController : Controller
         _database = database;
     }
 
-    [HttpGet("api/members")]
+    [HttpGet]
     public IActionResult GetMembers()
     {
-        var data = _database.Members
+        var members = _database.Members
             .Include(x => x.Address)
             .Include(x => x.Studios)
                 .ThenInclude(x => x.Studio)
             .ToList();
         
-        return Json(data);
+        return Ok(members);
     }
 }

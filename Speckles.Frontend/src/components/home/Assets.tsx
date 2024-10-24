@@ -42,6 +42,7 @@ function AssetList() {
         <button className="bg-green-primary p-4 rounded-full">
           <CaretLeft size={24} color="white" />
         </button>
+
         <button className="bg-green-primary p-4 rounded-full">
           <CaretRight size={24} color="white" />
         </button>

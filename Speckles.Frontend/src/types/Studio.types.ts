@@ -1,6 +1,6 @@
 import { IPortfolio } from "./Portfolio.types";
-import { IMember } from "./Member.types";
-import { IAsset } from "./Asset.types";
+import { IMemberShort } from "./Member.types";
+import { IAssetShort } from "./Asset.types";
 import { IAddress } from "./Address.types";
 
 export interface IStudio {
@@ -10,11 +10,11 @@ export interface IStudio {
   slug: string;
   address: IAddress;
   portfolio: IPortfolio;
-  members: IMember[];
-  assets: IAsset[];
+  members: IMemberShort[];
+  assets: IAssetShort[];
 }
 
-export interface IStudioDto {
+export interface IStudioShort {
   studioId: string;
   name: string;
   slug: string;

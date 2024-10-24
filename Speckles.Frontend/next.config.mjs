@@ -6,6 +6,7 @@ const nextConfig = {
             hostname: 'firebasestorage.googleapis.com',
         }]
     },
+    reactStrictMode: false
 };
 
 export default nextConfig;

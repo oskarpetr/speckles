@@ -1,6 +1,7 @@
 using Mapster;
 using Speckles.Api.Dto;
 using Speckles.Database.Tables;
+using File = Speckles.Database.Tables.File;
 
 namespace Speckles.Api.Mappings;
 
@@ -18,6 +19,11 @@ public class MapsterConfiguration
             .Map(dest => dest.TagId, src => src.Tag.TagId)
             .Map(dest => dest.Name, src => src.Tag.Name);
         
+        // File -> FileDto
+        TypeAdapterConfig<File, FileDto>.NewConfig()
+            .Map(dest => dest.FileId, src => src.FileId)
+            .Map(dest => dest.Name, src => src.Name);
+        
         // Asset -> AssetDto
         TypeAdapterConfig<Asset, AssetDto>.NewConfig()
             .Map(dest => dest.AssetId, src => src.AssetId)
@@ -29,6 +35,7 @@ public class MapsterConfiguration
             .Map(dest => dest.Comments, src => src.Comments)
             .Map(dest => dest.License, src => src.License)
             .Map(dest => dest.CustomLicense, src => src.CustomLicense)
+            .Map(dest => dest.Files, src => src.Files.Adapt<List<FileDto>>())
             .Map(dest => dest.Tags, src => src.Tags.Adapt<List<Tag>>())
             .Map(dest => dest.Studio, src => src.Studio.Adapt<StudioDto>());
         

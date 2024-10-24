@@ -4,7 +4,7 @@ import Heading from "@/components/common/Heading";
 import Layout from "@/components/layout/Layout";
 import { IAsset } from "@/types/Asset.types";
 import { cn } from "@/utils/cn";
-import { fetchAsset } from "@/utils/fetchers";
+import { fetchAsset, postSavedAsset } from "@/utils/fetchers";
 import { getAssetImage, getStudioLogo } from "@/utils/images";
 import { Basket, Heart, X } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
@@ -15,10 +15,12 @@ import { useState } from "react";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { BEZIER_CURVE } from "@/utils/anim";
 import FadeIn from "@/components/anim/FadeIn";
-import { formatPrice } from "@/utils/currency";
+import { formatPrice } from "@/utils/formatters";
 import Tags from "@/components/assets/Tags";
 
 export default function AssetPage() {
+  const memberId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
+
   const { assetId } = useParams();
 
   // Fetch asset
@@ -35,6 +37,13 @@ export default function AssetPage() {
 
   const asset = data as IAsset;
 
+  // Post saved asset
+  const postSavedAssetRequest = useQuery({
+    queryKey: ["savedAsset", memberId, assetId],
+    queryFn: () => postSavedAsset(memberId, assetId.toString()),
+    enabled: false,
+  });
+
   const toggleAddToBasket = async () => {
     if (!addedToBasket) {
       await assetControls.start({ scale: 1 }, { duration: 0.3 });
@@ -48,12 +57,12 @@ export default function AssetPage() {
   };
 
   const toggleSaveAsset = async () => {
+    postSavedAssetRequest.refetch();
+
     setSavedAsset((prev) => !prev);
 
     await saveAssetControls.start({ scale: 1.2 });
     await saveAssetControls.start({ scale: 1 });
-
-    // request
   };
 
   return (
@@ -63,7 +72,7 @@ export default function AssetPage() {
           <FadeIn delay={0.1} className="relative">
             <Image
               key={asset.images[0].imageId}
-              src={getAssetImage(asset.images[0].imageId)}
+              src={getAssetImage(asset.assetId, asset.images[0].imageId)}
               alt={asset.images[0].alt}
               width={600}
               height={0}
@@ -117,7 +126,10 @@ export default function AssetPage() {
                     >
                       <div className="w-16 h-16 flex items-center justify-center bg-black-primary rounded-full overflow-hidden border-1 border-black-primary">
                         <Image
-                          src={getAssetImage(asset.images[0].imageId)}
+                          src={getAssetImage(
+                            asset.assetId,
+                            asset.images[0].imageId
+                          )}
                           alt={asset.images[0].alt}
                           width={64}
                           height={64}

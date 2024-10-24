@@ -14,6 +14,7 @@ const config: Config = {
         "green-primary": "#3C672D",
         "green-primary-hover": "#325725",
         "black-primary": "#121212",
+        "white-primary": "#FFF5E7",
       },
     },
   },

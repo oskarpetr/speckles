@@ -1,5 +1,5 @@
-import { IAsset, IAssetShort } from "@/types/Asset.types";
-import { formatPrice } from "@/utils/currency";
+import { IAssetShort } from "@/types/Asset.types";
+import { formatPrice } from "@/utils/formatters";
 import { getAssetImage } from "@/utils/images";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default function Asset({ asset, type = "asset", orderId }: Props) {
         }
       >
         <Image
-          src={getAssetImage(asset.image.imageId)}
+          src={getAssetImage(asset.assetId, asset.image.imageId)}
           alt={`${asset.name} Image`}
           width={500}
           height={0}

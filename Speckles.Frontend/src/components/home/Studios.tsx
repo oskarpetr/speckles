@@ -1,4 +1,4 @@
-import { IStudio } from "@/types/Studio.types";
+import { IStudioShort } from "@/types/Studio.types";
 import { getStudioLogo } from "@/utils/images";
 import Image from "next/image";
 import Section from "../common/Section";
@@ -22,7 +22,7 @@ function StudioList() {
     queryFn: fetchStudios,
   });
 
-  const studios = data as IStudio[];
+  const studios = data as IStudioShort[];
 
   return (
     <div className="grid grid-cols-4 gap-6">

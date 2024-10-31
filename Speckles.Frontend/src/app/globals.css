@@ -37,3 +37,13 @@ body {
     text-wrap: balance;
   }
 }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #F3F3F3 inset !important;
+  box-shadow: 0 0 0 30px #F3F3F3 inset !important;
+}
+
+* {
+  text-underline-offset: 2px;
+  text-decoration-color: #12121250;
+}

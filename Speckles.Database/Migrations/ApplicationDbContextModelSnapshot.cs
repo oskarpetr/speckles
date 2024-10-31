@@ -219,6 +219,33 @@ namespace Speckles.Database.Migrations
                     b.ToTable("CustomLicenses");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.File", b =>
+                {
+                    b.Property<string>("FileId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AssetId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("FileId");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("File");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.Image", b =>
                 {
                     b.Property<string>("ImageId")
@@ -271,6 +298,10 @@ namespace Speckles.Database.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -566,6 +597,17 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.File", b =>
+                {
+                    b.HasOne("Speckles.Database.Tables.Asset", "Asset")
+                        .WithMany("Files")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.Image", b =>
                 {
                     b.HasOne("Speckles.Database.Tables.Asset", "Asset")
@@ -695,6 +737,8 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("CustomLicense");
+
+                    b.Navigation("Files");
 
                     b.Navigation("Images");
 

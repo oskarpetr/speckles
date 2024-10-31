@@ -1,32 +1,32 @@
 import { IAssetShort } from "@/types/Asset.types";
 import { useQuery } from "@tanstack/react-query";
-import FadeIn from "../anim/FadeIn";
+import FadeIn from "../animation/FadeIn";
 import Section from "../common/Section";
 import { fetchAssets } from "@/utils/fetchers";
-import Asset from "../assets/Asset";
+import Asset from "../asset/Asset";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 
-export default function Assets() {
+export default function HomeAssets() {
   return (
     <FadeIn delay={0.2}>
       <Section title="For you" />
-      <AssetList />
+      <HomeAssetList />
     </FadeIn>
   );
 }
 
-function AssetList() {
-  const { data, error, isSuccess } = useQuery({
+function HomeAssetList() {
+  const assetQuery = useQuery({
     queryKey: ["assets"],
     queryFn: fetchAssets,
   });
 
-  const assets = data as IAssetShort[];
+  const assets = assetQuery.data?.data as IAssetShort[];
 
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-3 gap-6">
-        {isSuccess &&
+        {assetQuery.isSuccess &&
           assets.map((asset, index) => (
             <FadeIn
               key={`asset_${asset.assetId}`}

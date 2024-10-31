@@ -12,6 +12,7 @@ public class Asset
     public ICollection<Image> Images { get; set; } = new List<Image>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<AssetTag> Tags { get; set; } = new List<AssetTag>();
+    public ICollection<File> Files { get; set; } = new List<File>();
     
     public string CurrencyId { get; set; }
     public Currency Currency { get; set; }

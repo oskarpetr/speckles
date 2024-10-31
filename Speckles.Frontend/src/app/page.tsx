@@ -1,8 +1,8 @@
 "use client";
 
 import Heading from "@/components/common/Heading";
-import Assets from "@/components/home/Assets";
-import Studios from "@/components/home/Studios";
+import HomeAssets from "@/components/home/HomeAssets";
+import HomeStudios from "@/components/home/HomeStudios";
 import Layout from "@/components/layout/Layout";
 
 export default function HomePage() {
@@ -13,8 +13,8 @@ export default function HomePage() {
         subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum est vel justo posuere ullamcorper. Phasellus sed malesuada massa."
       />
 
-      <Assets />
-      <Studios />
+      <HomeAssets />
+      <HomeStudios />
     </Layout>
   );
 }

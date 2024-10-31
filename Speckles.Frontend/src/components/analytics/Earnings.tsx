@@ -2,23 +2,29 @@ import { IEarning } from "@/types/Earning.types";
 import { fetchStudioEarnings } from "@/utils/fetchers";
 import { useQuery } from "@tanstack/react-query";
 import EarningsChart from "./EarningsChart";
-import SelectTime from "./SelectTime";
+import { timeIntervals } from "./SelectTimeInterval";
+import { useEffect, useState } from "react";
+import SelectTimeInterval from "./SelectTimeInterval";
 
 interface Props {
   studioId: string;
 }
 
 export default function Earnings({ studioId }: Props) {
-  const fetchStudioEarningsRequest = useQuery({
+  const [timeInterval, setTimeInterval] = useState(timeIntervals[0]);
+
+  const studioEarningQuery = useQuery({
     queryKey: ["studios", studioId, "earnings"],
-    queryFn: () => fetchStudioEarnings(studioId.toString()),
+    queryFn: () => fetchStudioEarnings(studioId.toString(), timeInterval),
   });
 
-  const earnings = (fetchStudioEarningsRequest.data as IEarning[]) || [];
+  const earnings = (studioEarningQuery.data.data as IEarning[]) || [];
 
   const earningsChartData = earnings.map((earning) => ({
     name: earning.assetName,
     value: earning.totalAmount,
+    asset: earning.asset,
+    ordered: earning.ordered,
     currency: earning.asset.currency,
   }));
 
@@ -27,22 +33,25 @@ export default function Earnings({ studioId }: Props) {
     0
   );
 
-  const onTimeChange = (time: string) => {
-    console.log(time);
-  };
+  useEffect(() => {
+    studioEarningQuery.refetch();
+  }, [timeInterval]);
 
   return (
-    fetchStudioEarningsRequest.isSuccess && (
-      <div className="flex items-center w-1/2 bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
+    studioEarningQuery.isSuccess && (
+      <div className="flex items-center w-full bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
         <EarningsChart data={earningsChartData} />
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <div>Earnings</div>
-            <div className="heading text-4xl">${totalAmount}</div>
+            <div className="heading text-4xl">${totalAmount.toFixed(2)}</div>
           </div>
 
-          <SelectTime onTimeChange={onTimeChange} />
+          <SelectTimeInterval
+            timeInterval={timeInterval}
+            setTimeInterval={setTimeInterval}
+          />
         </div>
       </div>
     )

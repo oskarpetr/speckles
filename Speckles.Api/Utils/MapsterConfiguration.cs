@@ -9,6 +9,32 @@ public class MapsterConfiguration
 {
     public static void Configure()
     {
+        // Studio -> StudioDto
+        TypeAdapterConfig<Studio, StudioDto>.NewConfig()
+            .Map(dest => dest.StudioId, src => src.StudioId)
+            .Map(dest => dest.Members, src => src.Members.Adapt<List<ShortMemberDto>>())
+            .Map(dest => dest.Assets, src => src.Assets.Adapt<List<ShortAssetDto>>())
+            .Map(dest => dest.Address, src => src.Address)
+            .Map(dest => dest.Name, src => src.Name)
+            .Map(dest => dest.Portfolio, src => src.Portfolio)
+            .Map(dest => dest.Slug, src => src.Slug)
+            .Map(dest => dest.ContactEmail, src => src.ContactEmail);
+        
+        // Studio -> ShortStudioDto
+        TypeAdapterConfig<Studio, ShortStudioDto>.NewConfig()
+            .Map(dest => dest.StudioId, src => src.StudioId)
+            .Map(dest => dest.Name, src => src.Name)
+            .Map(dest => dest.Slug, src => src.Slug);
+        
+        // StudioMember -> MemberDto
+        
+        // StudioMember -> ShortMemberDto
+        TypeAdapterConfig<StudioMember, ShortMemberDto>.NewConfig()
+            .Map(dest => dest.MemberId, src => src.Member.MemberId)
+            .Map(dest => dest.Username, src => src.Member.Username)
+            .Map(dest => dest.FullName, src => src.Member.FullName)
+            .Map(dest => dest.Email, src => src.Member.Email);
+        
         // Image -> ImageDto
         TypeAdapterConfig<Image, ImageDto>.NewConfig()
             .Map(dest => dest.ImageId, src => src.ImageId)
@@ -22,7 +48,16 @@ public class MapsterConfiguration
         // File -> FileDto
         TypeAdapterConfig<File, FileDto>.NewConfig()
             .Map(dest => dest.FileId, src => src.FileId)
-            .Map(dest => dest.Name, src => src.Name);
+            .Map(dest => dest.Name, src => src.Name)
+            .Map(dest => dest.FileName, src => src.FileName)
+            .Map(dest => dest.Size, src => src.Size);
+        
+        // Comment -> CommentDto
+        TypeAdapterConfig<Comment, CommentDto>.NewConfig()
+            .Map(dest => dest.CommentId, src => src.CommentId)
+            .Map(dest => dest.Text, src => src.Text)
+            .Map(dest => dest.Date, src => src.Date)
+            .Map(dest => dest.Member, src => src.Member.Adapt<ShortMemberDto>());
         
         // Asset -> AssetDto
         TypeAdapterConfig<Asset, AssetDto>.NewConfig()
@@ -32,12 +67,12 @@ public class MapsterConfiguration
             .Map(dest => dest.Currency, src => src.Currency)
             .Map(dest => dest.Description, src => src.Description)
             .Map(dest => dest.Images, src => src.Images.Adapt<List<ImageDto>>())
-            .Map(dest => dest.Comments, src => src.Comments)
+            .Map(dest => dest.Comments, src => src.Comments.Adapt<List<CommentDto>>())
             .Map(dest => dest.License, src => src.License)
             .Map(dest => dest.CustomLicense, src => src.CustomLicense)
             .Map(dest => dest.Files, src => src.Files.Adapt<List<FileDto>>())
             .Map(dest => dest.Tags, src => src.Tags.Adapt<List<Tag>>())
-            .Map(dest => dest.Studio, src => src.Studio.Adapt<StudioDto>());
+            .Map(dest => dest.Studio, src => src.Studio.Adapt<ShortStudioDto>());
         
         // Asset -> ShortAssetDto
         TypeAdapterConfig<Asset, ShortAssetDto>.NewConfig()

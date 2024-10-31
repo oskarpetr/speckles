@@ -1,14 +1,14 @@
 using Mapster;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Speckles.Api.Dto;
+using Speckles.Api.Lib;
 using Speckles.Database;
 
 namespace Speckles.Api.Controllers;
 
 [ApiController]
-[Route("api/assets")]
+[Route(ApiEndpoints.API_BASE)]
 public class AssetController : Controller
 {
     private readonly ApplicationDbContext _database;
@@ -18,7 +18,7 @@ public class AssetController : Controller
         _database = database;
     }
     
-    [HttpGet]
+    [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] string? format)
     {
         var assets = _database.Assets
@@ -28,20 +28,27 @@ public class AssetController : Controller
             .Include(x => x.License)
             .Include(x => x.Studio)
             .Include(x => x.Comments)
+            .Include(x => x.Files)
             .Include(x => x.Tags)
             .ThenInclude(x => x.Tag)
             .ToList();
+
+        ApiResponse response;
         
         if (format == "short")
         {
-            return Ok(assets.Adapt<List<ShortAssetDto>>());
+            response = new ApiResponse(assets.Adapt<List<ShortAssetDto>>());
+        }
+        else
+        {
+            response = new ApiResponse(assets.Adapt<List<AssetDto>>());
         }
         
-        return Ok(assets.Adapt<List<AssetDto>>());
+        return Ok(response);
     }
 
-    [HttpGet("{assetId}")]
-    public IActionResult GetAsset(string assetId)
+    [HttpGet(ApiEndpoints.Assets.GET_ASSET)]
+    public IActionResult GetAsset(string assetId, [FromQuery] string? format)
     {
         var assetExists = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
         
@@ -49,7 +56,7 @@ public class AssetController : Controller
         {
             return NotFound();
         }
-        
+
         var asset = _database.Assets
             .Include(x => x.CustomLicense)
             .Include(x => x.Images)
@@ -57,11 +64,14 @@ public class AssetController : Controller
             .Include(x => x.License)
             .Include(x => x.Studio)
             .Include(x => x.Comments)
+                .ThenInclude(x => x.Member)
+            .Include(x => x.Files)
             .Include(x => x.Tags)
                 .ThenInclude(x => x.Tag)
-            .FirstOrDefault(x => x.AssetId == assetId)
-            .Adapt<AssetDto>();
+            .FirstOrDefault(x => x.AssetId == assetId);
 
-        return Ok(asset);
+        ApiResponse response = new ApiResponse(asset.Adapt<AssetDto>());
+        
+        return Ok(response);
     }
 }

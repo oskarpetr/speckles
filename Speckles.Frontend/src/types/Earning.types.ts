@@ -4,4 +4,5 @@ export interface IEarning {
   assetName: string;
   asset: IAssetShort;
   totalAmount: number;
+  ordered: number;
 }

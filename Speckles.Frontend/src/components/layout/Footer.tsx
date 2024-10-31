@@ -7,52 +7,49 @@ export default function Footer() {
       <div className="flex gap-32">
         <div className="w-full flex flex-col gap-2">
           <Section title="Store" color="white" />
-          <Link href="/" className="text-white opacity-80">
-            Home page
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Search Assets
-          </Link>
+
+          <FooterItem text="Home Page" link="/" />
+          <FooterItem text="Search Assets" link="/" />
         </div>
 
         <div className="w-full flex flex-col gap-2">
           <Section title="Creators" color="white" />
-          <Link href="/" className="text-white opacity-80">
-            Become a Creator
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Earning program
-          </Link>
+
+          <FooterItem text="Become a Creator" link="/" />
+          <FooterItem text="Earning Program" link="/" />
         </div>
 
         <div className="w-full flex flex-col gap-2">
           <Section title="Customers" color="white" />
-          <Link href="/" className="text-white opacity-80">
-            Help Centre
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Licensing
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Refunds
-          </Link>
+
+          <FooterItem text="Help Centre" link="/" />
+          <FooterItem text="Licensing" link="/" />
+          <FooterItem text="Refunds" link="/" />
         </div>
 
         <div className="w-full flex flex-col gap-2">
           <Section title="Legal" color="white" />
-          <Link href="/" className="text-white opacity-80">
-            Terms and Conditions
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Privacy Policy
-          </Link>
-          <Link href="/" className="text-white opacity-80">
-            Copyright
-          </Link>
+
+          <FooterItem text="Terms and Conditions" link="/" />
+          <FooterItem text="Privacy Policy" link="/" />
+          <FooterItem text="Copyright" link="/" />
         </div>
       </div>
 
       <div className="text-white opacity-50">&copy; 2024 Speckles</div>
     </footer>
+  );
+}
+
+interface Props {
+  link: string;
+  text: string;
+}
+
+function FooterItem({ link, text }: Props) {
+  return (
+    <Link href={link} className="text-white opacity-80">
+      {text}
+    </Link>
   );
 }

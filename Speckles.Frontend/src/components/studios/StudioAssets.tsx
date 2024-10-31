@@ -1,7 +1,7 @@
 import { IAssetShort } from "@/types/Asset.types";
-import FadeIn from "../anim/FadeIn";
+import FadeIn from "../animation/FadeIn";
 import Section from "../common/Section";
-import Asset from "../assets/Asset";
+import Asset from "../asset/Asset";
 
 interface Props {
   assets: IAssetShort[];
@@ -11,12 +11,12 @@ export default function StudioAssets({ assets }: Props) {
   return (
     <FadeIn delay={0.2}>
       <Section title="Studio's assets" />
-      <AssetList assets={assets} />
+      <StudioAssetList assets={assets} />
     </FadeIn>
   );
 }
 
-function AssetList({ assets }: Props) {
+function StudioAssetList({ assets }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-4 gap-6">

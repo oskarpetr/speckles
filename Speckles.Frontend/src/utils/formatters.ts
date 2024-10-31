@@ -11,10 +11,10 @@ export function formatPrice(price: number, currency: ICurrency) {
   return formatter.format(price);
 }
 
-export function formatDate(date: string) {
+export function formatDate(date: string, long: boolean = true) {
   return new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
-    month: "long",
+    month: long ? "long" : "short",
     year: "numeric",
   });
 }

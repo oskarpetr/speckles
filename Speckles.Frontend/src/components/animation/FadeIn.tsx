@@ -2,7 +2,7 @@
 
 import { ComponentProps, ReactNode } from "react";
 import { motion } from "framer-motion";
-import { BEZIER_CURVE } from "@/utils/anim";
+import { BEZIER_CURVE } from "@/utils/animation";
 
 interface Props {
   children: ReactNode;

@@ -13,7 +13,7 @@ import { DownloadSimple, FileText } from "@phosphor-icons/react";
 import { getAssetFileExtension } from "@/utils/images";
 import Link from "next/link";
 import Section from "@/components/common/Section";
-import FadeIn from "@/components/anim/FadeIn";
+import FadeIn from "@/components/animation/FadeIn";
 import RoundedButton from "@/components/common/RoundedButton";
 
 export default function OrderPage() {
@@ -25,7 +25,7 @@ export default function OrderPage() {
     queryFn: () => fetchOrder(orderId.toString()),
   });
 
-  const order = fetchOrderRequest.data as IOrder;
+  const order = fetchOrderRequest.data.data as IOrder;
 
   return (
     <Layout>

@@ -16,7 +16,7 @@ export default function RoundedButton({
     <button
       onClick={onClick}
       className={cn(
-        "rounded-full transition-colors",
+        "rounded-full transition-colors w-fit h-fit",
         colorType === "primary"
           ? "p-4 bg-green-primary hover:bg-green-primary-hover"
           : "p-[calc(1rem-1px)] bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-black-primary border-opacity-10"

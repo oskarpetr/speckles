@@ -4,9 +4,14 @@ import { CaretRight } from "@phosphor-icons/react";
 interface Props {
   title: string;
   color?: "white" | "black";
+  chevron?: boolean;
 }
 
-export default function Section({ title, color = "black" }: Props) {
+export default function Section({
+  title,
+  color = "black",
+  chevron = true,
+}: Props) {
   return (
     <div className="flex items-center gap-1 mb-4">
       <h1
@@ -17,7 +22,7 @@ export default function Section({ title, color = "black" }: Props) {
       >
         {title}
       </h1>
-      <CaretRight color={color === "black" ? "black" : "white"} />
+      {chevron && <CaretRight color={color === "black" ? "black" : "white"} />}
     </div>
   );
 }

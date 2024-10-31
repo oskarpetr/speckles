@@ -1,6 +1,8 @@
 "use client";
 
 import Earnings from "@/components/analytics/Earnings";
+import Sales from "@/components/analytics/Sales";
+import FadeIn from "@/components/animation/FadeIn";
 import Heading from "@/components/common/Heading";
 import Section from "@/components/common/Section";
 import Layout from "@/components/layout/Layout";
@@ -18,7 +20,7 @@ export default function MyStudioPage() {
     queryFn: () => fetchStudio(studioId.toString()),
   });
 
-  const studio = fetchStudioRequest.data as IStudio;
+  const studio = fetchStudioRequest.data.data as IStudio;
 
   return (
     <Layout>
@@ -26,10 +28,14 @@ export default function MyStudioPage() {
         <Fragment>
           <Heading title={studio.name} />
 
-          <div>
+          <FadeIn delay={0.1}>
             <Section title="Analytics" />
-            <Earnings studioId={studioId.toString()} />
-          </div>
+
+            <div className="flex gap-8">
+              <Earnings studioId={studioId.toString()} />
+              <Sales />
+            </div>
+          </FadeIn>
         </Fragment>
       )}
     </Layout>

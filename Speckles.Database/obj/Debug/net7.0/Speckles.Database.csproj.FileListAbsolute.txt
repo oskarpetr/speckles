@@ -29,9 +29,9 @@
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/staticwebassets.build.json
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/staticwebassets.development.json
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/scopedcss/bundle/Speckles.Database.styles.css
-/Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.Database.csproj.CopyComplete
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.Database.dll
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/refint/Speckles.Database.dll
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.Database.pdb
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.Database.genruntimeconfig.cache
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/ref/Speckles.Database.dll
+/Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.FF26C9D2.Up2Date

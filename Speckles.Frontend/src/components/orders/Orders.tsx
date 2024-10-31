@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import FadeIn from "../anim/FadeIn";
+import FadeIn from "../animation/FadeIn";
 import { fetchOrders } from "@/utils/fetchers";
 import { IOrderShort } from "@/types/Order.types";
-import Asset from "../assets/Asset";
+import Asset from "../asset/Asset";
 
 export default function Orders() {
   return (
@@ -15,16 +15,16 @@ export default function Orders() {
 function OrderList() {
   const memberId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
 
-  const { data, error, isSuccess } = useQuery({
+  const ordersQuery = useQuery({
     queryKey: ["saved", memberId],
     queryFn: () => fetchOrders(memberId),
   });
 
-  const orders = data as IOrderShort[];
+  const orders = ordersQuery.data.data as IOrderShort[];
 
   return (
     <div className="grid grid-cols-3 gap-6">
-      {isSuccess &&
+      {ordersQuery.isSuccess &&
         orders.map((order, index) => (
           <FadeIn
             key={`asset_${order.asset.assetId}`}

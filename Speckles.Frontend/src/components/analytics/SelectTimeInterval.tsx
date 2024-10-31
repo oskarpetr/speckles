@@ -1,32 +1,29 @@
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export const timeIntervals = ["1d", "1w", "1m", "1y", "all time"];
 
 interface Props {
-  onTimeChange: (time: string) => void;
+  timeInterval: string;
+  setTimeInterval: Dispatch<SetStateAction<string>>;
 }
 
-export default function SelectTime({ onTimeChange }: Props) {
-  const [active, setActive] = useState(timeIntervals[0]);
-
-  const onChange = (time: string) => {
-    setActive(time);
-    onTimeChange(time);
-  };
-
+export default function SelectTimeInterval({
+  timeInterval,
+  setTimeInterval,
+}: Props) {
   return (
-    <div className="flex p-0.5 gap-1 bg-green-primary bg-opacity-10 border border-black-primary border-opacity-10 rounded-full">
+    <div className="flex p-0.5 gap-1 h-fit bg-green-primary bg-opacity-10 border border-black-primary border-opacity-10 rounded-full">
       {timeIntervals.map((time) => (
         <button
           key={time}
           className={cn(
             "px-5 py-2 rounded-full w-fit transition-colors font-semibold",
-            active === time
+            timeInterval === time
               ? "bg-green-primary text-white"
               : "bg-transparent text-green-primary"
           )}
-          onClick={() => onChange(time)}
+          onClick={() => setTimeInterval(time)}
         >
           {time}
         </button>

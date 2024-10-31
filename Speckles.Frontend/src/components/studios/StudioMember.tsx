@@ -7,7 +7,7 @@ interface Props {
   member: IMemberShort;
 }
 
-export default function Member({ member }: Props) {
+export default function StudioMember({ member }: Props) {
   return (
     <Link
       href={`/members/${member.username}`}

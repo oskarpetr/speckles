@@ -1,15 +1,11 @@
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Speckles.Api.Lib;
 using Speckles.Database;
 
 namespace Speckles.Api.Controllers;
 
 [ApiController]
-[Route("api/images")]
+[Route(ApiEndpoints.API_BASE)]
 public class ImageController : Controller
 {
     private readonly ApplicationDbContext _database;
@@ -17,11 +13,5 @@ public class ImageController : Controller
     public ImageController(ApplicationDbContext database)
     {
         _database = database;
-    }
-
-    [HttpGet]
-    public IActionResult GetImages()
-    {
-        return Ok(_database.Images.ToList());
     }
 }

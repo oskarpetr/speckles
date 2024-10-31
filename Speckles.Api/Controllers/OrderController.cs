@@ -2,12 +2,13 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Speckles.Api.Dto;
+using Speckles.Api.Lib;
 using Speckles.Database;
 
 namespace Speckles.Api.Controllers;
 
 [ApiController]
-[Route("api/orders")]
+[Route(ApiEndpoints.API_BASE)]
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _database;
@@ -17,18 +18,17 @@ public class OrderController : Controller
         _database = database;
     }
     
-    [HttpGet]
-    [Route("{memberId}")]
-    public IActionResult GetOrders(string memberId, [FromQuery] string? format)
+    [HttpGet(ApiEndpoints.Orders.GET_ORDER)]
+    public IActionResult GetOrder(string orderId)
     {
-        var memberExists = _database.Members.FirstOrDefault(x => x.MemberId == memberId);
+        var orderExists = _database.Orders.FirstOrDefault(x => x.OrderId == orderId);
         
-        if(memberExists == null)
+        if(orderExists == null)
         {
             return NotFound();
         }
 
-        var orders = _database.Orders
+        var order = _database.Orders
             .Include(x => x.Asset)
             .ThenInclude(x => x.CustomLicense)
 
@@ -46,17 +46,17 @@ public class OrderController : Controller
 
             .Include(x => x.Asset)
             .ThenInclude(x => x.Comments)
+            
+            .Include(x => x.Asset)
+            .ThenInclude(x => x.Files)
 
             .Include(x => x.Asset)
             .ThenInclude(x => x.Tags)
             .ThenInclude(x => x.Tag)
-            .Where(x => x.MemberId == memberId);
-
-        if (format == "short")
-        {
-            return Ok(orders.Adapt<List<ShortOrderDto>>());
-        }
+            .FirstOrDefault(x => x.OrderId == orderId);
         
-        return Ok(orders.Adapt<List<OrderDto>>());
+        ApiResponse response = new ApiResponse(order.Adapt<OrderDto>());
+        
+        return Ok(response);
     }
 }

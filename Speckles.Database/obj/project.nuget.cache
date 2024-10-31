@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FfyMltqEiMFJQyZ7zXCuDqwEWEsjPRVA9TtrUfpLg4yP3aPBzymbK8foLCvC1b7mbiPL4j5TZ0/mgs4VHPYZkw==",
+  "dgSpecHash": "4eFH7jquDL0=",
   "success": true,
-  "projectFilePath": "/Users/oskarpetr/Developer/React/Speckles/Speckles.Database/Speckles.Database.csproj",
+  "projectFilePath": "/Users/oskarpetr/Developer/React/speckles/Speckles.Database/Speckles.Database.csproj",
   "expectedPackageFiles": [
     "/Users/oskarpetr/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/microsoft.entityframeworkcore/7.0.11/microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
@@ -25,7 +25,10 @@
     "/Users/oskarpetr/.nuget/packages/npgsql.entityframeworkcore.postgresql/7.0.11/npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/oskarpetr/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/Users/oskarpetr/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/oskarpetr/.nuget/packages/microsoft.netcore.app.ref/7.0.20/microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
+    "/Users/oskarpetr/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.20/microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512",
+    "/Users/oskarpetr/.nuget/packages/microsoft.netcore.app.host.osx-arm64/7.0.20/microsoft.netcore.app.host.osx-arm64.7.0.20.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,30 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
-import FadeIn from "../anim/FadeIn";
+import FadeIn from "../animation/FadeIn";
 import { fetchSavedAssets } from "@/utils/fetchers";
 import { IAssetShort } from "@/types/Asset.types";
-import Asset from "../assets/Asset";
+import Asset from "../asset/Asset";
 
 export default function Saved() {
   return (
     <FadeIn delay={0.2}>
-      <SavedAssetList />
+      <SavedList />
     </FadeIn>
   );
 }
 
-function SavedAssetList() {
+function SavedList() {
   const memberId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
 
-  const { data, error, isSuccess } = useQuery({
-    queryKey: ["savedAssets", memberId],
+  const savedQuery = useQuery({
+    queryKey: ["saved", memberId],
     queryFn: () => fetchSavedAssets(memberId),
   });
 
-  const savedAssets = data as IAssetShort[];
+  const savedAssets = savedQuery.data.data as IAssetShort[];
 
   return (
     <div className="grid grid-cols-3 gap-6">
-      {isSuccess &&
+      {savedQuery.isSuccess &&
         savedAssets.map((asset, index) => (
           <FadeIn
             key={`asset_${asset.assetId}`}

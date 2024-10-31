@@ -1,8 +1,8 @@
-import { IMemberDto } from "./Member.types";
+import { IMemberShort } from "./Member.types";
 
 export interface IComment {
   commentId: string;
   text: string;
   date: string;
-  member: IMemberDto;
+  member: IMemberShort;
 }

@@ -34,7 +34,7 @@ export default function EarningsChart({ data }: Props) {
             name: "USD",
             locale: "en-US",
           },
-          image: {
+          thumbnail: {
             imageId: "",
             alt: "",
           },
@@ -106,7 +106,7 @@ function CustomTooltip({
               <Image
                 src={getAssetImage(
                   newPayload.asset.assetId,
-                  newPayload.asset.image.imageId
+                  newPayload.asset.thumbnail.imageId
                 )}
                 alt={newPayload.asset.name}
                 width={50}

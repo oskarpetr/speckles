@@ -3,10 +3,10 @@
 import Heading from "@/components/common/Heading";
 import Layout from "@/components/layout/Layout";
 
-export default function AccountPage() {
+export default function ProfilePage() {
   return (
     <Layout>
-      <Heading title="Account" />
+      <Heading title="Profile" />
     </Layout>
   );
 }

@@ -1,11 +1,11 @@
-import { IImageDto } from "./ Image.types";
+import { IImageDto } from "./Image.types";
 import { IComment } from "./Comment.types";
 import { ICurrency } from "./Currency.types";
 import { ICustomLicense } from "./CustomLicense.types";
 import { IFile } from "./File.types";
 import { ILicense } from "./License.types";
-import { IStudioShort } from "./Studio.types";
-import { ITag } from "./Tag.types";
+import { IStudio } from "./Studio.types";
+import { ITagShort } from "./Tag.types";
 
 export interface IAsset {
   assetId: string;
@@ -14,12 +14,15 @@ export interface IAsset {
   currency: ICurrency;
   description: string;
   license: ILicense;
-  studio: IStudioShort;
+  studio: IStudio;
   customLicense?: ICustomLicense;
+  thumbnail: IImageDto;
   images: IImageDto[];
   files: IFile[];
-  tags: ITag[];
+  tags: ITagShort[];
   comments: IComment[];
+  saved: boolean;
+  inBasket: boolean;
 }
 
 export interface IAssetShort {
@@ -27,5 +30,6 @@ export interface IAssetShort {
   name: string;
   price: number;
   currency: ICurrency;
-  image: IImageDto;
+  tags: ITagShort[];
+  thumbnail: IImageDto;
 }

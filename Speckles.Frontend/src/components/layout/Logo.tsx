@@ -12,7 +12,7 @@ export default function Logo() {
         alt="Speckles Logo"
         width={50}
         height={50}
-        className="w-6 h-6"
+        className="w-5 h-5"
       />
       <div className="text-white font-bold text-xl !tracking-tight">
         Speckles

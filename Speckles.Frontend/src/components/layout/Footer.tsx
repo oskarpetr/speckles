@@ -17,6 +17,10 @@ export default function Footer() {
 
           <FooterItem text="Become a Creator" link="/" />
           <FooterItem text="Earning Program" link="/" />
+          <FooterItem
+            text="Develeoper API"
+            link="http://localhost:8080/swagger"
+          />
         </div>
 
         <div className="w-full flex flex-col gap-2">
@@ -48,7 +52,10 @@ interface Props {
 
 function FooterItem({ link, text }: Props) {
   return (
-    <Link href={link} className="text-white opacity-80">
+    <Link
+      href={link}
+      className="text-white opacity-80 hover:opacity-60 transition-opacity w-fit"
+    >
       {text}
     </Link>
   );

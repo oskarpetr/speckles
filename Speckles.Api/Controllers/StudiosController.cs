@@ -10,7 +10,7 @@ namespace Speckles.Api.Controllers;
 
 [ApiController]
 [Route(ApiEndpoints.API_BASE)]
-public class StudioController : Controller
+public class StudiosController : Controller
 {
     private readonly ApplicationDbContext _database;
     
@@ -19,57 +19,141 @@ public class StudioController : Controller
         _database = database;
     }
     
+    /// <summary>
+    /// Retrieves all studios in short form.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a list of all studios in their short form.
+    /// </remarks>
+    /// <returns>Retrieves all studios in short form.</returns>
+    /// <response code="200">Retrieves all studios in short form.</response>
+    [ProducesResponseType(typeof(List<ShortStudioDto>), 200)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIOS)]
     public IActionResult GetStudios()
     {
         var studios = _database.Studios;
+        var studiosDto = studios.Adapt<List<ShortStudioDto>>();
 
-        ApiResponse response = new ApiResponse(studios.Adapt<List<ShortStudioDto>>());
+        var response = new ApiResponse(studiosDto);
         
         return Ok(response);
     }
 
+    /// <summary>
+    /// Retrieves studio in default form.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a studio in its default form.
+    /// </remarks>
+    /// <returns>Retrieves studio in default form.</returns>
+    /// <response code="200">Retrieves studio in default form.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(typeof(StudioDto), 200)]
+    [ProducesResponseType(404)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIO)]
     public IActionResult GetStudio(string slug)
     {
-        var studioExists = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        var studioExists = _database.Studios.Any(x => x.Slug == slug);
         
-        if (studioExists == null)
-        {
+        if (!studioExists)
             return NotFound();
-        }
         
         var studio = _database.Studios
             .Include(x => x.Portfolio)
                 .ThenInclude(x => x.Projects)
             .Include(x => x.Address)
             .Include(x => x.Assets)
+                .ThenInclude(x =>x.Thumbnail)
+            .Include(x => x.Assets)
                 .ThenInclude(x => x.Images)
+            .Include(x => x.Assets)
+                .ThenInclude(x => x.Tags)
+                    .ThenInclude(x => x.Tag)
             .Include(x => x.Assets)
                 .ThenInclude(x => x.Currency)
             .Include(x => x.Members)
                 .ThenInclude(x => x.Member)
             .FirstOrDefault(x => x.Slug == slug);
 
-        ApiResponse response = new ApiResponse(studio.Adapt<StudioDto>());
+        var studioDto = studio.Adapt<StudioDto>();
+        var response = new ApiResponse(studioDto);
         
         return Ok(response);
     }
     
-    [HttpGet]
-    [Route(ApiEndpoints.Studios.GET_STUDIO_EARNING)]
-    public IActionResult GetEarnings(string slug, [FromQuery] string timeInterval)
+    /// <summary>
+    /// Creates studio.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint creates a studio.
+    /// </remarks>
+    /// <returns>Creates studio.</returns>
+    /// <response code="201">Creates studio.</response>
+    [ProducesResponseType(201)]
+    [HttpPost(ApiEndpoints.Studios.POST_STUDIO)]
+    public IActionResult PostStudio()
     {
-        var studioExists = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Updates studio.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint updates a studio.
+    /// </remarks>
+    /// <returns>Updates studio.</returns>
+    /// <response code="204">Updates studio.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [HttpPost(ApiEndpoints.Studios.PUT_STUDIO)]
+    public IActionResult UpdateStudio()
+    {
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Deletes studio.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint deletes a studio.
+    /// </remarks>
+    /// <returns>Deletes studio.</returns>
+    /// <response code="204">Deletes studio.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [HttpPost(ApiEndpoints.Studios.DELETE_STUDIO)]
+    public IActionResult DeleteStudio()
+    {
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Retrieves studio's earnings.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a studio's earnings.
+    /// </remarks>
+    /// <returns>Retrieves studio's earnings.</returns>
+    /// <response code="200">Retrieves studio's earnings.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(typeof(List<EarningDto>), 200)]
+    [ProducesResponseType(404)]
+    [HttpGet(ApiEndpoints.Studios.GET_STUDIO_EARNINGS)]
+    public IActionResult GetStudioEarnings(string slug, [FromQuery] string timeInterval)
+    {
+        var studioExists = _database.Studios.Any(x => x.Slug == slug);
         
-        if (studioExists == null)
-        {
+        if (!studioExists) 
             return NotFound();
-        }
 
         var orders = _database.Orders
             .Include(x => x.Asset)
                 .ThenInclude(x => x.Currency)
+            .Include(x => x.Asset)
+                .ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset)
                 .ThenInclude(x => x.Images)
             .Where(x => x.Asset.Studio.Slug == slug);
@@ -115,9 +199,8 @@ public class StudioController : Controller
         return Ok(response);
     }
 
-    [HttpGet]
-    [Route("gen")]
-    public IActionResult Generate()
+    [HttpGet("gen")]
+    public IActionResult Gen()
     {
         string[] assetIds = new string[]
         {

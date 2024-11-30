@@ -1,10 +1,12 @@
 "use client";
 
 import FadeIn from "@/components/animation/FadeIn";
+import Button from "@/components/common/Button";
 import Heading from "@/components/common/Heading";
 import RegisterForm from "@/components/forms/RegisterForm";
 import NotAuthLayout from "@/components/layout/NotAuthLayout";
 import { cn } from "@/utils/cn";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -23,6 +25,20 @@ export default function RegisterPage() {
 
       <FadeIn delay={0.5} className="flex flex-col gap-8 items-center">
         <RegisterForm step={step} setStep={setStep} />
+
+        <div className="flex gap-6 items-center w-full">
+          <div className="h-[1px] bg-black-primary bg-opacity-20 w-full"></div>
+          <div>or</div>
+          <div className="h-[1px] bg-black-primary bg-opacity-20 w-full"></div>
+        </div>
+
+        <Button
+          text="Continue with Google"
+          margin={false}
+          image={"/images/providers/google.svg"}
+          type="black"
+          onClick={() => signIn("google")}
+        />
 
         <Link href="/login" className="flex gap-2">
           <div>Already have an account?</div>

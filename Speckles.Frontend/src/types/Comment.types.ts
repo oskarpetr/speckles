@@ -5,4 +5,6 @@ export interface IComment {
   text: string;
   date: string;
   member: IMemberShort;
+  likes: number;
+  liked: boolean;
 }

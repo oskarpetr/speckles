@@ -13,13 +13,13 @@ export default function RoundedButton({
   colorType = "primary",
 }: Props) {
   return (
-    <button
+    <div
       onClick={onClick}
       className={cn(
-        "rounded-full transition-colors w-fit h-fit",
+        "cursor-pointer rounded-full transition-all w-fit h-fit focus:ring-4 ring-0",
         colorType === "primary"
-          ? "p-4 bg-green-primary hover:bg-green-primary-hover"
-          : "p-[calc(1rem-1px)] bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-black-primary border-opacity-10"
+          ? "p-4 bg-green-primary hover:bg-green-primary-hover ring-green-primary ring-opacity-30"
+          : "p-[calc(1rem-1px)] bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-green-primary border-opacity-10 ring-green-light ring-opacity-50"
       )}
     >
       <Icon
@@ -27,6 +27,6 @@ export default function RoundedButton({
         size={24}
         color={colorType === "primary" ? "white" : "#3C672D"}
       />
-    </button>
+    </div>
   );
 }

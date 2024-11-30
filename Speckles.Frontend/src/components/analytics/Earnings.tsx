@@ -7,19 +7,23 @@ import { useEffect, useState } from "react";
 import SelectTimeInterval from "./SelectTimeInterval";
 
 interface Props {
-  studioId: string;
+  slug: string;
 }
 
-export default function Earnings({ studioId }: Props) {
+export default function Earnings({ slug }: Props) {
+  // time interval
   const [timeInterval, setTimeInterval] = useState(timeIntervals[0]);
 
-  const studioEarningQuery = useQuery({
-    queryKey: ["studios", studioId, "earnings"],
-    queryFn: () => fetchStudioEarnings(studioId.toString(), timeInterval),
+  // earnings query
+  const studioEarningsQuery = useQuery({
+    queryKey: ["studios", slug, "earnings"],
+    queryFn: () => fetchStudioEarnings(slug, timeInterval),
   });
 
-  const earnings = (studioEarningQuery.data.data as IEarning[]) || [];
+  // earnings
+  const earnings = (studioEarningsQuery.data?.data ?? []) as IEarning[];
 
+  // earnings chart data
   const earningsChartData = earnings.map((earning) => ({
     name: earning.assetName,
     value: earning.totalAmount,
@@ -28,17 +32,18 @@ export default function Earnings({ studioId }: Props) {
     currency: earning.asset.currency,
   }));
 
+  // total amount
   const totalAmount = earningsChartData.reduce(
     (acc, earning) => acc + earning.value,
     0
   );
 
   useEffect(() => {
-    studioEarningQuery.refetch();
+    studioEarningsQuery.refetch();
   }, [timeInterval]);
 
   return (
-    studioEarningQuery.isSuccess && (
+    studioEarningsQuery.isSuccess && (
       <div className="flex items-center w-full bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
         <EarningsChart data={earningsChartData} />
 

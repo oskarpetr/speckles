@@ -22,7 +22,7 @@ export default function Heading({
         <h1
           className={cn(
             "heading text-4xl",
-            color === "black" ? "text-black-primary" : "text-white-primary"
+            color === "black" ? "text-black-primary" : "text-white"
           )}
         >
           {title}

@@ -1,8 +1,8 @@
-import { ITag } from "@/types/Tag.types";
+import { ITagShort } from "@/types/Tag.types";
 import Link from "next/link";
 
 interface Props {
-  tags: ITag[];
+  tags: ITagShort[];
 }
 
 export default function Tags({ tags }: Props) {
@@ -17,11 +17,11 @@ export default function Tags({ tags }: Props) {
   );
 }
 
-function Tag({ tag }: { tag: ITag }) {
+function Tag({ tag }: { tag: ITagShort }) {
   return (
     <Link
       href={`/tags/${tag.tagId}`}
-      className="text-sm bg-green-primary bg-opacity-10 border border-black-primary border-opacity-10 px-4 py-1.5 rounded-full font-bold"
+      className="focus:ring-4 ring-0 transition-all ring-green-light ring-opacity-50 text-sm bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-green-primary border-opacity-10 px-4 py-1.5 rounded-full font-semibold"
     >
       {tag.name}
     </Link>

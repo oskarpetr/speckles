@@ -9,6 +9,7 @@ import { BEZIER_CURVE } from "@/utils/animation";
 import { useQuery } from "@tanstack/react-query";
 import { postRegister } from "@/utils/fetchers";
 import { IAuthRegister } from "@/types/Auth.types";
+import { passwordSchema } from "@/utils/validationSchemas";
 
 interface Props {
   step: number;
@@ -27,13 +28,13 @@ export default function RegisterForm({ step, setStep }: Props) {
   const validationSchemaStep1 = object({
     fullName: string().required("Full name is required"),
     email: string()
-      .email("Email address must be in a valid email")
+      .email("Email address must be in a valid format")
       .required("Email address is required"),
   });
 
   const validationSchemaStep2 = object({
     username: string().required("Username is required"),
-    password: string().required("Password is required"),
+    password: passwordSchema.required("Password is required"),
     confirmPassword: string()
       .oneOf([ref("password")], "Passwords must match")
       .required("Confirm password is required"),
@@ -44,7 +45,7 @@ export default function RegisterForm({ step, setStep }: Props) {
     state: string().required("State is required"),
     street: string().required("Street is required"),
     city: string().required("City is required"),
-    zip: string().required("Zip is required"),
+    zip: string().required("ZIP is required"),
   });
 
   const initialValuesStep1 = {

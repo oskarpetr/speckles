@@ -20,7 +20,7 @@ function SavedList() {
     queryFn: () => fetchSavedAssets(memberId),
   });
 
-  const savedAssets = savedQuery.data.data as IAssetShort[];
+  const savedAssets = savedQuery.data?.data as IAssetShort[];
 
   return (
     <div className="grid grid-cols-3 gap-6">

@@ -1,7 +1,7 @@
 "use client";
 
-import { ComponentProps, ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ComponentProps, Fragment, ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { BEZIER_CURVE } from "@/utils/animation";
 
 interface Props {
@@ -17,16 +17,23 @@ export default function FadeIn({
   className,
   animate = true,
 }: Props) {
-  return animate ? (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.5, ease: BEZIER_CURVE }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  ) : (
-    children
+  return (
+    <Fragment>
+      <AnimatePresence mode="wait">
+        {animate && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ delay, duration: 0.5, ease: BEZIER_CURVE }}
+            className={className}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!animate && children}
+    </Fragment>
   );
 }

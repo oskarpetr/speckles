@@ -1,39 +1,89 @@
 "use client";
 
-import { MagnifyingGlass } from "@phosphor-icons/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import BasketCount from "../orders/BasketCount";
+import BasketCount from "../basket/BasketCount";
 import Icon from "../common/Icon";
-import { ReactNode } from "react";
 import Logo from "./Logo";
 import Button from "../common/Button";
+import SavedCount from "../saved/SavedCount";
+import DropdownMenu from "../common/DropdownMenu";
+import { IMenuItem } from "@/types/MenuItem.types";
+import Tooltip from "../common/Tooltip";
+import Avatar from "../common/Avatar";
+import { signOut, useSession } from "next-auth/react";
+import PopupTooltip from "../common/PopupTooltip";
 
 export default function Menu() {
-  const logged = false;
+  // session
+  const { data: session, status } = useSession();
+
+  const userMenuItems: IMenuItem[] = [
+    {
+      link: "/profile",
+      text: "Profile",
+      icon: "User",
+    },
+    {
+      link: "/settings",
+      text: "Settings",
+      icon: "GearSix",
+    },
+    {
+      onClick: signOut,
+      text: "Log out",
+      icon: "SignOut",
+    },
+  ];
+
+  const search = () => {};
 
   return (
     <div className="flex justify-between items-center px-32 py-8 bg-green-primary fixed w-full top-0 z-10 h-24">
       <Logo />
 
-      <div className="flex gap-12">
-        <div className="flex gap-6 items-center">
-          <button className="active:scale-95 transition-transform">
-            <MagnifyingGlass color="white" size={24} />
-          </button>
+      <div className="flex gap-6 items-center">
+        <div className="flex gap-2 items-center">
+          <Tooltip text="Search">
+            <MenuItem icon="MagnifyingGlass" onClick={search} />
+          </Tooltip>
 
-          <MenuItem icon="Package" link="orders" />
-          <MenuItem icon="Heart" link="saved" />
+          {status === "authenticated" && (
+            <Tooltip text="Orders">
+              <MenuItem icon="Package" link="orders" />
+            </Tooltip>
+          )}
 
-          <MenuItem icon="Basket" link="basket">
-            <BasketCount />
-          </MenuItem>
+          <Tooltip text="Saved">
+            <MenuItem icon="Heart" link="saved">
+              <SavedCount />
+            </MenuItem>
+          </Tooltip>
 
-          {logged && <MenuItem icon="User" link="account" />}
+          <Tooltip text="Basket">
+            <MenuItem icon="Basket" link="basket">
+              <BasketCount />
+            </MenuItem>
+          </Tooltip>
+
+          {status === "authenticated" && (
+            <div className="ml-3 flex items-center">
+              <PopupTooltip
+                button={
+                  <Avatar
+                    memberId={session.user.memberId}
+                    fullName={session.user.fullName}
+                    size={48}
+                  />
+                }
+              >
+                <DropdownMenu items={userMenuItems} />
+              </PopupTooltip>
+            </div>
+          )}
         </div>
 
-        {!logged && (
+        {status === "unauthenticated" && (
           <Link href="/login">
             <Button text="Login" size="small" margin={false} type="white" />
           </Link>
@@ -43,28 +93,31 @@ export default function Menu() {
   );
 }
 
-interface Props {
-  link: string;
-  icon: string;
-  children?: ReactNode;
-}
-
-function MenuItem({ link, icon, children }: Props) {
+function MenuItem({ link, onClick, icon, children }: IMenuItem) {
   const pathName = usePathname();
   const trimmedPathName = pathName.replace("/", "");
 
-  return (
-    <Link
-      href={"/" + link}
-      className="relative active:scale-95 transition-transform"
-    >
-      <Icon
-        name={icon}
-        color="white"
-        size={24}
-        weight={trimmedPathName === link ? "fill" : "regular"}
-      />
+  const Content = () => (
+    <div className="relative active:scale-95 transition-all cursor-pointer w-12 h-12 flex justify-center items-center rounded-full border border-transparent hover:border-white hover:border-opacity-10 hover:bg-white hover:bg-opacity-10">
+      {icon && (
+        <Icon
+          name={icon}
+          color="white"
+          size={24}
+          weight={trimmedPathName === link ? "fill" : "regular"}
+        />
+      )}
       {children}
+    </div>
+  );
+
+  return link ? (
+    <Link href={"/" + link}>
+      <Content />
     </Link>
+  ) : (
+    <button onClick={onClick}>
+      <Content />
+    </button>
   );
 }

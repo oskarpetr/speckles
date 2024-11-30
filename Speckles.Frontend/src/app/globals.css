@@ -47,3 +47,25 @@ input:-webkit-autofill {
   text-underline-offset: 2px;
   text-decoration-color: #12121250;
 }
+
+/* .swiper-container,.swiper-pagination {
+  overflow: visible !important;
+position: absolute !important;
+  bottom: -30px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 10 !important;
+}
+
+.swiper-pagination-bullet {
+  background-color: #000;
+  width: 12px;
+  height: 12px;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ff0000;
+  opacity: 1;
+} */

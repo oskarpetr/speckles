@@ -1,10 +1,10 @@
 import { IComment } from "@/types/Comment.types";
-import Section from "../common/Section";
 import Link from "next/link";
-import Image from "next/image";
-import { getAvatar } from "@/utils/images";
-import { formatDate } from "@/utils/formatters";
 import { formatDistance } from "date-fns";
+import FadeIn from "../animation/FadeIn";
+import Avatar from "../common/Avatar";
+import { useState } from "react";
+import Like from "../common/Like";
 
 interface Props {
   comments: IComment[];
@@ -12,44 +12,69 @@ interface Props {
 
 export default function Comments({ comments }: Props) {
   return (
-    <div className="w-[600px]">
-      <Section title="Comments" />
-
-      <div className="flex flex-col gap-8">
-        {comments.length > 0 ? (
-          comments.map((comment) => (
-            <Comment key={comment.commentId} comment={comment} />
-          ))
-        ) : (
-          <div className="opacity-80">No comments.</div>
-        )}
-      </div>
-    </div>
+    <FadeIn delay={0} className="flex flex-col gap-8 w-[600px]">
+      {comments.length > 0 ? (
+        comments.map((comment, index) => (
+          <FadeIn delay={index * 0.05} key={comment.commentId}>
+            <Comment comment={comment} />
+          </FadeIn>
+        ))
+      ) : (
+        <div className="opacity-80">No comments yet.</div>
+      )}
+    </FadeIn>
   );
 }
 
 function Comment({ comment }: { comment: IComment }) {
+  const [liked, setLiked] = useState(comment.liked);
+
+  // toggle like comment
+  const toggleLikeComment = async () => {
+    if (liked) {
+      comment.likes -= 1;
+    } else {
+      comment.likes += 1;
+    }
+
+    // request
+  };
+
   return (
-    <Link href={`/members/${comment.member.username}`} className="flex gap-4">
-      <Image
-        src={getAvatar(comment.member.memberId)}
-        alt={`${comment.member.username}'s Avatar`}
-        width={60}
-        height={60}
-        className="rounded-full w-16 h-16"
-      />
+    <div className="flex gap-6">
+      <Link href={`/members/${comment.member.username}`}>
+        <Avatar
+          memberId={comment.member.memberId}
+          fullName={comment.member.fullName}
+          size={60}
+        />
+      </Link>
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <div className="font-extrabold">{comment.member.username}</div>
-          <div className="opacity-50 font-semibold">
+          <Link href={`/members/${comment.member.username}`}>
+            <div className="font-extrabold">{comment.member.fullName}</div>
+          </Link>
+
+          <div className="opacity-50 font-semibold text-sm">
             {formatDistance(new Date(comment.date), new Date(), {
               addSuffix: true,
             })}
           </div>
         </div>
+
         <div className="opacity-80">{comment.text}</div>
+
+        <button onClick={toggleLikeComment} className="mt-2">
+          <Like
+            liked={liked}
+            setLiked={setLiked}
+            iconSize="small"
+            color="black"
+            number={comment.likes}
+          />
+        </button>
       </div>
-    </Link>
+    </div>
   );
 }

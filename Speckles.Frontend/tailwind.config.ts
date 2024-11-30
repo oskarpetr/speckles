@@ -13,6 +13,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         "green-primary": "#3C672D",
         "green-primary-hover": "#325725",
+        "green-light": "#D4DBCF",
         "black-primary": "#121212",
         "white-primary": "#FFF5E7",
       },

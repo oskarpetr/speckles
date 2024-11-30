@@ -1,5 +1,7 @@
 import { ChangeEvent, FocusEvent, Fragment } from "react";
-import FadeIn from "../animation/FadeIn";
+import FormError from "./FormError";
+import Icon from "../common/Icon";
+import { cn } from "@/utils/cn";
 
 interface Props {
   type?: "text" | "email" | "password";
@@ -10,6 +12,7 @@ interface Props {
   value: string;
   error: string | undefined;
   touched: boolean | undefined;
+  icon?: string;
 }
 
 export default function Input({
@@ -21,24 +24,35 @@ export default function Input({
   value = "",
   error,
   touched,
+  icon,
 }: Props) {
   return (
     <Fragment>
-      <input
-        key={name}
-        type={type}
-        name={name}
-        className="w-full px-6 py-3 bg-black-primary bg-opacity-5 transition-[outline] outline outline-2 outline-transparent focus:outline-green-primary rounded-lg border border-black-primary border-opacity-10"
-        placeholder={placeholder}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-      />
-      {error && touched && (
-        <FadeIn>
-          <p className="mt-2 text-red-500 text-sm font-semibold">{error}</p>
-        </FadeIn>
-      )}
+      <div className="relative flex items-center">
+        {icon && (
+          <Icon
+            name="MagnifyingGlass"
+            className="absolute ml-6 opacity-30"
+            size={20}
+            weight="bold"
+          />
+        )}
+        <input
+          key={name}
+          type={type}
+          name={name}
+          className={cn(
+            "focus:ring-4 ring-opacity-5 ring-neutral-600 transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10",
+            icon ? "pl-[3.25rem]" : "pl-6"
+          )}
+          placeholder={placeholder}
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+        />
+      </div>
+
+      <FormError error={error} touched={touched} />
     </Fragment>
   );
 }

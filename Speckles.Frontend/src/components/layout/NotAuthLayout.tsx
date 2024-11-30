@@ -25,7 +25,7 @@ export default function NotAuthLayout({ children }: Props) {
 
         <FadeIn delay={0.2}>
           <Image
-            src={"/images/Illustration.png"}
+            src={"/images/AccountIllustration.png"}
             alt="Illustration"
             width={400}
             height={400}

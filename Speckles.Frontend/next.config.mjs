@@ -1,3 +1,5 @@
+import withPlaiceholder from "@plaiceholder/next";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
@@ -6,7 +8,10 @@ const nextConfig = {
             hostname: 'firebasestorage.googleapis.com',
         }]
     },
-    reactStrictMode: false
+    reactStrictMode: false,
+    experimental: {
+        serverComponentsExternalPackages: ['@react-pdf/renderer'],
+    }
 };
 
-export default nextConfig;
+export default withPlaiceholder(nextConfig);

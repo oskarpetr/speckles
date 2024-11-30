@@ -20,16 +20,16 @@ export default function OrderPage() {
   const { orderId } = useParams();
 
   // Fetch order
-  const fetchOrderRequest = useQuery({
+  const orderQuery = useQuery({
     queryKey: ["orders", orderId],
     queryFn: () => fetchOrder(orderId.toString()),
   });
 
-  const order = fetchOrderRequest.data.data as IOrder;
+  const order = orderQuery.data?.data as IOrder;
 
   return (
     <Layout>
-      {fetchOrderRequest.isSuccess && (
+      {orderQuery.isSuccess && (
         <Fragment>
           <Heading title={order.asset.name} />
 

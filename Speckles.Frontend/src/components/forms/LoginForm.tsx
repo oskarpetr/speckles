@@ -3,39 +3,28 @@ import Section from "../common/Section";
 import Button from "../common/Button";
 import { object, string } from "yup";
 import Input from "./Input";
-import { useQuery } from "@tanstack/react-query";
-import { postLogin } from "@/utils/fetchers";
 import { useEffect, useState } from "react";
-import { IAuthLogin } from "@/types/Auth.types";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { toastSuccess } from "../common/Toast";
 
 export default function LoginForm() {
-  const [loginBody, setLoginBody] = useState<IAuthLogin>();
+  // router
+  const router = useRouter();
 
-  // on form submit
-  useEffect(() => {
-    if (loginBody) {
-      postLoginQuery.refetch();
-    }
-  }, [loginBody]);
+  // session
+  const { status } = useSession();
 
-  // login request
-  const postLoginQuery = useQuery({
-    queryKey: ["login"],
-    queryFn: () => postLogin(loginBody!),
-    enabled: false,
-    retryDelay: 0,
-  });
+  // error response
+  const [formError, setFormError] = useState<string | undefined>();
 
-  // error responses
-  const emailError =
-    postLoginQuery.error?.name === "404" ? "Email does not exist" : undefined;
-  const passwordError =
-    postLoginQuery.error?.name === "401" ? "Wrong password" : undefined;
+  // loading
+  const [loading, setLoading] = useState(false);
 
   // validation schema for fields
   const validationSchema = object({
     email: string()
-      .email("Email address must be in a valid email")
+      .email("Email address must be in a valid format")
       .required("Email address is required"),
     password: string().required("Password is required"),
   });
@@ -47,9 +36,33 @@ export default function LoginForm() {
   };
 
   // on submit handler
-  const onSubmit = (values: any) => {
-    setLoginBody(values);
+  const onSubmit = async (values: any) => {
+    if (!values.email || !values.password) {
+      return;
+    }
+
+    setLoading(true);
+
+    const signInRes = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      callbackUrl: "/",
+      redirect: false,
+    });
+
+    setLoading(false);
+
+    if (signInRes?.ok) {
+      router.push(signInRes.url!);
+      toastSuccess("You have been signed in.");
+    } else if (signInRes?.error) {
+      setFormError("Invalid email or password");
+    }
   };
+
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
 
   return (
     <Formik
@@ -76,7 +89,7 @@ export default function LoginForm() {
                 onBlur={handleBlur}
                 value={values.email}
                 placeholder="Enter email address"
-                error={errors.email || emailError}
+                error={errors.email}
                 touched={touched.email}
               />
             </div>
@@ -89,12 +102,18 @@ export default function LoginForm() {
                 onBlur={handleBlur}
                 value={values.password}
                 placeholder="Enter password"
-                error={errors.password || passwordError}
+                error={errors.password || formError}
                 touched={touched.password}
               />
             </div>
 
-            <Button icon="ArrowRight" text="Login" iconDirection="right" />
+            {/* <FormError error={formError} touched /> */}
+            <Button
+              icon="ArrowRight"
+              text="Login"
+              iconDirection="right"
+              loading={loading}
+            />
           </div>
         </form>
       )}

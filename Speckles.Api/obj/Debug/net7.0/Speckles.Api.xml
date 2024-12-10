@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Speckles.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Speckles.Api.Controllers.AssetsController">
+            <remarks>
+            Manages operations related to assets.
+            </remarks>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AssetsController.GetAssets(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all assets in short form.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all assets in their short form.
+            </remarks>
+            <returns>Retrieves all assets in short form.</returns>
+            <response code="200">Retrieves all assets in short form.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AssetsController.GetAsset(System.String,System.String)">
+            <summary>
+            Retrieves asset in default form.
+            </summary>
+            <remarks>
+            This endpoint retrieves an asset in its default form.
+            </remarks>
+            <returns>Retrieves asset in default form.</returns>
+            <response code="200">Retrieves asset in default form.</response>
+            <response code="404">Asset was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AssetsController.CreateAsset">
+            <summary>
+            Creates asset.
+            </summary>
+            <remarks>
+            This endpoint creates an asset.
+            </remarks>
+            <returns>Creates asset.</returns>
+            <response code="201">Creates asset.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AssetsController.UpdateAsset(System.String)">
+            <summary>
+            Updates asset.
+            </summary>
+            <remarks>
+            This endpoint updates an asset.
+            </remarks>
+            <returns>Updates asset.</returns>
+            <response code="204">Updates asset.</response>
+            <response code="404">Asset was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AssetsController.DeleteAsset(System.String)">
+            <summary>
+            Deletes asset.
+            </summary>
+            <remarks>
+            This endpoint deletes an asset.
+            </remarks>
+            <returns>Deletes asset.</returns>
+            <response code="204">Deletes asset.</response>
+            <response code="404">Asset was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AuthController.Register(Speckles.Api.BodyModels.RegisterBody)">
+            <summary>
+            Creates member.
+            </summary>
+            <remarks>
+            This endpoint creates a member.
+            </remarks>
+            <returns>This endpoint creates a member.</returns>
+            <response code="201">This endpoint creates a member.</response>
+            <response code="409">Member with that username or email already exists.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.AuthController.Login(Speckles.Api.BodyModels.LoginBody)">
+            <summary>
+            Validates member.
+            </summary>
+            <remarks>
+            This endpoint validates a member.
+            </remarks>
+            <returns>This endpoint validates a member.</returns>
+            <response code="201">This endpoint validates a member.</response>
+            <response code="401">Member's email or password is incorrect.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.BasketController.GetBasket(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all basket assets in short form by member id.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all basket assets in their short form by a member id.
+            </remarks>
+            <returns>Retrieves all basket assets in short form by member id.</returns>
+            <response code="200">Retrieves all basket assets in short form by member id.</response>
+            <response code="404">Member was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.BasketController.PostBasket(System.String,Speckles.Api.BodyModels.SavedBody)">
+            <summary>
+            Creates basket asset for member id.
+            </summary>
+            <remarks>
+            This endpoint creates a basket asset for member id.
+            </remarks>
+            <returns>Creates basket asset for member id.</returns>
+            <response code="201">Creates basket asset for member id.</response>
+            <response code="404">Member or asset was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.CommentsController.CreateComment">
+            <summary>
+            Creates comment.
+            </summary>
+            <remarks>
+            This endpoint creates a comment.
+            </remarks>
+            <returns>Creates comment.</returns>
+            <response code="201">Creates comment.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.CommentsController.UpdateComment(System.String)">
+            <summary>
+            Updates comment.
+            </summary>
+            <remarks>
+            This endpoint updates a comment.
+            </remarks>
+            <returns>Updates comment.</returns>
+            <response code="204">Updates comment.</response>
+            <response code="404">Comment was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.CommentsController.DeleteComment(System.String)">
+            <summary>
+            Deletes comment.
+            </summary>
+            <remarks>
+            This endpoint deletes a comment.
+            </remarks>
+            <returns>Deletes comment.</returns>
+            <response code="204">Deletes comment.</response>
+            <response code="404">Comment was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.CommentsController.CreateCommentLink(System.String)">
+            <summary>
+            Creates comment's like.
+            </summary>
+            <remarks>
+            This endpoint creates a comment's like.
+            </remarks>
+            <returns>Creates comment's like.</returns>
+            <response code="201">Creates comment's like.</response>
+            <response code="404">Comment was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.OrdersController.GetOrders(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all orders in short form by member id.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all orders in their short form by a member id.
+            </remarks>
+            <returns>Retrieves all orders in short form by member id.</returns>
+            <response code="200">Retrieves all orders in short form by member id.</response>
+            <response code="404">Member was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.OrdersController.GetOrder(System.String)">
+            <summary>
+            Retrieves order in default form.
+            </summary>
+            <remarks>
+            This endpoint retrieves a order in its default form.
+            </remarks>
+            <returns>Retrieves order in default form.</returns>
+            <response code="200">Retrieves order in default form.</response>
+            <response code="404">Order was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.OrdersController.PostOrder">
+            <summary>
+            Creates order.
+            </summary>
+            <remarks>
+            This endpoint creates a order.
+            </remarks>
+            <returns>Creates order.</returns>
+            <response code="201">Creates order.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.SavedController.GetSaved(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all saved assets in short form by member id.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all saved assets in their short form by a member id.
+            </remarks>
+            <returns>Retrieves all saved assets in short form by member id.</returns>
+            <response code="200">Retrieves all saved assets in short form by member id.</response>
+            <response code="404">Member was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.SavedController.PostSaved(System.String,Speckles.Api.BodyModels.SavedBody)">
+            <summary>
+            Creates saved asset for member id.
+            </summary>
+            <remarks>
+            This endpoint creates a saved asset for member id.
+            </remarks>
+            <returns>Creates saved asset for member id.</returns>
+            <response code="201">Creates saved asset for member id.</response>
+            <response code="404">Member or asset was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.GetStudios">
+            <summary>
+            Retrieves all studios in short form.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all studios in their short form.
+            </remarks>
+            <returns>Retrieves all studios in short form.</returns>
+            <response code="200">Retrieves all studios in short form.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.GetStudio(System.String)">
+            <summary>
+            Retrieves studio in default form.
+            </summary>
+            <remarks>
+            This endpoint retrieves a studio in its default form.
+            </remarks>
+            <returns>Retrieves studio in default form.</returns>
+            <response code="200">Retrieves studio in default form.</response>
+            <response code="404">Studio was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.PostStudio">
+            <summary>
+            Creates studio.
+            </summary>
+            <remarks>
+            This endpoint creates a studio.
+            </remarks>
+            <returns>Creates studio.</returns>
+            <response code="201">Creates studio.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.UpdateStudio(System.String)">
+            <summary>
+            Updates studio.
+            </summary>
+            <remarks>
+            This endpoint updates a studio.
+            </remarks>
+            <returns>Updates studio.</returns>
+            <response code="204">Updates studio.</response>
+            <response code="404">Studio was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.DeleteStudio(System.String)">
+            <summary>
+            Deletes studio.
+            </summary>
+            <remarks>
+            This endpoint deletes a studio.
+            </remarks>
+            <returns>Deletes studio.</returns>
+            <response code="204">Deletes studio.</response>
+            <response code="404">Studio was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.StudiosController.GetStudioEarnings(System.String,System.String)">
+            <summary>
+            Retrieves studio's earnings.
+            </summary>
+            <remarks>
+            This endpoint retrieves a studio's earnings.
+            </remarks>
+            <returns>Retrieves studio's earnings.</returns>
+            <response code="200">Retrieves studio's earnings.</response>
+            <response code="404">Studio was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.TagsController.GetAssetsByTag(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Retrieves all assets in short form by tag id.
+            </summary>
+            <remarks>
+            This endpoint retrieves a list of all assets in their short form by a tag id.
+            </remarks>
+            <returns>Retrieves all assets in short form by tag id.</returns>
+            <response code="200">Retrieves all assets in short form by tag id.</response>
+            <response code="404">Tag was not found.</response>
+        </member>
+        <member name="M:Speckles.Api.Controllers.TagsController.PostTag">
+            <summary>
+            Creates tag.
+            </summary>
+            <remarks>
+            This endpoint creates a tag.
+            </remarks>
+            <returns>Creates tag.</returns>
+            <response code="201">Creates tag.</response>
+        </member>
+    </members>
+</doc>

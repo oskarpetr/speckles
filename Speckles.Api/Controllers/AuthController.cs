@@ -1,5 +1,7 @@
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.BodyModels;
+using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 using Speckles.Database;
 using Speckles.Database.Tables;
@@ -17,22 +19,29 @@ public class AuthController : Controller
         _database = database;
     }
 
+    /// <summary>
+    /// Creates member.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint creates a member.
+    /// </remarks>
+    /// <returns>This endpoint creates a member.</returns>
+    /// <response code="201">This endpoint creates a member.</response>
+    /// <response code="409">Member with that username or email already exists.</response>
+    [ProducesResponseType(201)]
+    [ProducesResponseType(typeof(ApiError), 409)]
     [HttpPost(ApiEndpoints.Auth.REGISTER)]
     public IActionResult Register([FromBody] RegisterBody registerBody)
     {
-        var usernameExists = _database.Members.FirstOrDefault(x => x.Username == registerBody.username);
+        var usernameExists = _database.Members.Any(x => x.Username == registerBody.username);
         
-        if (usernameExists != null)
-        {
-            return Conflict();
-        }
+        if (!usernameExists)
+            return Conflict(new ApiError("Username", registerBody.username, 409));
         
-        var emailExists = _database.Members.FirstOrDefault(x => x.Email == registerBody.email);
+        var emailExists = _database.Members.Any(x => x.Email == registerBody.email);
         
-        if (emailExists != null)
-        {
-            return Conflict();
-        }
+        if (!emailExists)
+            return Conflict(new ApiError("Email", registerBody.email, 409));
 
         var address = new Address()
         {
@@ -60,21 +69,31 @@ public class AuthController : Controller
         return Ok();
     }
     
+    /// <summary>
+    /// Validates member.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint validates a member.
+    /// </remarks>
+    /// <returns>This endpoint validates a member.</returns>
+    /// <response code="201">This endpoint validates a member.</response>
+    /// <response code="401">Member's email or password is incorrect.</response>
+    [ProducesResponseType(typeof(ApiResponse<ShortMemberDto>), 201)]
+    [ProducesResponseType(typeof(ApiError), 401)]
     [HttpPost(ApiEndpoints.Auth.LOGIN)]
     public IActionResult Login([FromBody] LoginBody loginBody)
     {
-        var emailExists = _database.Members.FirstOrDefault(x => x.Email == loginBody.email);
+        var member = _database.Members.FirstOrDefault(x => x.Email == loginBody.email);
         
-        if (emailExists == null)
-        {
-            return NotFound();
-        }
-        
-        if (emailExists.Password != loginBody.password)
-        {
+        if (member == null)
             return Unauthorized();
-        }
         
-        return Ok();
+        if(member.Password != loginBody.password)
+            return Unauthorized();
+
+        var shortMemberDto = member.Adapt<ShortMemberDto>();
+        var response = new ApiResponse(shortMemberDto);
+        
+        return Ok(response);
     }
 }

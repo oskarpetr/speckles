@@ -27,9 +27,24 @@ public class ApplicationDbContext : DbContext
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+        
     }
     
-    public ApplicationDbContext() 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
+        // One asset has one thumbnail
+        modelBuilder.Entity<Asset>()
+            .HasOne(a => a.Thumbnail)
+            .WithMany()
+            .HasForeignKey(a => a.ThumbnailId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        // One asset has many images
+        modelBuilder.Entity<Asset>()
+            .HasMany(a => a.Images)
+            .WithOne(i => i.Asset)
+            .HasForeignKey(i => i.AssetId);
     }
 }

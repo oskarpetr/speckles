@@ -35,3 +35,5 @@
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.Database.genruntimeconfig.cache
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/ref/Speckles.Database.dll
 /Users/oskarpetr/Developer/React/speckles/Speckles.Database/obj/Debug/net7.0/Speckles.FF26C9D2.Up2Date
+/Users/oskarpetr/Developer/React/speckles/Speckles.Database/bin/Debug/net7.0/DotNetEnv.dll
+/Users/oskarpetr/Developer/React/speckles/Speckles.Database/bin/Debug/net7.0/Sprache.dll

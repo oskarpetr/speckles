@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,91 +12,97 @@ namespace Speckles.Api.Controllers;
 
 [ApiController]
 [Route(ApiEndpoints.API_BASE)]
-public class BasketController : Controller
+public class SavedController : Controller
 {
     private readonly ApplicationDbContext _database;
     
-    public BasketController(ApplicationDbContext database)
+    public SavedController(ApplicationDbContext database)
     {
         _database = database;
     }
     
-    [HttpGet(ApiEndpoints.Basket.GET_BASKET)]
-    public IActionResult GetBasket(string memberId, [FromQuery] string? format)
+    /// <summary>
+    /// Retrieves all saved assets in short form by member id.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a list of all saved assets in their short form by a member id.
+    /// </remarks>
+    /// <returns>Retrieves all saved assets in short form by member id.</returns>
+    /// <response code="200">Retrieves all saved assets in short form by member id.</response>
+    /// <response code="404">Member was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<ShortAssetDto>>), 200)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpGet(ApiEndpoints.Saved.GET_SAVED)]
+    public IActionResult GetSaved([FromQuery, Required] string memberId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var memberExists = _database.Members.FirstOrDefault(x => x.MemberId == memberId);
+        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
         
-        if (memberExists == null)
-        {
-            return NotFound();
-        }
+        if(!memberExists)
+            return NotFound(new ApiError("Member", memberId));
 
-        var basketAssets = _database.BasketAssets
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.CustomLicense)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Thumbnail)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Images)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Currency)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.License)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Studio)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Comments)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Files)
-            .Include(x => x.Asset)
-                .ThenInclude(x => x.Tags)
-                    .ThenInclude(x => x.Tag)
+        var savedAssets = _database.SavedAssets
+            .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
+            .Include(x => x.Asset).ThenInclude(x => x.Currency)
+            .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
             .Where(x => x.MemberId == memberId)
-            .Select(x => x.Asset);
+            .Select(x => x.Asset).ToList();
+        
+        if(offset != null)
+            savedAssets = savedAssets.Skip(offset.Value).ToList();
+            
+        if(limit != null)
+            savedAssets = savedAssets.Take(limit.Value).ToList();
 
         ApiResponse response;
         
-        if (format == "short")
+        if (format == "count")
         {
-            response = new ApiResponse(basketAssets.Adapt<List<ShortAssetDto>>());
-        }
-        else if (format == "count")
-        {
-            response = new ApiResponse(new
-            {
-                basketCount = basketAssets.Count()
-            });
+            var count = new ApiCount(savedAssets);
+            response = new ApiResponse(count);
         }
         else
         {
-            response = new ApiResponse(basketAssets.Adapt<List<AssetDto>>());
+            var savedAssetsDto = savedAssets.Adapt<List<ShortAssetDto>>();
+            response = new ApiResponse(savedAssetsDto);
         }
         
         return Ok(response);
     }
     
-    [HttpPost(ApiEndpoints.Basket.POST_BASKET)]
-    public IActionResult PostBasket([FromRoute] string memberId, [FromBody] SavedBody savedBody)
+    /// <summary>
+    /// Creates saved asset for member id.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint creates a saved asset for member id.
+    /// </remarks>
+    /// <returns>Creates saved asset for member id.</returns>
+    /// <response code="201">Creates saved asset for member id.</response>
+    /// <response code="404">Member or asset was not found.</response>
+    [ProducesResponseType(201)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpPost(ApiEndpoints.Saved.POST_SAVED)]
+    public IActionResult PostSaved([FromQuery, Required] string memberId, [FromBody] SavedBody savedBody)
     {
         var assetId = savedBody.assetId;
         
-        var memberExists = _database.Members.FirstOrDefault(x => x.MemberId == memberId);
-        var assetExists = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
+        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
         
-        if(memberExists == null || assetExists == null)
-        {
-            return NotFound();
-        }
+        if(!memberExists)
+            return NotFound(new ApiError("Member", memberId));
         
-        var basketExists = _database.BasketAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
+        if(!assetExists)
+            return NotFound(new ApiError("Asset", assetId));
+        
+        var saved = _database.SavedAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
 
-        if (basketExists != null)
+        if (saved != null)
         {
-            _database.BasketAssets.Remove(basketExists);
+            _database.SavedAssets.Remove(saved);
         }
         else
         {
-            _database.BasketAssets.Add(new BasketAsset()
+            _database.SavedAssets.Add(new SavedAsset()
             {
                 MemberId = memberId,
                 AssetId = assetId

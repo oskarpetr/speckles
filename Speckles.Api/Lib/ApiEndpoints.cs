@@ -8,36 +8,68 @@ public static class ApiEndpoints
     public static class Assets
     {
         public const string GET_ASSETS = "assets";
+        public const string POST_ASSET = "assets";
+
         public const string GET_ASSET = "assets/{assetId}";
+        public const string PUT_ASSET = "assets/{assetId}";
+        public const string DELETE_ASSET = "assets/{assetId}";
     }
 
     public static class Orders
     {
+        public const string GET_ORDERS = "orders";
+        public const string POST_ORDER = "orders";
+
         public const string GET_ORDER = "orders/{orderId}";
     }
 
     public static class Studios
     {
         public const string GET_STUDIOS = "studios";
+        public const string POST_STUDIO = "studios";
+        
         public const string GET_STUDIO = "studios/{slug}";
-        public const string GET_STUDIO_EARNING = "studios/{slug}/earning";
+        public const string PUT_STUDIO = "studios/{slug}";
+        public const string DELETE_STUDIO = "studios/{slug}";
+        
+        public const string GET_STUDIO_EARNINGS = "studios/{slug}/earnings";
     }
 
     public static class Members
+    {}
+
+    public static class Saved
     {
-        public const string GET_SAVED = "members/{memberId}/saved";
-        public const string POST_SAVED = "members/{memberId}/saved";
-        
-        public const string GET_ORDERS = "members/{memberId}/orders";
-        public const string POST_ORDER = "members/{memberId}/orders";
-        
-        public const string GET_BASKET = "members/{memberId}/basket";
-        public const string POST_BASKET = "members/{memberId}/basket";
+        public const string GET_SAVED = "saved";
+        public const string POST_SAVED = "saved";
+    }
+
+    public static class Basket
+    {
+        public const string GET_BASKET = "basket";
+        public const string POST_BASKET = "basket";
     }
 
     public static class Auth
     {
-        public const string REGISTER = "register";
-        public const string LOGIN = "login";
+        public const string REGISTER = "auth/register";
+        public const string LOGIN = "auth/login";
+    }
+
+    public static class Tags
+    {
+        public const string POST_TAG = "tags";
+        
+        public const string GET_ASSETS = "tags/{tagId}";
+    }
+
+    public static class Comments
+    {
+        public const string POST_COMMENT = "comments";
+        
+        public const string PUT_COMMENT = "comments/{commentId}";
+        public const string DELETE_COMMENT = "comments/{commentId}";
+        
+        public const string POST_LIKE = "comments/{commentId}/like";
     }
 }

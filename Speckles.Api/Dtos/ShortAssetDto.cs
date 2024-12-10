@@ -9,5 +9,6 @@ public class ShortAssetDto
     public string Name { get; set; }
     public decimal Price { get; set; }
     public Currency Currency { get; set; }
-    public ImageDto Image { get; set; }
+    public ImageDto Thumbnail { get; set; }
+    public List<ShortTagDto> Tags { get; set; }
 }

@@ -6,11 +6,11 @@ namespace Speckles.Api.Controllers;
 
 [ApiController]
 [Route(ApiEndpoints.API_BASE)]
-public class ImageController : Controller
+public class ImagesController : Controller
 {
     private readonly ApplicationDbContext _database;
     
-    public ImageController(ApplicationDbContext database)
+    public ImagesController(ApplicationDbContext database)
     {
         _database = database;
     }

@@ -1,33 +1,42 @@
+using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 using Speckles.Database;
-using Speckles.Database.Tables;
 
 namespace Speckles.Api.Controllers;
 
+/// <remarks>
+/// Manages operations related to assets.
+/// </remarks>
 [ApiController]
 [Route(ApiEndpoints.API_BASE)]
 public class AssetsController : Controller
 {
     private readonly ApplicationDbContext _database;
     
-    public AssetController(ApplicationDbContext database)
+    public AssetsController(ApplicationDbContext database)
     {
         _database = database;
     }
     
+    /// <summary>
+    /// Retrieves all assets in short form.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a list of all assets in their short form.
+    /// </remarks>
+    /// <returns>Retrieves all assets in short form.</returns>
+    /// <response code="200">Retrieves all assets in short form.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<ShortAssetDto>>), 200)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] int? limit, [FromQuery] int? offset)
     {
         var orders = _database.Orders;
 
-        var assetIds = orders
-            .Select(x => x.AssetId)
-            .GroupBy(x => x)
-            .Select(x => x.First());
+        var assetIds = orders.Select(x => x.AssetId).Distinct();
         
         if (offset != null)
             assetIds = assetIds.Skip(offset.Value);
@@ -35,17 +44,12 @@ public class AssetsController : Controller
         if (limit != null)
             assetIds = assetIds.Take(limit.Value);
 
-        var assets = new List<Asset>();
-        foreach (var assetId in assetIds)
-        {
-            var asset = _database.Assets
-                .Include(x => x.Thumbnail)
-                .Include(x => x.Currency)
-                .Include(x => x.Tags)
-                    .ThenInclude(x => x.Tag)
-                .FirstOrDefault(x => x.AssetId == assetId);
-            assets.Add(asset);
-        }
+        var assets = _database.Assets
+            .Where(x => assetIds.Contains(x.AssetId))
+            .Include(x => x.Thumbnail)
+            .Include(x => x.Currency)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
+            .ToList();
 
         var assetsDto = assets.Adapt<List<ShortAssetDto>>();
         var response = new ApiResponse(assetsDto);
@@ -53,14 +57,24 @@ public class AssetsController : Controller
         return Ok(response);
     }
 
-    [ProducesResponseType(typeof(List<AssetDto>), 200)]
+    /// <summary>
+    /// Retrieves asset in default form.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves an asset in its default form.
+    /// </remarks>
+    /// <returns>Retrieves asset in default form.</returns>
+    /// <response code="200">Retrieves asset in default form.</response>
+    /// <response code="404">Asset was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<AssetDto>>), 200)]
+    [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSET)]
-    public IActionResult GetAsset(string assetId, [FromQuery] string memberId)
+    public IActionResult GetAsset(string assetId, [FromQuery, Required] string memberId)
     {
         var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
         
         if (!assetExists)
-            return NotFound();
+            return NotFound(new ApiError("Asset", assetId));
 
         var asset = _database.Assets
             .Include(x => x.CustomLicense)
@@ -68,15 +82,13 @@ public class AssetsController : Controller
             .Include(x => x.Images)
             .Include(x => x.Currency)
             .Include(x => x.License)
-            .Include(x => x.Studio)
-            .Include(x => x.Comments)
-                .ThenInclude(x => x.Member)
-            .Include(x => x.Comments)
-                .ThenInclude(x => x.LikedBy)
-                    .ThenInclude(x => x.Member)
+            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.Member)
+            .Include(x => x.Studio).ThenInclude(x => x.Address)
+            .Include(x => x.Studio).ThenInclude(x => x.Portfolio).ThenInclude(x => x.Projects)
+            .Include(x => x.Comments).ThenInclude(x => x.Member)
+            .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.Member)
             .Include(x => x.Files)
-            .Include(x => x.Tags)
-                .ThenInclude(x => x.Tag)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
             .FirstOrDefault(x => x.AssetId == assetId);
 
         var assetDto = asset.Adapt<AssetDto>();
@@ -99,5 +111,67 @@ public class AssetsController : Controller
         var response = new ApiResponse(assetDto);
         
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Creates asset.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint creates an asset.
+    /// </remarks>
+    /// <returns>Creates asset.</returns>
+    /// <response code="201">Creates asset.</response>
+    [ProducesResponseType(201)]
+    [HttpPost(ApiEndpoints.Assets.POST_ASSET)]
+    public IActionResult CreateAsset()
+    {
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Updates asset.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint updates an asset.
+    /// </remarks>
+    /// <returns>Updates asset.</returns>
+    /// <response code="204">Updates asset.</response>
+    /// <response code="404">Asset was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpPut(ApiEndpoints.Assets.PUT_ASSET)]
+    public IActionResult UpdateAsset(string assetId)
+    {
+        var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
+        
+        if (!assetExists)
+            return NotFound(new ApiError("Asset", assetId));
+        
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Deletes asset.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint deletes an asset.
+    /// </remarks>
+    /// <returns>Deletes asset.</returns>
+    /// <response code="204">Deletes asset.</response>
+    /// <response code="404">Asset was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpDelete(ApiEndpoints.Assets.DELETE_ASSET)]
+    public IActionResult DeleteAsset(string assetId)
+    {
+        var asset = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
+        
+        if(asset == null)
+            return NotFound(new ApiError("Asset", assetId));
+        
+        _database.Assets.Remove(asset);
+        _database.SaveChanges();
+        
+        return Ok();
     }
 }

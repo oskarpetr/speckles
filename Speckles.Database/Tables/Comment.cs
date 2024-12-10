@@ -8,4 +8,5 @@ public class Comment
     
     public string MemberId { get; set; }
     public virtual Member Member { get; set; }
+    public ICollection<UserLike> LikedBy { get; set; }
 }

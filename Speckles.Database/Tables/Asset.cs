@@ -8,7 +8,6 @@ public class Asset
     public string Description { get; set; }
     public Studio Studio { get; set; }
     public CustomLicense? CustomLicense { get; set; }
-
     public ICollection<Image> Images { get; set; } = new List<Image>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<AssetTag> Tags { get; set; } = new List<AssetTag>();
@@ -19,4 +18,6 @@ public class Asset
     
     public string LicenseId { get; set; }
     public virtual License License { get; set; }
+    public string ThumbnailId { get; set; }
+    public virtual Image Thumbnail { get; set; }
 }

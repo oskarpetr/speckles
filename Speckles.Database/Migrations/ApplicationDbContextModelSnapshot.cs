@@ -79,6 +79,10 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("StudioId")
                         .HasColumnType("text");
 
+                    b.Property<string>("ThumbnailId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("AssetId");
 
                     b.HasIndex("CurrencyId");
@@ -86,6 +90,8 @@ namespace Speckles.Database.Migrations
                     b.HasIndex("LicenseId");
 
                     b.HasIndex("StudioId");
+
+                    b.HasIndex("ThumbnailId");
 
                     b.ToTable("Assets");
                 });
@@ -508,6 +514,28 @@ namespace Speckles.Database.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.UserLike", b =>
+                {
+                    b.Property<string>("UserLikeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommentId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserLikeId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("UserLike");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.Asset", b =>
                 {
                     b.HasOne("Speckles.Database.Tables.Currency", "Currency")
@@ -526,11 +554,19 @@ namespace Speckles.Database.Migrations
                         .WithMany("Assets")
                         .HasForeignKey("StudioId");
 
+                    b.HasOne("Speckles.Database.Tables.Image", "Thumbnail")
+                        .WithMany()
+                        .HasForeignKey("ThumbnailId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.Navigation("Currency");
 
                     b.Navigation("License");
 
                     b.Navigation("Studio");
+
+                    b.Navigation("Thumbnail");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.AssetTag", b =>
@@ -542,7 +578,7 @@ namespace Speckles.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Speckles.Database.Tables.Tag", "Tag")
-                        .WithMany()
+                        .WithMany("Assets")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -732,6 +768,25 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Studio");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.UserLike", b =>
+                {
+                    b.HasOne("Speckles.Database.Tables.Comment", "Comment")
+                        .WithMany("LikedBy")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Speckles.Database.Tables.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.Asset", b =>
                 {
                     b.Navigation("Comments");
@@ -743,6 +798,11 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Speckles.Database.Tables.Comment", b =>
+                {
+                    b.Navigation("LikedBy");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Member", b =>
@@ -773,6 +833,11 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Assets");
 
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("Speckles.Database.Tables.Tag", b =>
+                {
+                    b.Navigation("Assets");
                 });
 #pragma warning restore 612, 618
         }

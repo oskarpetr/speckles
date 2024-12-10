@@ -43,3 +43,4 @@
 /Users/oskarpetr/Developer/React/speckles/Speckles.Api/obj/Debug/net7.0/Speckles.Api.pdb
 /Users/oskarpetr/Developer/React/speckles/Speckles.Api/obj/Debug/net7.0/Speckles.Api.genruntimeconfig.cache
 /Users/oskarpetr/Developer/React/speckles/Speckles.Api/obj/Debug/net7.0/ref/Speckles.Api.dll
+/Users/oskarpetr/Developer/React/speckles/Speckles.Api/obj/Debug/net7.0/Speckles.Api.xml

@@ -6,4 +6,6 @@ public class CommentDto
     public string Text { get; set; }
     public DateTimeOffset Date { get; set; }
     public ShortMemberDto Member { get; set; }
+    public int Likes { get; set; }
+    public bool Liked { get; set; }
 }

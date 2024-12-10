@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Mapster" Version="7.4.1-pre01" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
@@ -22,4 +23,10 @@
     <ItemGroup>
       <ProjectReference Include="..\Speckles.Database\Speckles.Database.csproj" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
 </Project>

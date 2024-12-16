@@ -2,13 +2,11 @@
 
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
-import Saved from "@/components/saved/Saved";
 
-export default function SavedPage() {
+export default function SettingsPage() {
   return (
     <Layout>
-      <Heading title="Saved assets" />
-      <Saved />
+      <Heading title="Settings" />
     </Layout>
   );
 }

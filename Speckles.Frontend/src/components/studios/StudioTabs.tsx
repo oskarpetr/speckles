@@ -1,11 +1,11 @@
 import { sortAssetsByTag } from "@/utils/sort";
-import Tabs from "../common/Tabs";
+import Tabs from "../shared/Tabs";
 import { IStudio } from "@/types/Studio.types";
 import { ITabItem } from "@/types/TabItem.types";
-import StudioAssets from "../studios/StudioAssets";
-import StudioMembers from "../studios/StudioMembers";
-import StudioAbout from "../studios/StudioAbout";
-import StudioAnalytics from "../studios/StudioAnalytics";
+import StudioAssets from "./StudioAssets";
+import StudioMembers from "./StudioMembers";
+import StudioAbout from "./StudioAbout";
+import StudioAnalytics from "./StudioAnalytics";
 import { useSession } from "next-auth/react";
 
 interface Props {
@@ -32,11 +32,11 @@ export default function StudioTabs({ studio }: Props) {
     },
     {
       title: "Members",
-      content: <StudioMembers members={studio?.members} />,
+      content: <StudioMembers members={studio?.members} canEdit={canEdit} />,
     },
     {
       title: "About",
-      content: <StudioAbout portfolio={studio?.portfolio} />,
+      content: <StudioAbout studio={studio} />,
     },
   ];
 

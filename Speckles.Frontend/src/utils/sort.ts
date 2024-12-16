@@ -2,7 +2,7 @@ import { IAssetShort } from "@/types/Asset.types";
 import { ITag } from "@/types/Tag.types";
 
 export function sortAssetsByTag(assets: IAssetShort[]) {
-  const tags: ITag[] = [];
+  const tags: ITag[] = [{ tagId: "all", name: "All", assets: assets }];
 
   assets.forEach((asset) => {
     asset.tags.forEach((tag) => {

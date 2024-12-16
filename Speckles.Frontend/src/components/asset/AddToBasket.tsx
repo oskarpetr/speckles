@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Button from "../common/Button";
+import Button from "../shared/Button";
 import { MenuContext } from "../context/MenuContext";
 // import { useAnimationControls } from "framer-motion";
 

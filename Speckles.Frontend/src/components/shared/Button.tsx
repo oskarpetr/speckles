@@ -1,11 +1,12 @@
 import { cn } from "@/utils/cn";
 import Icon from "./Icon";
 import Image from "next/image";
+import * as Icons from "@phosphor-icons/react/dist/ssr";
 
 interface Props {
   onClick?: () => void;
   type?: "primary" | "cancel" | "white" | "black";
-  icon?: string;
+  icon?: keyof typeof Icons;
   text?: string;
   secondaryText?: string;
   disabled?: boolean;
@@ -57,7 +58,7 @@ export default function Button({
       {icon && (
         <Icon
           name={loading ? "Spinner" : icon}
-          size={24}
+          size={size === "normal" ? 24 : 20}
           className={loading ? "animate-spin" : ""}
         />
       )}

@@ -4,7 +4,7 @@ export interface IComment {
   commentId: string;
   text: string;
   date: string;
-  member: IMemberShort;
+  author: IMemberShort;
   likes: number;
   liked: boolean;
 }

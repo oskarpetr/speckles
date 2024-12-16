@@ -2,11 +2,8 @@ import { IAssetShort } from "@/types/Asset.types";
 import { getAssetThumbnailAlt } from "@/utils/alts";
 import { formatPrice } from "@/utils/formatters";
 import { getAssetImage } from "@/utils/images";
-import { loadImage } from "@/utils/loadImage";
 import Image from "next/image";
 import Link from "next/link";
-import { getPlaiceholder } from "plaiceholder";
-import { useEffect, useState } from "react";
 
 interface Props {
   asset: IAssetShort;

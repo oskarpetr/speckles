@@ -1,7 +1,6 @@
-import { toastError, toastSuccess } from "@/components/common/Toast";
+import { toastError, toastSuccess } from "@/components/shared/Toast";
 import { IAuthLogin, IAuthRegister } from "@/types/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
-import { getSession, useSession } from "next-auth/react";
 
 // studios
 export async function fetchStudios() {
@@ -36,6 +35,11 @@ export async function fetchSavedCount(memberId: string) {
   return fetcher({ url: `saved?memberId=${memberId}&format=count` });
 }
 
+// promotions
+export async function fetchPromotion() {
+  return fetcher({ url: "promotion" });
+}
+
 export async function postSaved(
   memberId: string,
   assetId: string,
@@ -51,7 +55,7 @@ export async function postSaved(
 
 // basket assets
 export async function fetchBasket(memberId: string) {
-  return fetcher({ url: `basket?memberId=${memberId}&format=short` });
+  return fetcher({ url: `basket?memberId=${memberId}` });
 }
 
 export async function fetchBasketCount(memberId: string) {

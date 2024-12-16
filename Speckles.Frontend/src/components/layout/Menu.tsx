@@ -3,16 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import BasketCount from "../basket/BasketCount";
-import Icon from "../common/Icon";
+import Icon from "../shared/Icon";
 import Logo from "./Logo";
-import Button from "../common/Button";
+import Button from "../shared/Button";
 import SavedCount from "../saved/SavedCount";
-import DropdownMenu from "../common/DropdownMenu";
+import DropdownMenu from "../shared/DropdownMenu";
 import { IMenuItem } from "@/types/MenuItem.types";
-import Tooltip from "../common/Tooltip";
-import Avatar from "../common/Avatar";
+import Tooltip from "../shared/Tooltip";
+import Avatar from "../shared/Avatar";
 import { signOut, useSession } from "next-auth/react";
-import PopupTooltip from "../common/PopupTooltip";
+import PopupTooltip from "../shared/PopupTooltip";
+import { cn } from "@/utils/cn";
 
 export default function Menu() {
   // session
@@ -36,10 +37,48 @@ export default function Menu() {
     },
   ];
 
+  const menuItems: IMenuItem[] = [
+    {
+      link: "/profile",
+      text: "Profile",
+      icon: "User",
+    },
+    {
+      link: "/settings",
+      text: "Settings",
+      icon: "GearSix",
+    },
+    {
+      link: "orders",
+      text: "Orders",
+      icon: "Package",
+    },
+    {
+      link: "saved",
+      text: "Saved",
+      icon: "Heart",
+    },
+    {
+      link: "basket",
+      text: "Basket",
+      icon: "Basket",
+    },
+    {
+      onClick: signOut,
+      text: "Log out",
+      icon: "SignOut",
+    },
+  ];
+
   const search = () => {};
 
   return (
-    <div className="flex justify-between items-center px-32 py-8 bg-green-primary fixed w-full top-0 z-10 h-24">
+    <div
+      className={cn(
+        "flex justify-between items-center px-16 lg:px-32 py-8 bg-green-primary sticky top-0 w-full z-10 h-24"
+        // promotionVisible ? "translate-y-0" : "-translate-y-12"
+      )}
+    >
       <Logo />
 
       <div className="flex gap-6 items-center">
@@ -48,39 +87,55 @@ export default function Menu() {
             <MenuItem icon="MagnifyingGlass" onClick={search} />
           </Tooltip>
 
-          {status === "authenticated" && (
-            <Tooltip text="Orders">
-              <MenuItem icon="Package" link="orders" />
+          <div className="hidden md:block">
+            {status === "authenticated" && (
+              <Tooltip text="Orders">
+                <MenuItem icon="Package" link="orders" />
+              </Tooltip>
+            )}
+          </div>
+
+          <div className="hidden md:block">
+            <Tooltip text="Saved">
+              <MenuItem icon="Heart" link="saved">
+                <SavedCount />
+              </MenuItem>
             </Tooltip>
-          )}
+          </div>
 
-          <Tooltip text="Saved">
-            <MenuItem icon="Heart" link="saved">
-              <SavedCount />
-            </MenuItem>
-          </Tooltip>
+          <div className="hidden md:block">
+            <Tooltip text="Basket">
+              <MenuItem icon="Basket" link="basket">
+                <BasketCount />
+              </MenuItem>
+            </Tooltip>
+          </div>
 
-          <Tooltip text="Basket">
-            <MenuItem icon="Basket" link="basket">
-              <BasketCount />
-            </MenuItem>
-          </Tooltip>
-
-          {status === "authenticated" && (
-            <div className="ml-3 flex items-center">
-              <PopupTooltip
-                button={
-                  <Avatar
-                    memberId={session.user.memberId}
-                    fullName={session.user.fullName}
-                    size={48}
-                  />
-                }
-              >
-                <DropdownMenu items={userMenuItems} />
+          <div className="block md:hidden">
+            <Tooltip text="Menu">
+              <PopupTooltip button={<MenuItem icon="List" />}>
+                <DropdownMenu items={menuItems} />
               </PopupTooltip>
-            </div>
-          )}
+            </Tooltip>
+          </div>
+
+          <div className="hidden md:block">
+            {status === "authenticated" && (
+              <div className="ml-3 flex items-center">
+                <PopupTooltip
+                  button={
+                    <Avatar
+                      memberId={session.user.memberId}
+                      fullName={session.user.fullName}
+                      size={48}
+                    />
+                  }
+                >
+                  <DropdownMenu items={userMenuItems} />
+                </PopupTooltip>
+              </div>
+            )}
+          </div>
         </div>
 
         {status === "unauthenticated" && (
@@ -116,8 +171,8 @@ function MenuItem({ link, onClick, icon, children }: IMenuItem) {
       <Content />
     </Link>
   ) : (
-    <button onClick={onClick}>
+    <div role="button" onClick={onClick}>
       <Content />
-    </button>
+    </div>
   );
 }

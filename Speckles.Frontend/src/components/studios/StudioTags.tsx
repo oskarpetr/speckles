@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import Button from "../common/Button";
+import Button from "../shared/Button";
 import FadeIn from "../animation/FadeIn";
 import { ITag } from "@/types/Tag.types";
 

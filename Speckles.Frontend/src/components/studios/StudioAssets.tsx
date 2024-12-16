@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function StudioAssets({ tags, assets }: Props) {
-  const [selected, setSelected] = useState("All");
+  const [selected, setSelected] = useState("all");
 
   return (
     <FadeIn delay={0} className="flex flex-col gap-12">

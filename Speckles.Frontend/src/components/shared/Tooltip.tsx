@@ -1,4 +1,3 @@
-import { cn } from "@/utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode, useState } from "react";
 
@@ -9,12 +8,6 @@ interface Props {
 
 export default function Tooltip({ children, text }: Props) {
   const [isHovered, setIsHovered] = useState(false);
-
-  const setHovered = () => {
-    setTimeout(() => {
-      setIsHovered(true);
-    }, 500);
-  };
 
   return (
     <div

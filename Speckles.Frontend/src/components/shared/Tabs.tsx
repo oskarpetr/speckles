@@ -17,7 +17,7 @@ export default function Tabs({ items }: Props) {
       <FadeIn delay={0} className="flex gap-8">
         {items.map((item) => (
           <button
-            key={`tab_${item}`}
+            key={`tab_${item.title}`}
             className={cn(
               "flex flex-col gap-1 transition-opacity",
               selected === item.title ? "opacity-100" : "opacity-50"

@@ -1,8 +1,8 @@
 "use client";
 
 import FadeIn from "@/components/animation/FadeIn";
-import Button from "@/components/common/Button";
-import Heading from "@/components/common/Heading";
+import Button from "@/components/shared/Button";
+import Heading from "@/components/shared/Heading";
 import RegisterForm from "@/components/forms/RegisterForm";
 import NotAuthLayout from "@/components/layout/NotAuthLayout";
 import { cn } from "@/utils/cn";

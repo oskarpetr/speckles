@@ -1,8 +1,6 @@
 import { IMemberShort } from "@/types/Member.types";
-import { getAvatar } from "@/utils/images";
-import Image from "next/image";
 import Link from "next/link";
-import Avatar from "../common/Avatar";
+import Avatar from "../shared/Avatar";
 
 interface Props {
   member: IMemberShort;

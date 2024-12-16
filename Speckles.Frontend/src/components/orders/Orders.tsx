@@ -6,7 +6,7 @@ import Asset from "../asset/Asset";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
-import Icon from "../common/Icon";
+import Icon from "../shared/Icon";
 
 interface Props {
   orderCount: number;
@@ -42,7 +42,7 @@ function OrderList({ orderCount }: Props) {
   const ordersQuery = useQuery({
     queryKey: ["orders", session?.user.memberId],
     queryFn: () =>
-      fetchOrders(session?.user.memberId!, { offset: page * 9, limit: 9 }),
+      fetchOrders(session?.user.memberId ?? "", { offset: page * 9, limit: 9 }),
     enabled: !!session,
   });
 
@@ -52,10 +52,11 @@ function OrderList({ orderCount }: Props) {
     // window.scrollTo({ top: 0, behavior: "smooth" });
     ordersQuery.refetch();
   }, [page]);
+  console.log(Array.from({ length: pageCount }, (_, index) => index + 1));
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {ordersQuery.isSuccess &&
           orders.map((order, index) => (
             <FadeIn
@@ -80,11 +81,12 @@ function OrderList({ orderCount }: Props) {
 
         {Array.from({ length: pageCount }, (_, index) => index + 1)
           .slice(
-            Math.max(Math.min(0 + 5, pageCount) - 2, 0),
-            Math.min(Math.max(page - 3, 0) + 5, pageCount)
+            Math.max(0, page - 3),
+            Math.min(pageCount + 2, Math.max(5, page + 2))
           )
           .map((currentPage) => (
             <button
+              key={`page_${currentPage}`}
               className={cn(
                 "px-4 py-2 border rounded-lg tabular-nums transition-colors",
                 page === currentPage

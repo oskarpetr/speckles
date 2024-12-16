@@ -1,6 +1,6 @@
 "use client";
 
-import Heading from "@/components/common/Heading";
+import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import Orders from "@/components/orders/Orders";
 import { fetchOrderCount } from "@/utils/fetchers";
@@ -12,7 +12,7 @@ export default function OrdersPage() {
 
   const orderCountQuery = useQuery({
     queryKey: ["orders", session?.user.memberId, "count"],
-    queryFn: () => fetchOrderCount(session?.user.memberId!),
+    queryFn: () => fetchOrderCount(session?.user.memberId ?? ""),
     enabled: !!session,
   });
 

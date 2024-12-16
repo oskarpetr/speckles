@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
 import { MenuContextProvider } from "../context/MenuContext";
-import Toast from "../common/Toast";
+import Toast from "../shared/Toast";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 interface Props {

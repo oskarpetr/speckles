@@ -1,6 +1,6 @@
 import { ChangeEvent, FocusEvent, Fragment } from "react";
 import FormError from "./FormError";
-import Icon from "../common/Icon";
+import Icon from "../shared/Icon";
 import { cn } from "@/utils/cn";
 
 interface Props {

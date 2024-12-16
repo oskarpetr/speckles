@@ -1,12 +1,12 @@
 import { Formik } from "formik";
-import Section from "../common/Section";
-import Button from "../common/Button";
+import Section from "../shared/Section";
+import Button from "../shared/Button";
 import { object, string } from "yup";
 import Input from "./Input";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import { toastSuccess } from "../common/Toast";
+import { toastSuccess } from "../shared/Toast";
 
 export default function LoginForm() {
   // router

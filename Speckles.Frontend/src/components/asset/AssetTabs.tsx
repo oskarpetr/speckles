@@ -1,5 +1,5 @@
 import { IAsset } from "@/types/Asset.types";
-import Tabs from "../common/Tabs";
+import Tabs from "../shared/Tabs";
 import { ITabItem } from "@/types/TabItem.types";
 import Comments from "../asset/Comments";
 import AssetLicense from "../asset/AssetLicense";
@@ -20,5 +20,9 @@ export default function AssetTabs({ asset }: Props) {
     },
   ];
 
-  return <Tabs items={tabItems} />;
+  return (
+    <div className="max-w-[35rem]">
+      <Tabs items={tabItems} />
+    </div>
+  );
 }

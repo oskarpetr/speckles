@@ -1,9 +1,9 @@
 import { IAssetShort } from "@/types/Asset.types";
 import { useQuery } from "@tanstack/react-query";
 import FadeIn from "../animation/FadeIn";
-import Section from "../common/Section";
+import Section from "../shared/Section";
 import { fetchAssets } from "@/utils/fetchers";
-import RoundedButton from "../common/RoundedButton";
+import RoundedButton from "../shared/RoundedButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel, Navigation } from "swiper/modules";
 import Asset, { SkeletonAsset } from "../asset/Asset";
@@ -11,16 +11,16 @@ import Asset, { SkeletonAsset } from "../asset/Asset";
 import "swiper/css";
 import "swiper/css/navigation";
 
-export default function HomeAssets() {
+export default function ForYou() {
   return (
     <FadeIn delay={0.2}>
       <Section title="For you" />
-      <HomeAssetList />
+      <ForYouList />
     </FadeIn>
   );
 }
 
-function HomeAssetList() {
+function ForYouList() {
   const assetQuery = useQuery({
     queryKey: ["assets"],
     queryFn: fetchAssets,
@@ -33,8 +33,16 @@ function HomeAssetList() {
       <Swiper
         loop
         keyboard={{ enabled: true }}
-        slidesPerView={3}
+        slidesPerView={1}
         spaceBetween={24}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
         navigation={{
           prevEl: ".carousel-previous",
           nextEl: ".carousel-next",

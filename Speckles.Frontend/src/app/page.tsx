@@ -1,14 +1,11 @@
 "use client";
 
-import Heading from "@/components/common/Heading";
-import HomeAssets from "@/components/home/HomeAssets";
-import HomeStudios from "@/components/home/HomeStudios";
+import Heading from "@/components/shared/Heading";
+import ForYou from "@/components/home/ForYou";
+import TrendingStudios from "@/components/home/TrendingStudios";
 import Layout from "@/components/layout/Layout";
-import { useSession } from "next-auth/react";
 
 export default function HomePage() {
-  const { data: session } = useSession();
-  console.log(session);
   return (
     <Layout>
       {/* <div className="flex items-center justify-between"> */}
@@ -27,8 +24,8 @@ export default function HomePage() {
         </FadeIn>
       </div> */}
 
-      <HomeAssets />
-      <HomeStudios />
+      <ForYou />
+      <TrendingStudios />
     </Layout>
   );
 }

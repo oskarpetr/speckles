@@ -1,16 +1,30 @@
 import { getStudioLogoAlt } from "@/utils/alts";
 import { getStudioLogo } from "@/utils/images";
 import Image from "next/image";
-import Heading from "../common/Heading";
+import Heading from "../shared/Heading";
 import { IStudio } from "@/types/Studio.types";
 import FadeIn from "../animation/FadeIn";
-import Icon from "../common/Icon";
+import Button from "../shared/Button";
+import { useState } from "react";
+import { toastSuccess } from "../shared/Toast";
 
 interface Props {
   studio: IStudio;
 }
 
 export default function StudioBanner({ studio }: Props) {
+  const [followed, setFollowed] = useState(false);
+
+  function toggleFollow() {
+    setFollowed(!followed);
+
+    toastSuccess(
+      followed
+        ? `You unfollowed ${studio.name}.`
+        : `You followed ${studio.name}.`
+    );
+  }
+
   return (
     <div className="relative">
       <div className="h-64 overflow-hidden relative">
@@ -45,11 +59,18 @@ export default function StudioBanner({ studio }: Props) {
         </div>
 
         <FadeIn delay={0.1}>
+          <Button
+            icon={followed ? "Check" : "Plus"}
+            text={followed ? "Following" : "Follow"}
+            type="white"
+            size="small"
+            onClick={toggleFollow}
+          />
           {/* <div className="text-white">{studio.contactEmail}</div> */}
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Icon name="Basket" color="white" className="opacity-50" />
             <div className="text-white font-semibold text-lg">13 249 Sales</div>
-          </div>
+          </div> */}
         </FadeIn>
       </div>
     </div>

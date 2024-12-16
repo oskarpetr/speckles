@@ -8,8 +8,8 @@ import { useParams } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { MenuContext } from "@/components/context/MenuContext";
 import { useSession } from "next-auth/react";
-import AssetTabs from "@/components/tabs/AssetTabs";
 import AssetDetail from "@/components/asset/AssetDetail";
+import AssetTabs from "@/components/asset/AssetTabs";
 
 export default function AssetPage() {
   // session
@@ -25,14 +25,14 @@ export default function AssetPage() {
   // fetch asset
   const assetQuery = useQuery({
     queryKey: ["asset", assetId],
-    queryFn: () => fetchAsset(assetId.toString(), session?.user.memberId!),
+    queryFn: () => fetchAsset(assetId.toString(), session?.user.memberId ?? ""),
     enabled: !!session,
   });
 
   const asset = assetQuery.data?.data as IAsset;
-  const canEdit = asset?.studio.members.some(
-    (x) => x.memberId === session?.user.memberId
-  );
+  // const canEdit = asset?.studio.members.some(
+  //   (x) => x.memberId === session?.user.memberId
+  // );
 
   useEffect(() => {
     setAssetId(assetId.toString());

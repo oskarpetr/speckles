@@ -1,7 +1,7 @@
 "use client";
 
 import FadeIn from "@/components/animation/FadeIn";
-import Heading from "@/components/common/Heading";
+import Heading from "@/components/shared/Heading";
 import LoginForm from "@/components/forms/LoginForm";
 import NotAuthLayout from "@/components/layout/NotAuthLayout";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default function Loginpage() {
         <LoginForm />
 
         <Link href="/register" className="flex gap-2">
-          <div>Don't have an account?</div>
+          <div>Don&apos;t have an account?</div>
           <div className="text-green-primary font-bold underline">Register</div>
         </Link>
       </FadeIn>

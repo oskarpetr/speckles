@@ -10,7 +10,7 @@ interface Props {
 export default function NotAuthLayout({ children }: Props) {
   return (
     <div className="flex w-screen">
-      <div className="flex flex-col justify-between bg-green-primary w-1/3 h-screen fixed px-32 py-20 ">
+      <div className="flex flex-col justify-between bg-green-primary w-1/3 h-screen fixed px-32 py-20">
         <div className="flex flex-col gap-24">
           <FadeIn>
             <Logo />

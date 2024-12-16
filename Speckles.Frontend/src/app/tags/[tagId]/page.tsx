@@ -2,7 +2,7 @@
 
 import FadeIn from "@/components/animation/FadeIn";
 import Asset from "@/components/asset/Asset";
-import Heading from "@/components/common/Heading";
+import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { ITag } from "@/types/Tag.types";
 import { fetchAssetsByTag } from "@/utils/fetchers";

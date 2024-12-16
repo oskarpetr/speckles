@@ -62,28 +62,29 @@ export const MenuContextProvider = ({ children }: Props) => {
   // fetch basket count
   const basketCountQuery = useQuery({
     queryKey: ["basket", session?.user.memberId, "count"],
-    queryFn: () => fetchBasketCount(session?.user.memberId!),
+    queryFn: () => fetchBasketCount(session?.user.memberId ?? ""),
     enabled: status === "authenticated",
   });
 
   // post basket
   const postBasketQuery = useQuery({
     queryKey: ["basket", session?.user.memberId, assetId],
-    queryFn: () => postBasket(session?.user.memberId!, assetId, basketType!),
+    queryFn: () =>
+      postBasket(session?.user.memberId ?? "", assetId, basketType!),
     enabled: false,
   });
 
   // fetch saved count
   const savedCountQuery = useQuery({
-    queryKey: ["saved", session?.user.memberId!, "count"],
-    queryFn: () => fetchSavedCount(session?.user.memberId!),
+    queryKey: ["saved", session?.user.memberId ?? "", "count"],
+    queryFn: () => fetchSavedCount(session?.user.memberId ?? ""),
     enabled: status === "authenticated",
   });
 
   // post saved
   const postSavedQuery = useQuery({
-    queryKey: ["saved", session?.user.memberId!, assetId],
-    queryFn: () => postSaved(session?.user.memberId!, assetId, savedType!),
+    queryKey: ["saved", session?.user.memberId ?? "", assetId],
+    queryFn: () => postSaved(session?.user.memberId ?? "", assetId, savedType!),
     enabled: false,
   });
 

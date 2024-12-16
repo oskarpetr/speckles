@@ -1,6 +1,6 @@
 "use client";
 
-import Heading from "@/components/common/Heading";
+import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { IOrder } from "@/types/Order.types";
 import { formatDate, formatPrice, formatFileSize } from "@/utils/formatters";
@@ -12,9 +12,9 @@ import { Fragment } from "react";
 import { DownloadSimple, FileText } from "@phosphor-icons/react";
 import { getAssetFileExtension } from "@/utils/images";
 import Link from "next/link";
-import Section from "@/components/common/Section";
+import Section from "@/components/shared/Section";
 import FadeIn from "@/components/animation/FadeIn";
-import RoundedButton from "@/components/common/RoundedButton";
+import RoundedButton from "@/components/shared/RoundedButton";
 
 export default function OrderPage() {
   const { orderId } = useParams();
@@ -31,7 +31,10 @@ export default function OrderPage() {
     <Layout>
       {orderQuery.isSuccess && (
         <Fragment>
-          <Heading title={order.asset.name} />
+          <Heading
+            title={order.asset.name}
+            subtitle={order.asset.description}
+          />
 
           <div className="flex gap-16">
             <FadeIn delay={0.1} className="w-full">

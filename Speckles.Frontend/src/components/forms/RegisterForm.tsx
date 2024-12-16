@@ -1,6 +1,6 @@
 import { Formik } from "formik";
-import Section from "../common/Section";
-import Button from "../common/Button";
+import Section from "../shared/Section";
+import Button from "../shared/Button";
 import { object, ref, string } from "yup";
 import Input from "./Input";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -75,6 +75,7 @@ export default function RegisterForm({ step, setStep }: Props) {
   };
 
   const onSubmit = (values: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...data } = values;
     setRegisterBody((prev) => ({ ...prev, ...data }));
 
@@ -86,7 +87,6 @@ export default function RegisterForm({ step, setStep }: Props) {
     }
 
     if (step === 3) {
-      console.log("now");
       postRegisterQuery.refetch();
     }
   };

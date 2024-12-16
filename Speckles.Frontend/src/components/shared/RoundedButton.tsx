@@ -1,8 +1,9 @@
 import { cn } from "@/utils/cn";
 import Icon from "./Icon";
+import * as Icons from "@phosphor-icons/react/dist/ssr";
 
 interface Props {
-  icon: string;
+  icon: keyof typeof Icons;
   onClick?: () => void;
   colorType?: "primary" | "secondary";
 }

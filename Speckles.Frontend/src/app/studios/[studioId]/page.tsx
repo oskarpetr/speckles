@@ -6,7 +6,7 @@ import { IStudio } from "@/types/Studio.types";
 import { fetchStudio } from "@/utils/fetchers";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import StudioTabs from "@/components/tabs/StudioTabs";
+import StudioTabs from "@/components/studios/StudioTabs";
 
 export default function StudioPage() {
   // studioId param

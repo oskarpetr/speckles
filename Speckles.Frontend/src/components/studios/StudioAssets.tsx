@@ -4,6 +4,7 @@ import StudioTags from "./StudioTags";
 import { Fragment, useState } from "react";
 import { sortAssetsByTag } from "@/utils/sort";
 import StudioAssetList from "./StudioAssetList";
+import NoItemsYet from "../shared/NoItemsYet";
 
 interface Props {
   assets: IAssetShort[];
@@ -48,7 +49,7 @@ export default function StudioAssets({ assets }: Props) {
           </div>
         </Fragment>
       ) : (
-        <div className="text-neutral-500">No assets yet</div>
+        <NoItemsYet items="assets" />
       )}
     </FadeIn>
   );

@@ -11,6 +11,7 @@ import Section from "@/components/shared/Section";
 import Avatar from "@/components/shared/Avatar";
 import LayoutSection from "@/components/layout/LayoutSection";
 import { ApiResponse } from "@/types/ApiResponse.types";
+import NoItemsYet from "@/components/shared/NoItemsYet";
 
 export default function ProfilePage() {
   // username param
@@ -42,7 +43,7 @@ export default function ProfilePage() {
               {user.studios.length > 0 ? (
                 <StudioList studios={user.studios} delay={0.1} />
               ) : (
-                <div className="text-neutral-500">No studios yet</div>
+                <NoItemsYet items="studios" />
               )}
             </Section>
 
@@ -50,7 +51,7 @@ export default function ProfilePage() {
               {user.following.length > 0 ? (
                 <StudioList studios={user.following} delay={0.2} />
               ) : (
-                <div className="text-neutral-500">No followings yet</div>
+                <NoItemsYet items="followings" />
               )}
             </Section>
           </div>

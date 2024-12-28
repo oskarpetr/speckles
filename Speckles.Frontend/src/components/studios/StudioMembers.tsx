@@ -1,6 +1,7 @@
 import FadeIn from "../animation/FadeIn";
 import { IUserShort } from "@/types/dtos/User.types";
 import StudioMember from "./StudioMember";
+import NoItemsYet from "../shared/NoItemsYet";
 
 interface Props {
   members: IUserShort[];
@@ -25,7 +26,7 @@ export default function StudioMembers({ members }: Props) {
           )} */}
         </div>
       ) : (
-        <div className="text-neutral-500">No members yet</div>
+        <NoItemsYet items="members" />
       )}
     </FadeIn>
   );

@@ -1,23 +1,21 @@
 import FadeIn from "../animation/FadeIn";
-import { IMemberShort } from "@/types/Member.types";
+import { IUserShort } from "@/types/User.types";
 import StudioMember from "./StudioMember";
-import AddMember from "./AddMember";
 
 interface Props {
-  members: IMemberShort[];
-  canEdit: boolean;
+  members: IUserShort[];
 }
 
-export default function StudioMembers({ members, canEdit }: Props) {
+export default function StudioMembers({ members }: Props) {
   return (
     <FadeIn delay={0}>
       {/* <Section title="Studio's members" /> */}
-      <StudioMemberList members={members} canEdit={canEdit} />
+      <StudioMemberList members={members} />
     </FadeIn>
   );
 }
 
-function StudioMemberList({ members, canEdit }: Props) {
+function StudioMemberList({ members }: Props) {
   return (
     <div>
       {members.length > 0 ? (
@@ -28,11 +26,11 @@ function StudioMemberList({ members, canEdit }: Props) {
             </FadeIn>
           ))}
 
-          {canEdit && (
+          {/* {canEdit && (
             <FadeIn delay={(members.length + 1) * 0.05}>
               <AddMember />
             </FadeIn>
-          )}
+          )} */}
         </div>
       ) : (
         <div className="text-neutral-500">No members yet</div>

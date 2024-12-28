@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/components/layout/Layout";
-import { IAsset } from "@/types/Asset.types";
+import { IAsset } from "@/types/dtos/Asset.types";
 import { fetchAsset } from "@/utils/fetchers";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -10,10 +10,12 @@ import { MenuContext } from "@/components/context/MenuContext";
 import { useSession } from "next-auth/react";
 import AssetDetail from "@/components/asset/AssetDetail";
 import AssetTabs from "@/components/asset/AssetTabs";
+import LayoutSection from "@/components/layout/LayoutSection";
+import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function AssetPage() {
   // session
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   // asset id param
   const { assetId } = useParams();
@@ -23,29 +25,32 @@ export default function AssetPage() {
   const { setAssetId } = menuContext;
 
   // fetch asset
-  const assetQuery = useQuery({
+  const assetQuery = useQuery<ApiResponse<IAsset>>({
     queryKey: ["asset", assetId],
-    queryFn: () => fetchAsset(assetId.toString(), session?.user.memberId ?? ""),
-    enabled: !!session,
+    queryFn: () => fetchAsset(assetId as string, session?.user.memberId ?? ""),
+    enabled:
+      (status === "authenticated" && !!session) ||
+      status === "unauthenticated" ||
+      status === "loading",
   });
 
+  // asset
   const asset = assetQuery.data?.data as IAsset;
-  // const canEdit = asset?.studio.members.some(
-  //   (x) => x.memberId === session?.user.memberId
-  // );
 
   useEffect(() => {
-    setAssetId(assetId.toString());
+    setAssetId(assetId as string);
   }, []);
 
   return (
     <Layout>
-      {assetQuery.isSuccess && (
-        <div className="flex flex-col gap-32">
-          <AssetDetail asset={asset} />
-          <AssetTabs asset={asset} />
-        </div>
-      )}
+      <LayoutSection>
+        {assetQuery.isSuccess && (
+          <div className="flex flex-col gap-32">
+            <AssetDetail asset={asset} />
+            <AssetTabs asset={asset} />
+          </div>
+        )}
+      </LayoutSection>
     </Layout>
   );
 }

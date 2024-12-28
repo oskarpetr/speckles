@@ -1,37 +1,21 @@
-import { IStudioShort } from "@/types/Studio.types";
+import { IStudioShort } from "@/types/dtos/Studio.types";
 import Section from "../shared/Section";
 import { fetchStudios } from "@/utils/fetchers";
 import { useQuery } from "@tanstack/react-query";
-import FadeIn from "../animation/FadeIn";
-import HomeStudio from "./HomeStudio";
+import StudiosList from "../studios/StudioList";
+import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function TrendingStudios() {
-  return (
-    <FadeIn delay={0.3}>
-      <Section title="Trending studios" />
-      <TrendingStudiosList />
-    </FadeIn>
-  );
-}
-
-function TrendingStudiosList() {
-  const studiosQuery = useQuery({
+  const studiosQuery = useQuery<ApiResponse<IStudioShort[]>>({
     queryKey: ["studios"],
-    queryFn: fetchStudios,
+    queryFn: () => fetchStudios(),
   });
 
-  const studios = studiosQuery.data?.data as IStudioShort[];
+  const studios = studiosQuery.data?.data ?? [];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {studiosQuery.isSuccess &&
-        studios.map((studio, index) => (
-          <HomeStudio
-            key={`studio_${studio.studioId}`}
-            studio={studio}
-            index={index}
-          />
-        ))}
-    </div>
+    <Section title="Trending studios" delay={0.4}>
+      {studiosQuery.isSuccess && <StudiosList studios={studios} delay={0.4} />}
+    </Section>
   );
 }

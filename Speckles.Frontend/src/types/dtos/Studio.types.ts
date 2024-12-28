@@ -1,5 +1,5 @@
 import { IPortfolio } from "./Portfolio.types";
-import { IMemberShort } from "./Member.types";
+import { IUserShort } from "./User.types";
 import { IAssetShort } from "./Asset.types";
 import { IAddress } from "./Address.types";
 
@@ -10,7 +10,7 @@ export interface IStudio {
   slug: string;
   address: IAddress;
   portfolio: IPortfolio;
-  members: IMemberShort[];
+  members: IUserShort[];
   assets: IAssetShort[];
 }
 

@@ -1,13 +1,21 @@
 import Link from "next/link";
 import Section from "../shared/Section";
 import Image from "next/image";
+import { cn } from "@/utils/cn";
+import { layoutSectionPadding } from "./LayoutSection";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer>
-      <div className="flex justify-between items-center gap-6 bg-neutral-800 px-16 py-8 lg:px-32">
+      <div
+        className={cn(
+          "flex justify-between items-center gap-6 bg-neutral-800",
+          layoutSectionPadding,
+          "py-8"
+        )}
+      >
         <div className="text-white opacity-80">Payment options</div>
 
         <div className="flex gap-4">
@@ -33,39 +41,39 @@ export default function Footer() {
 
       <div className="bg-black-primary flex flex-col gap-16 px-16 py-16 lg:px-32 lg:py-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16">
-          <div className="w-full flex flex-col gap-2">
-            <Section title="Store" color="white" />
+          <Section title="Store" color="white">
+            <div className="flex flex-col gap-2">
+              <FooterItem text="Home Page" link="/" />
+              <FooterItem text="Search Assets" link="/" />
+            </div>
+          </Section>
 
-            <FooterItem text="Home Page" link="/" />
-            <FooterItem text="Search Assets" link="/" />
-          </div>
+          <Section title="Creators" color="white">
+            <div className="flex flex-col gap-2">
+              <FooterItem text="Become a Creator" link="/" />
+              <FooterItem text="Earning Program" link="/" />
+              <FooterItem
+                text="Develeoper API"
+                link="http://localhost:8080/swagger"
+              />
+            </div>
+          </Section>
 
-          <div className="w-full flex flex-col gap-2">
-            <Section title="Creators" color="white" />
+          <Section title="Customers" color="white">
+            <div className="flex flex-col gap-2">
+              <FooterItem text="Help Centre" link="/" />
+              <FooterItem text="Licensing" link="/" />
+              <FooterItem text="Refunds" link="/" />
+            </div>
+          </Section>
 
-            <FooterItem text="Become a Creator" link="/" />
-            <FooterItem text="Earning Program" link="/" />
-            <FooterItem
-              text="Develeoper API"
-              link="http://localhost:8080/swagger"
-            />
-          </div>
-
-          <div className="w-full flex flex-col gap-2">
-            <Section title="Customers" color="white" />
-
-            <FooterItem text="Help Centre" link="/" />
-            <FooterItem text="Licensing" link="/" />
-            <FooterItem text="Refunds" link="/" />
-          </div>
-
-          <div className="w-full flex flex-col gap-2">
-            <Section title="Legal" color="white" />
-
-            <FooterItem text="Terms and Conditions" link="/" />
-            <FooterItem text="Privacy Policy" link="/" />
-            <FooterItem text="Copyright" link="/" />
-          </div>
+          <Section title="Legal" color="white">
+            <div className="flex flex-col gap-2">
+              <FooterItem text="Terms and Conditions" link="/terms" />
+              <FooterItem text="Privacy Policy" link="/privacy" />
+              <FooterItem text="Copyright" link="/" />
+            </div>
+          </Section>
         </div>
 
         <div className="text-white opacity-50">

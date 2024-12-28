@@ -35,8 +35,10 @@ public static class ApiEndpoints
         public const string GET_STUDIO_EARNINGS = "studios/{slug}/earnings";
     }
 
-    public static class Members
-    {}
+    public static class Users
+    {
+        public const string GET_USER = "users/{username}";
+    }
 
     public static class Saved
     {
@@ -71,5 +73,10 @@ public static class ApiEndpoints
         public const string DELETE_COMMENT = "comments/{commentId}";
         
         public const string POST_LIKE = "comments/{commentId}/like";
+    }
+
+    public static class Promotions
+    {
+        public const string GET_PROMOTION = "promotion";
     }
 }

@@ -1,16 +1,34 @@
 import { BEZIER_CURVE } from "@/utils/animation";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MenuContext } from "../context/MenuContext";
+import { getLocalSaved } from "@/utils/local";
+import { useSession } from "next-auth/react";
 
 export default function SavedCount() {
+  // session
+  const { status } = useSession();
+
   // menu context
   const menuContext = useContext(MenuContext);
-  const { savedCountQuery } = menuContext;
 
   // saved count
-  const savedCount = (savedCountQuery?.data?.data.count as number) ?? 0;
+  const [savedCount, setSavedCount] = useState(0);
+
+  const getSaved = async () => {
+    if (status === "authenticated" && menuContext.savedCountQuery !== null) {
+      const fetch = await menuContext.savedCountQuery?.refetch();
+      setSavedCount(fetch?.data?.data?.count || 0);
+    } else {
+      const localSaved = getLocalSaved();
+      setSavedCount(localSaved.length);
+    }
+  };
+
+  useEffect(() => {
+    getSaved();
+  }, []);
 
   return (
     <AnimatePresence>

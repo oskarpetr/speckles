@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/specklesDb</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="neondb@ep-broad-sun-a2hrln4g.eu-central-1.aws.neon.tech" uuid="6b514f1e-2fd6-40c8-bcea-c4178017321d">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-broad-sun-a2hrln4g.eu-central-1.aws.neon.tech:5432/neondb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

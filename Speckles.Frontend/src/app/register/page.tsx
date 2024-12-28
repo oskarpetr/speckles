@@ -34,9 +34,9 @@ export default function RegisterPage() {
 
         <Button
           text="Continue with Google"
-          margin={false}
           image={"/images/providers/google.svg"}
           type="black"
+          fullWidth
           onClick={() => signIn("google")}
         />
 

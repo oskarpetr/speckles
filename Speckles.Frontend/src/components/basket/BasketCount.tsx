@@ -1,16 +1,34 @@
 import { BEZIER_CURVE } from "@/utils/animation";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MenuContext } from "../context/MenuContext";
+import { useSession } from "next-auth/react";
+import { getLocalBasket } from "@/utils/local";
 
 export default function BasketCount() {
+  // session
+  const { status } = useSession();
+
   // menu context
   const menuContext = useContext(MenuContext);
-  const { basketCountQuery } = menuContext;
 
   // basket count
-  const basketCount = (basketCountQuery?.data?.data.count as number) ?? 0;
+  const [basketCount, setBasketCount] = useState(0);
+
+  const getBasket = async () => {
+    if (status === "authenticated") {
+      const fetch = await menuContext.basketCountQuery?.refetch();
+      setBasketCount(fetch?.data?.data?.count || 0);
+    } else {
+      const localBasket = getLocalBasket();
+      setBasketCount(localBasket.length);
+    }
+  };
+
+  useEffect(() => {
+    getBasket();
+  }, []);
 
   return (
     <AnimatePresence>

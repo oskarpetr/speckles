@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Speckles.Database.Tables;
 
 public class Studio
@@ -11,6 +9,6 @@ public class Studio
     public Address Address { get; set; }
     public Portfolio Portfolio { get; set; }
     
-    public ICollection<StudioMember> Members { get; set; }
-    public ICollection<Asset> Assets { get; set; }
+    public ICollection<StudioMember> Members { get; set; } = new List<StudioMember>();
+    public ICollection<Asset> Assets { get; set; } = new List<Asset>();
 }

@@ -11,11 +11,11 @@ export function toastError(message: string) {
 export default function Toast() {
   return (
     <Toaster
-      containerStyle={{
-        marginTop: "112px",
-        marginRight: "16px",
-      }}
-      position="top-right"
+      // containerStyle={{
+      //   marginTop: "156px", // 112px
+      //   marginRight: "16px",
+      // }}
+      position="bottom-center"
       toastOptions={{
         style: {
           borderRadius: "10px",

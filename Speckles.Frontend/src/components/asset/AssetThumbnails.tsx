@@ -1,17 +1,22 @@
 import Image from "next/image";
 import FadeIn from "../animation/FadeIn";
 import { getAssetImage } from "@/utils/images";
-import { IAsset } from "@/types/Asset.types";
 import { useContext, useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 import { MenuContext } from "../context/MenuContext";
 import Like from "../shared/Like";
+import { useSession } from "next-auth/react";
+import { existsInLocalSaved, localSavedToggle } from "@/utils/local";
+import { IAsset } from "@/types/Asset.types";
 
 interface Props {
   asset: IAsset;
 }
 
-export default function AssetWithSlider({ asset }: Props) {
+export default function AssetThumbnails({ asset }: Props) {
+  // session
+  const { status } = useSession();
+
   // menu context
   const menuContext = useContext(MenuContext);
   const { savedCountQuery, postSavedQuery, setSavedType } = menuContext;
@@ -19,13 +24,26 @@ export default function AssetWithSlider({ asset }: Props) {
   // active image state
   const [activeImage, setActiveImage] = useState(0);
 
+  // determine if asset is saved
+  const determineSaved = () => {
+    if (status === "authenticated") {
+      return asset.saved;
+    } else {
+      return existsInLocalSaved(asset.assetId);
+    }
+  };
+
   // saved asset state
-  const [savedAsset, setSavedAsset] = useState(asset.saved);
+  const [savedAsset, setSavedAsset] = useState(determineSaved);
 
   // toggle save asset
   const toggleSaveAsset = async () => {
-    await postSavedQuery?.refetch();
-    await savedCountQuery?.refetch();
+    if (status === "authenticated") {
+      await postSavedQuery?.refetch();
+      await savedCountQuery?.refetch();
+    } else if (status === "unauthenticated") {
+      localSavedToggle(savedAsset, asset.assetId);
+    }
 
     setSavedType((prev) => (prev === "add" ? "remove" : "add"));
   };
@@ -49,8 +67,8 @@ export default function AssetWithSlider({ asset }: Props) {
   // };
 
   useEffect(() => {
-    setSavedType(asset.saved ? "remove" : "add");
-  }, []);
+    setSavedType(savedAsset ? "remove" : "add");
+  }, [savedAsset]);
 
   return (
     <FadeIn delay={0.1} className="flex flex-col gap-4">

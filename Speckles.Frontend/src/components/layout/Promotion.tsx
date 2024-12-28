@@ -1,26 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import Icon from "../shared/Icon";
 import { fetchPromotion } from "@/utils/fetchers";
-import { IPromotion } from "@/types/Promotion.types";
+import { IPromotion } from "@/types/dtos/Promotion.types";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
+import { layoutSectionPadding } from "./LayoutSection";
+import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function Promotion() {
   const [visible, setVisible] = useState(true);
 
-  const promotionQuery = useQuery({
+  const promotionQuery = useQuery<ApiResponse<IPromotion>>({
     queryKey: ["promotion"],
     queryFn: fetchPromotion,
   });
 
-  const promotion = (promotionQuery.data?.data as IPromotion) ?? null;
+  const promotion = promotionQuery.data?.data as IPromotion;
 
   return (
-    promotion !== null && (
+    promotion && (
       <div
         className={cn(
-          "flex justify-between items-center gap-12 bg-black-primary px-16 lg:px-32 py-3 transition-transform",
-          visible ? "translate-y-0" : "-translate-y-12 absolute"
+          "flex justify-between items-center gap-12 bg-black-primary transition-transform",
+          visible ? "translate-y-0" : "-translate-y-12 absolute",
+          layoutSectionPadding,
+          "py-3"
         )}
       >
         <div className="text-white text-sm font-semibold">

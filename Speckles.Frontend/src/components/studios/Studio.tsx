@@ -1,20 +1,15 @@
 import { IStudioShort } from "@/types/Studio.types";
-import FadeIn from "../animation/FadeIn";
 import Link from "next/link";
 import Image from "next/image";
 import { getStudioLogo } from "@/utils/images";
 
 interface Props {
   studio: IStudioShort;
-  index: number;
 }
 
-export default function HomeStudio({ studio, index }: Props) {
+export default function Studio({ studio }: Props) {
   return (
-    <FadeIn
-      delay={0.3 + index * 0.05}
-      className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-9 bg-neutral-300"
-    >
+    <div className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-9 bg-neutral-300">
       <Link href={`/studios/${studio.slug}`}>
         <Image
           src={getStudioLogo(studio.studioId)}
@@ -30,6 +25,6 @@ export default function HomeStudio({ studio, index }: Props) {
           <div className="font-bold text-white">{studio.name}</div>
         </div>
       </Link>
-    </FadeIn>
+    </div>
   );
 }

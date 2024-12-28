@@ -1,10 +1,13 @@
 import { toastError, toastSuccess } from "@/components/shared/Toast";
-import { IAuthLogin, IAuthRegister } from "@/types/Auth.types";
+import { IAuthLogin, IAuthRegister } from "@/types/dtos/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
+import { ToggleState } from "@/types/ToggleState.types";
 
 // studios
-export async function fetchStudios() {
-  return fetcher({ url: "studios", authorize: true });
+export async function fetchStudios(memberId?: string) {
+  return fetcher({
+    url: !memberId ? "studios" : `studios?memberId=${memberId}`,
+  });
 }
 
 export async function fetchStudio(studioId: string) {
@@ -33,6 +36,11 @@ export async function fetchSavedAssets(memberId: string) {
 
 export async function fetchSavedCount(memberId: string) {
   return fetcher({ url: `saved?memberId=${memberId}&format=count` });
+}
+
+// user
+export async function fetchUser(username: string) {
+  return fetcher({ url: `users/${username}` });
 }
 
 // promotions
@@ -65,7 +73,7 @@ export async function fetchBasketCount(memberId: string) {
 export async function postBasket(
   memberId: string,
   assetId: string,
-  type: "add" | "remove"
+  type: ToggleState
 ) {
   return fetcher({
     url: `basket?memberId=${memberId}`,
@@ -75,10 +83,23 @@ export async function postBasket(
   });
 }
 
+// comments
+export async function postCommentLike(
+  commentId: string,
+  memberId: string,
+  type: ToggleState
+) {
+  return fetcher({
+    url: `comments/${commentId}/like?memberId=${memberId}`,
+    method: "POST",
+    successMessage: type === "add" ? "Liked comment" : "Unliked comment",
+  });
+}
+
 // orders
 export async function fetchOrders(
   memberId: string,
-  { offset, limit }: { offset: number; limit: number }
+  { offset = 0, limit = 0 }: { offset?: number; limit?: number }
 ) {
   return fetcher({
     url: `orders?memberId=${memberId}&format=short&offset=${offset}&limit=${limit}`,
@@ -111,6 +132,18 @@ export async function postLogin(loginBody: IAuthLogin) {
 // tags
 export async function fetchAssetsByTag(tagId: string) {
   return fetcher({ url: `tags/${tagId}` });
+}
+
+// currency
+export async function fetchCurrencyRates(currency: string) {
+  // return fetcher({
+  //   url: `v1/latest?base=${currency}`,
+  //   origin: "https://api.frankfurter.dev/",
+  // });
+  return fetcher({
+    url: `v6/latest/${currency}`,
+    origin: "https://open.er-api.com/",
+  });
 }
 
 // fetcher

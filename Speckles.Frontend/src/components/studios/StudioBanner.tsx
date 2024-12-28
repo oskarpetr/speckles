@@ -7,13 +7,24 @@ import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
 import { useState } from "react";
 import { toastSuccess } from "../shared/Toast";
+import Like from "../shared/Like";
+import { canEditStudio } from "@/utils/permissions";
+import { useSession } from "next-auth/react";
+import { cn } from "@/utils/cn";
+import { layoutSectionPadding } from "../layout/LayoutSection";
 
 interface Props {
   studio: IStudio;
 }
 
 export default function StudioBanner({ studio }: Props) {
+  // session
+  const { data: session } = useSession();
+
   const [followed, setFollowed] = useState(false);
+
+  // permission
+  const canEdit = canEditStudio(studio, session?.user.memberId ?? "");
 
   function toggleFollow() {
     setFollowed(!followed);
@@ -39,17 +50,39 @@ export default function StudioBanner({ studio }: Props) {
         <div className="h-full flex justify-between items-center absolute bottom-0 left-0 px-8 pb-4 pt-12 w-full bg-gradient-to-t from-[#12121280] to-[#12121200]"></div>
       </div>
 
-      <div className="absolute bottom-12 left-32 flex justify-between items-end gap-6 w-[calc(100%-16rem)]">
-        <div className="flex items-center gap-6">
-          <FadeIn>
+      <div
+        className={cn(
+          "absolute top-0 flex justify-between items-center gap-6 w-full h-fit",
+          layoutSectionPadding
+        )}
+      >
+        <div className="flex items-center gap-8">
+          <FadeIn className="relative">
             <Image
               src={getStudioLogo(studio.studioId)}
               alt={getStudioLogoAlt(studio.name)}
-              width={100}
-              height={100}
-              className="w-20 h-20 rounded-full object-cover"
+              width={150}
+              height={150}
+              className="w-24 h-24 rounded-full object-cover"
             />
+
+            <div className="absolute -top-2 -right-3">
+              <Button
+                type="white"
+                size="small"
+                circle={true}
+                onClick={toggleFollow}
+              >
+                <Like
+                  liked={followed}
+                  setLiked={setFollowed}
+                  iconSize="small"
+                  color="black"
+                />
+              </Button>
+            </div>
           </FadeIn>
+
           <div className="flex flex-col gap-1">
             <Heading title={studio.name} color="white" />
             <FadeIn className="text-white text-opacity-60 font-semibold">
@@ -59,13 +92,14 @@ export default function StudioBanner({ studio }: Props) {
         </div>
 
         <FadeIn delay={0.1}>
-          <Button
-            icon={followed ? "Check" : "Plus"}
-            text={followed ? "Following" : "Follow"}
-            type="white"
-            size="small"
-            onClick={toggleFollow}
-          />
+          {canEdit && (
+            <Button
+              icon={{ name: "GearSix" }}
+              text="Settings"
+              type="white"
+              size="small"
+            />
+          )}
           {/* <div className="text-white">{studio.contactEmail}</div> */}
           {/* <div className="flex items-center gap-2">
             <Icon name="Basket" color="white" className="opacity-50" />

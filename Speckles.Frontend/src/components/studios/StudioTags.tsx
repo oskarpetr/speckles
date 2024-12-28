@@ -1,15 +1,19 @@
 import { Dispatch, SetStateAction } from "react";
 import Button from "../shared/Button";
 import FadeIn from "../animation/FadeIn";
-import { ITag } from "@/types/Tag.types";
+import { ITag } from "@/types/dtos/Tag.types";
 
 interface Props {
   tags: ITag[];
-  selected: string;
-  setSelected: Dispatch<SetStateAction<string>>;
+  selectedTag: string;
+  setSelectedTag: Dispatch<SetStateAction<string>>;
 }
 
-export default function StudioTags({ tags, selected, setSelected }: Props) {
+export default function StudioTags({
+  tags,
+  selectedTag,
+  setSelectedTag,
+}: Props) {
   return (
     <FadeIn delay={0} className="flex flex-col gap-2 w-80 h-fit sticky top-44">
       {tags.map((tag, index) => (
@@ -17,10 +21,10 @@ export default function StudioTags({ tags, selected, setSelected }: Props) {
           <Button
             key={tag.tagId}
             text={tag.name}
-            type={selected === tag.tagId ? "primary" : "white"}
-            onClick={() => setSelected(tag.tagId)}
-            margin={false}
+            type={selectedTag === tag.tagId ? "primary" : "white"}
+            onClick={() => setSelectedTag(tag.tagId)}
             secondaryText={tag.assets.length.toString()}
+            fullWidth
           />
         </FadeIn>
       ))}

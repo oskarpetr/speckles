@@ -8,7 +8,7 @@ interface Props {
 
 export default function StudioAnalytics({ slug }: Props) {
   return (
-    <FadeIn delay={0} className="flex gap-8">
+    <FadeIn delay={0} className="flex flex-col xl:flex-row gap-8">
       <Earnings slug={slug} />
       <Sales />
     </FadeIn>

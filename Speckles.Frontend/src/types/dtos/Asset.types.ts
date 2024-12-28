@@ -1,4 +1,4 @@
-import { IImageDto } from "./Image.types";
+import { IImage } from "./Image.types";
 import { IComment } from "./Comment.types";
 import { ICurrency } from "./Currency.types";
 import { ICustomLicense } from "./CustomLicense.types";
@@ -16,8 +16,8 @@ export interface IAsset {
   license: ILicense;
   studio: IStudio;
   customLicense?: ICustomLicense;
-  thumbnail: IImageDto;
-  images: IImageDto[];
+  thumbnail: IImage;
+  images: IImage[];
   files: IFile[];
   tags: ITagShort[];
   comments: IComment[];
@@ -31,5 +31,5 @@ export interface IAssetShort {
   price: number;
   currency: ICurrency;
   tags: ITagShort[];
-  thumbnail: IImageDto;
+  thumbnail: IImage;
 }

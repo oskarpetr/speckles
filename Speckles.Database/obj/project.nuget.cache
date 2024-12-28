@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zqUUzSdX8Z4=",
+  "dgSpecHash": "qgjBqUpXl2Xho7xg1N6WG1G+iFJAOLJNoDepkJ1SLRVlTSkpGr9WWv+24gvvw+8VzkJ402pCfmGCM7/jsJjmow==",
   "success": true,
-  "projectFilePath": "/Users/oskarpetr/Developer/React/speckles/Speckles.Database/Speckles.Database.csproj",
+  "projectFilePath": "/Users/oskarpetr/Developer/React/Speckles/Speckles.Database/Speckles.Database.csproj",
   "expectedPackageFiles": [
     "/Users/oskarpetr/.nuget/packages/dotnetenv/3.1.1/dotnetenv.3.1.1.nupkg.sha512",
     "/Users/oskarpetr/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",

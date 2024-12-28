@@ -18,19 +18,29 @@ public class StudiosController : Controller
     }
     
     /// <summary>
-    /// Retrieves all studios in short form.
+    /// Retrieves all studios or member's studios in short form.
     /// </summary>
     /// <remarks>
-    /// This endpoint retrieves a list of all studios in their short form.
+    /// This endpoint retrieves a list of all studios or member's studios in their short form.
     /// </remarks>
-    /// <returns>Retrieves all studios in short form.</returns>
-    /// <response code="200">Retrieves all studios in short form.</response>
+    /// <returns>Retrieves all studios or member's studios in short form.</returns>
+    /// <response code="200">Retrieves all studios or member's studios in short form.</response>
     [ProducesResponseType(typeof(ApiResponse<List<ShortStudioDto>>), 200)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIOS)]
-    public IActionResult GetStudios()
+    public IActionResult GetStudios([FromQuery] string? memberId)
     {
-        var studios = _database.GetStudios();
-        var response = new ApiResponse(studios);
+        ApiResponse response;
+        
+        if(memberId == null)
+        {
+            var studios = _database.GetStudios();
+            response = new ApiResponse(studios);
+        }
+        else
+        {
+            var studios = _database.GetMemberStudios(memberId);
+            response = new ApiResponse(studios);
+        }
         
         return Ok(response);
     }

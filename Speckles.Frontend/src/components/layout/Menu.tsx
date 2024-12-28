@@ -14,6 +14,7 @@ import Avatar from "../shared/Avatar";
 import { signOut, useSession } from "next-auth/react";
 import PopupTooltip from "../shared/PopupTooltip";
 import { cn } from "@/utils/cn";
+import { layoutSectionPadding } from "./LayoutSection";
 
 export default function Menu() {
   // session
@@ -21,9 +22,14 @@ export default function Menu() {
 
   const userMenuItems: IMenuItem[] = [
     {
-      link: "/profile",
+      link: `/profile/${session?.user.username}`,
       text: "Profile",
       icon: "User",
+    },
+    {
+      link: "/studios",
+      text: "My studios",
+      icon: "Acorn",
     },
     {
       link: "/settings",
@@ -39,7 +45,7 @@ export default function Menu() {
 
   const menuItems: IMenuItem[] = [
     {
-      link: "/profile",
+      link: `/profile/${session?.user.username}`,
       text: "Profile",
       icon: "User",
     },
@@ -49,17 +55,17 @@ export default function Menu() {
       icon: "GearSix",
     },
     {
-      link: "orders",
+      link: "/orders",
       text: "Orders",
       icon: "Package",
     },
     {
-      link: "saved",
+      link: "/saved",
       text: "Saved",
       icon: "Heart",
     },
     {
-      link: "basket",
+      link: "/basket",
       text: "Basket",
       icon: "Basket",
     },
@@ -75,8 +81,10 @@ export default function Menu() {
   return (
     <div
       className={cn(
-        "flex justify-between items-center px-16 lg:px-32 py-8 bg-green-primary sticky top-0 w-full z-10 h-24"
-        // promotionVisible ? "translate-y-0" : "-translate-y-12"
+        "flex justify-between items-center bg-green-primary sticky top-0 w-full z-10 h-24",
+        // promotionVisible ? "translate-y-0" : "-translate-y-12",
+        layoutSectionPadding,
+        "py-8"
       )}
     >
       <Logo />
@@ -87,17 +95,17 @@ export default function Menu() {
             <MenuItem icon="MagnifyingGlass" onClick={search} />
           </Tooltip>
 
-          <div className="hidden md:block">
-            {status === "authenticated" && (
+          {status === "authenticated" && (
+            <div className="hidden md:block">
               <Tooltip text="Orders">
-                <MenuItem icon="Package" link="orders" />
+                <MenuItem icon="Package" link="/orders" />
               </Tooltip>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="hidden md:block">
             <Tooltip text="Saved">
-              <MenuItem icon="Heart" link="saved">
+              <MenuItem icon="Heart" link="/saved">
                 <SavedCount />
               </MenuItem>
             </Tooltip>
@@ -105,7 +113,7 @@ export default function Menu() {
 
           <div className="hidden md:block">
             <Tooltip text="Basket">
-              <MenuItem icon="Basket" link="basket">
+              <MenuItem icon="Basket" link="/basket">
                 <BasketCount />
               </MenuItem>
             </Tooltip>
@@ -118,29 +126,27 @@ export default function Menu() {
               </PopupTooltip>
             </Tooltip>
           </div>
-
-          <div className="hidden md:block">
-            {status === "authenticated" && (
-              <div className="ml-3 flex items-center">
-                <PopupTooltip
-                  button={
-                    <Avatar
-                      memberId={session.user.memberId}
-                      fullName={session.user.fullName}
-                      size={48}
-                    />
-                  }
-                >
-                  <DropdownMenu items={userMenuItems} />
-                </PopupTooltip>
-              </div>
-            )}
-          </div>
         </div>
 
-        {status === "unauthenticated" && (
+        {status === "authenticated" ? (
+          <div className="hidden md:block">
+            <div className="flex items-center">
+              <PopupTooltip
+                button={
+                  <Avatar
+                    memberId={session.user.memberId}
+                    fullName={session.user.fullName}
+                    size={48}
+                  />
+                }
+              >
+                <DropdownMenu items={userMenuItems} />
+              </PopupTooltip>
+            </div>
+          </div>
+        ) : (
           <Link href="/login">
-            <Button text="Login" size="small" margin={false} type="white" />
+            <Button text="Login" size="small" type="white" />
           </Link>
         )}
       </div>
@@ -167,7 +173,7 @@ function MenuItem({ link, onClick, icon, children }: IMenuItem) {
   );
 
   return link ? (
-    <Link href={"/" + link}>
+    <Link href={link}>
       <Content />
     </Link>
   ) : (

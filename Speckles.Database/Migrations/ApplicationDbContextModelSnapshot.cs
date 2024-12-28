@@ -148,12 +148,12 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("AssetId")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("MemberId")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -163,7 +163,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
                 });
@@ -249,7 +249,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.ToTable("File");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Image", b =>
@@ -398,6 +398,26 @@ namespace Speckles.Database.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.Promotion", b =>
+                {
+                    b.Property<string>("PromotionId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("PromotionId");
+
+                    b.ToTable("Promotions");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.Recommendation", b =>
                 {
                     b.Property<string>("RecommendationId")
@@ -514,6 +534,28 @@ namespace Speckles.Database.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.UserFollow", b =>
+                {
+                    b.Property<string>("UserFollowId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StudioId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserFollowId");
+
+                    b.HasIndex("StudioId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFollows");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.UserLike", b =>
                 {
                     b.Property<string>("UserLikeId")
@@ -533,7 +575,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("UserLike");
+                    b.ToTable("UserLikes");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.Asset", b =>
@@ -613,13 +655,13 @@ namespace Speckles.Database.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("AssetId");
 
-                    b.HasOne("Speckles.Database.Tables.Member", "Member")
+                    b.HasOne("Speckles.Database.Tables.Member", "Author")
                         .WithMany()
-                        .HasForeignKey("MemberId")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Member");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Speckles.Database.Tables.CustomLicense", b =>
@@ -768,6 +810,25 @@ namespace Speckles.Database.Migrations
                     b.Navigation("Studio");
                 });
 
+            modelBuilder.Entity("Speckles.Database.Tables.UserFollow", b =>
+                {
+                    b.HasOne("Speckles.Database.Tables.Studio", "Studio")
+                        .WithMany()
+                        .HasForeignKey("StudioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Speckles.Database.Tables.Member", "User")
+                        .WithMany("Following")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Studio");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Speckles.Database.Tables.UserLike", b =>
                 {
                     b.HasOne("Speckles.Database.Tables.Comment", "Comment")
@@ -808,6 +869,8 @@ namespace Speckles.Database.Migrations
             modelBuilder.Entity("Speckles.Database.Tables.Member", b =>
                 {
                     b.Navigation("BasketAssets");
+
+                    b.Navigation("Following");
 
                     b.Navigation("Purchases");
 

@@ -8,7 +8,7 @@ import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { BEZIER_CURVE } from "@/utils/animation";
 import { useQuery } from "@tanstack/react-query";
 import { postRegister } from "@/utils/fetchers";
-import { IAuthRegister } from "@/types/Auth.types";
+import { IAuthRegister } from "@/types/dtos/Auth.types";
 import { passwordSchema } from "@/utils/validationSchemas";
 
 interface Props {
@@ -186,8 +186,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <div>
-                  <Section title="Full name" />
+                <Section title="Full name">
                   <Input
                     name="fullName"
                     onChange={handleChange}
@@ -197,9 +196,8 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.fullName}
                     touched={touched.fullName}
                   />
-                </div>
-                <div>
-                  <Section title="Email address" />
+                </Section>
+                <Section title="Email address">
                   <Input
                     name="email"
                     type="email"
@@ -210,7 +208,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.email}
                     touched={touched.email}
                   />
-                </div>
+                </Section>
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>
@@ -225,8 +223,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <div>
-                  <Section title="Username" />
+                <Section title="Username">
                   <Input
                     name="username"
                     onChange={handleChange}
@@ -236,9 +233,8 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.username}
                     touched={touched.username}
                   />
-                </div>
-                <div>
-                  <Section title="Password" />
+                </Section>
+                <Section title="Password">
                   <Input
                     name="password"
                     type="password"
@@ -249,9 +245,8 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.password}
                     touched={touched.password}
                   />
-                </div>
-                <div>
-                  <Section title="Confirm password" />
+                </Section>
+                <Section title="Confirm password">
                   <Input
                     name="confirmPassword"
                     type="password"
@@ -262,7 +257,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.confirmPassword}
                     touched={touched.confirmPassword}
                   />
-                </div>
+                </Section>
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>
@@ -277,8 +272,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <div>
-                  <Section title="Country" />
+                <Section title="Country">
                   <Input
                     name="country"
                     onChange={handleChange}
@@ -288,9 +282,8 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.country}
                     touched={touched.country}
                   />
-                </div>
-                <div>
-                  <Section title="State" />
+                </Section>
+                <Section title="State">
                   <Input
                     name="state"
                     onChange={handleChange}
@@ -300,10 +293,9 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.state}
                     touched={touched.state}
                   />
-                </div>
+                </Section>
                 <div className="flex gap-6">
-                  <div className="w-full">
-                    <Section title="City" />
+                  <Section title="City">
                     <Input
                       name="city"
                       onChange={handleChange}
@@ -313,9 +305,8 @@ export default function RegisterForm({ step, setStep }: Props) {
                       error={errors.city}
                       touched={touched.city}
                     />
-                  </div>
-                  <div className="w-full">
-                    <Section title="ZIP" />
+                  </Section>
+                  <Section title="ZIP">
                     <Input
                       name="zip"
                       onChange={handleChange}
@@ -325,10 +316,9 @@ export default function RegisterForm({ step, setStep }: Props) {
                       error={errors.zip}
                       touched={touched.zip}
                     />
-                  </div>
+                  </Section>
                 </div>
-                <div>
-                  <Section title="Street" />
+                <Section title="Street">
                   <Input
                     name="street"
                     onChange={handleChange}
@@ -338,7 +328,7 @@ export default function RegisterForm({ step, setStep }: Props) {
                     error={errors.street}
                     touched={touched.street}
                   />
-                </div>
+                </Section>
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>
@@ -355,17 +345,16 @@ function FormButtons({ step, goBack }: { step: number; goBack: () => void }) {
     <div className="flex gap-6">
       {step !== 1 && (
         <Button
-          icon="ArrowLeft"
+          icon={{ name: "ArrowLeft" }}
           text="Go back"
           type="cancel"
           onClick={goBack}
-          fullWidth={false}
         />
       )}
       <Button
-        icon="ArrowRight"
+        icon={{ name: "ArrowRight", iconDirection: "right" }}
         text={step === 3 ? "Register" : "Continue"}
-        iconDirection="right"
+        fullWidth
       />
     </div>
   );

@@ -1,9 +1,7 @@
-import { ICurrency } from "@/types/Currency.types";
-
-export function formatPrice(price: number, currency: ICurrency) {
-  const formatter = new Intl.NumberFormat(currency.locale, {
+export function formatPrice(locale: string, currency: string, price: number) {
+  const formatter = new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: currency.name,
+    currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });

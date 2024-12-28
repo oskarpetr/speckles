@@ -1,15 +1,15 @@
-import { IMemberShort } from "@/types/Member.types";
+import { IUserShort } from "@/types/User.types";
 import Link from "next/link";
 import Avatar from "../shared/Avatar";
 
 interface Props {
-  member: IMemberShort;
+  member: IUserShort;
 }
 
 export default function StudioMember({ member }: Props) {
   return (
     <Link
-      href={`/members/${member.username}`}
+      href={`/profile/${member.username}`}
       className="flex items-center gap-6"
     >
       <Avatar

@@ -35,7 +35,7 @@ export default function NotAuthLayout({ children }: Props) {
       </div>
 
       <div className="w-full ml-[calc(100%*1/3)] px-32 py-20">
-        <div className="w-[30rem] flex flex-col gap-24">{children}</div>
+        <div className="w-[35rem] flex flex-col gap-24">{children}</div>
       </div>
     </div>
   );

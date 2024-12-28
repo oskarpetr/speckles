@@ -6,7 +6,7 @@ import LoginForm from "@/components/forms/LoginForm";
 import NotAuthLayout from "@/components/layout/NotAuthLayout";
 import Link from "next/link";
 
-export default function Loginpage() {
+export default function LoginPage() {
   return (
     <NotAuthLayout>
       <div className="h-7"></div>

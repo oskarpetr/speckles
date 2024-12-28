@@ -1,6 +1,7 @@
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Speckles.Api.Dto;
+using Speckles.Api.Models;
 using Speckles.Database;
 using Speckles.Database.Tables;
 
@@ -14,7 +15,23 @@ public class DatabaseService
     {
         _database = database;
     }
+    
+    public void DeleteAsset(string assetId)
+    {
+        var asset = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
+        
+        if (asset == null)
+            return;
+        
+        _database.Assets.Remove(asset);
+        _database.SaveChanges();
+    }
 
+    public bool MemberExists(string memberId)
+    {
+        return _database.Members.Any(x => x.MemberId == memberId);
+    }
+    
     public bool StudioExists(string slug)
     {
         return _database.Studios.Any(x => x.Slug == slug);
@@ -33,6 +50,18 @@ public class DatabaseService
     public List<ShortStudioDto> GetStudios()
     {
         return _database.Studios
+            .ToList()
+            
+            // Studio -> ShortStudioDto
+            .Adapt<List<ShortStudioDto>>();
+    }
+    
+    public List<ShortStudioDto> GetMemberStudios(string memberId) {
+        return _database.Studios
+            .Include(x => x.Members)
+            
+            // Search studios by memberId
+            .Where(x => x.Members.Any(y => y.MemberId == memberId))
             .ToList()
             
             // Studio -> ShortStudioDto
@@ -74,5 +103,98 @@ public class DatabaseService
             
             // Tag -> TagDto
             .Adapt<TagDto>();
+    }
+
+    public List<Order> GetOrders()
+    {
+        return _database.Orders.ToList();
+    }
+    
+    public List<ShortAssetDto> GetAssets(List<string> assetIds)
+    {
+        return _database.Assets
+            .Where(x => assetIds.Contains(x.AssetId))
+            .Include(x => x.Thumbnail)
+            .Include(x => x.Currency)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
+            .ToList()
+            
+            // Asset -> ShortAssetDto
+            .Adapt<List<ShortAssetDto>>();
+    }
+    
+    public bool AssetExists(string assetId)
+    {
+        return _database.Assets.Any(x => x.AssetId == assetId);
+    }
+    
+    public AssetDto GetAsset(string assetId, string? memberId)
+    {
+        var asset = _database.Assets
+            .Include(x => x.CustomLicense)
+            .Include(x => x.Thumbnail)
+            .Include(x => x.Images)
+            .Include(x => x.Currency)
+            .Include(x => x.License)
+            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.Member)
+            .Include(x => x.Studio).ThenInclude(x => x.Address)
+            .Include(x => x.Studio).ThenInclude(x => x.Portfolio).ThenInclude(x => x.Projects)
+            .Include(x => x.Comments).ThenInclude(x => x.Author)
+            .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.Member)
+            .Include(x => x.Files)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
+            
+            // Search asset by assetId
+            .FirstOrDefault(x => x.AssetId == assetId)
+
+            // Asset -> AssetDto
+            .Adapt<AssetDto>();
+        
+        if (string.IsNullOrEmpty(memberId))
+            return asset;
+        
+        var assetInteraction = AssetInteraction(assetId, memberId);
+
+        foreach (var comment in asset.Comments)
+            comment.Liked = assetInteraction.LikedComments.Contains(comment.CommentId);
+        
+        asset.Saved = assetInteraction.Saved;
+        asset.InBasket = assetInteraction.InBasket;
+
+        return asset;
+    }
+
+    AssetInteraction AssetInteraction(string assetId, string memberId)
+    {
+        var asset = _database.Assets
+            .Include(x => x.Comments).ThenInclude(x => x.LikedBy)
+            
+            // Search asset by assetId
+            .FirstOrDefault(x => x.AssetId == assetId);
+        
+        if(asset == null)
+            return new AssetInteraction();
+        
+        var savedExists =
+            _database.SavedAssets.FirstOrDefault(x =>
+                x.MemberId == memberId && x.AssetId == assetId);
+        
+        var basketExists =
+            _database.BasketAssets.FirstOrDefault(x =>
+                x.MemberId == memberId && x.AssetId == assetId);
+
+        var likedComments = new List<string>();
+        foreach (var comment in asset.Comments)
+        {
+            var liked = comment.LikedBy.Any(x => x.MemberId == memberId);
+            if (liked) likedComments.Add(comment.CommentId);
+        }
+        
+        return new AssetInteraction()
+        {
+            LikedComments = likedComments,
+            Saved = savedExists != null,
+            InBasket = basketExists != null
+        };
     }
 }

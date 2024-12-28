@@ -6,7 +6,7 @@ public class Comment
     public string Text { get; set; }
     public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
     
-    public string MemberId { get; set; }
-    public virtual Member Member { get; set; }
+    public string AuthorId { get; set; }
+    public virtual Member Author { get; set; }
     public ICollection<UserLike> LikedBy { get; set; }
 }

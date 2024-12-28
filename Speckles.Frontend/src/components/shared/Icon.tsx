@@ -1,14 +1,15 @@
-import React from "react";
+import React, { ComponentProps, ComponentType } from "react";
 import * as Icons from "@phosphor-icons/react/dist/ssr";
 
-type IconWeight = "bold" | "duotone" | "fill" | "regular" | "thin";
+export type IconWeight = "bold" | "duotone" | "fill" | "regular" | "thin";
+export type IconNames = keyof typeof Icons;
 
 interface Props {
-  name: keyof typeof Icons;
+  name: IconNames;
   size?: number;
   weight?: IconWeight;
   color?: string;
-  className?: React.ComponentProps<"div">["className"];
+  className?: ComponentProps<"div">["className"];
 }
 
 const Icon = ({
@@ -18,7 +19,7 @@ const Icon = ({
   color = "currentColor",
   className,
 }: Props) => {
-  const PhosphorIcon = Icons[name] as React.ComponentType<{
+  const PhosphorIcon = Icons[name] as ComponentType<{
     size?: number;
     weight?: IconWeight;
     color?: string;

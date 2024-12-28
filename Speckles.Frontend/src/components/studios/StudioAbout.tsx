@@ -7,7 +7,7 @@ interface Props {
 
 export default function StudioAbout({ studio }: Props) {
   return (
-    <FadeIn delay={0} className="flex flex-col gap-12">
+    <FadeIn delay={0} className="flex flex-col gap-12 max-w-[35rem]">
       <div>{studio.portfolio.about}</div>
 
       <div>

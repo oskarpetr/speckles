@@ -11,81 +11,83 @@ import { getAssetImage } from "@/utils/images";
 import Section from "@/components/shared/Section";
 import FadeIn from "@/components/animation/FadeIn";
 import { useSession } from "next-auth/react";
-import { IAssetShort } from "@/types/Asset.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
 import { getAssetThumbnailAlt } from "@/utils/alts";
-import { formatPrice } from "@/utils/formatters";
+import LayoutSection from "@/components/layout/LayoutSection";
+import AssetPrice from "@/components/asset/AssetPrice";
+import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function BasketPage() {
-  // Session
+  // session
   const { data: session } = useSession();
 
-  // Fetch basket
-  const basketQuery = useQuery({
+  // fetch basket
+  const basketQuery = useQuery<ApiResponse<IAssetShort[]>>({
     queryKey: ["basket", session?.user.memberId],
     queryFn: () => fetchBasket(session?.user.memberId ?? ""),
     enabled: !!session?.user.memberId,
   });
 
-  const basket = basketQuery.data?.data as IAssetShort[];
+  // basket
+  const basket = basketQuery.data?.data ?? [];
 
   return (
     <Layout>
-      <Heading title="Basket" />
+      <LayoutSection>
+        <Heading title="Basket" />
 
-      {basketQuery.isSuccess && (
-        <div className="flex gap-16">
-          <FadeIn delay={0.1} className="w-full">
-            <Section title="Assets" />
+        {basketQuery.isSuccess && (
+          <div className="flex gap-16">
+            <Section title="Assets" delay={0.1}>
+              <div className="flex flex-col gap-6 h-fit bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
+                {basket.map((asset, index) => (
+                  <Fragment key={`asset_${asset.assetId}`}>
+                    <FadeIn
+                      delay={0.2 + index * 0.05}
+                      className="flex justify-between items-center"
+                    >
+                      <div className="flex items-center gap-4">
+                        <Image
+                          src={getAssetImage(
+                            asset.assetId,
+                            asset.thumbnail.imageId
+                          )}
+                          alt={getAssetThumbnailAlt(asset.name)}
+                          width={256}
+                          height={0}
+                          className="w-32 rounded-lg"
+                        />
 
-            <div className="flex flex-col gap-6 h-fit bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
-              {basket.map((asset, index) => (
-                <Fragment key={`asset_${asset.assetId}`}>
-                  <FadeIn
-                    delay={0.2 + index * 0.05}
-                    className="flex justify-between items-center"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Image
-                        src={getAssetImage(
-                          asset.assetId,
-                          asset.thumbnail.imageId
-                        )}
-                        alt={getAssetThumbnailAlt(asset.name)}
-                        width={256}
-                        height={0}
-                        className="w-32 rounded-lg"
-                      />
+                        <div>
+                          <div className="font-bold text-lg">{asset.name}</div>
+                          <div className="opacity-50">{asset.name}</div>
+                        </div>
 
-                      <div>
-                        <div className="font-bold text-lg">{asset.name}</div>
-                        <div className="opacity-50">{asset.name}</div>
-                      </div>
-
-                      <div>
-                        <div className="font-bold text-lg">Price</div>
-                        <div className="opacity-50">
-                          {formatPrice(asset.price, asset.currency)}
+                        <div>
+                          <div className="font-bold text-lg">Price</div>
+                          <AssetPrice
+                            price={asset.price}
+                            currency={asset.currency}
+                            color="black"
+                          />
                         </div>
                       </div>
-                    </div>
-                  </FadeIn>
-
-                  {index !== basket.length - 1 && (
-                    <FadeIn delay={0.2 + index * 0.05}>
-                      <div className="border-b border-black-primary border-opacity-10"></div>
                     </FadeIn>
-                  )}
-                </Fragment>
-              ))}
-            </div>
-          </FadeIn>
 
-          <FadeIn delay={0.2} className="w-1/2">
-            <Section title="Order summary" />
+                    {index !== basket.length - 1 && (
+                      <FadeIn delay={0.2 + index * 0.05}>
+                        <div className="border-b border-black-primary border-opacity-10"></div>
+                      </FadeIn>
+                    )}
+                  </Fragment>
+                ))}
+              </div>
+            </Section>
 
-            <div className="flex flex-col gap-6 bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
-              <div className="flex flex-col gap-2">
-                {/* <div className="flex justify-between">
+            <Section title="Order summary" delay={0.2}>
+              <div className="flex flex-col gap-6 bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
+                <div className="flex flex-col gap-2">
+                  {/* <div className="flex justify-between">
                 <div>Order date</div>
                 <div>{formatDate(order.date)}</div>
               </div>
@@ -101,31 +103,32 @@ export default function BasketPage() {
                 <div>Payment method</div>
                 <div>{order.paymentMethod}</div>
               </div> */}
-              </div>
+                </div>
 
-              <div className="flex flex-col gap-3 mt-8">
-                <button
-                  className={
-                    "bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-black-primary border-opacity-10 flex items-center justify-center gap-2 w-full rounded-lg py-[calc(1rem-1px)] text-green-primary font-bold transition-colors"
-                  }
-                >
-                  <FileText size={24} />
-                  View Invoice
-                </button>
+                <div className="flex flex-col gap-3 mt-8">
+                  <button
+                    className={
+                      "bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-black-primary border-opacity-10 flex items-center justify-center gap-2 w-full rounded-lg py-[calc(1rem-1px)] text-green-primary font-bold transition-colors"
+                    }
+                  >
+                    <FileText size={24} />
+                    View Invoice
+                  </button>
 
-                <button
-                  className={
-                    "bg-green-primary hover:bg-green-primary-hover flex items-center justify-center gap-2 w-full rounded-lg py-4 text-white font-bold transition-colors"
-                  }
-                >
-                  <DownloadSimple size={24} />
-                  Download All
-                </button>
+                  <button
+                    className={
+                      "bg-green-primary hover:bg-green-primary-hover flex items-center justify-center gap-2 w-full rounded-lg py-4 text-white font-bold transition-colors"
+                    }
+                  >
+                    <DownloadSimple size={24} />
+                    Download All
+                  </button>
+                </div>
               </div>
-            </div>
-          </FadeIn>
-        </div>
-      )}
+            </Section>
+          </div>
+        )}
+      </LayoutSection>
     </Layout>
   );
 }

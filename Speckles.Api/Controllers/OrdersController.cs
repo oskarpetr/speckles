@@ -42,13 +42,16 @@ public class OrdersController : Controller
             .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
-            .Where(x => x.MemberId == memberId);
+            .Where(x => x.MemberId == memberId)
+            .ToList();
 
+        var totalCount = orders.Count;
+        
         if(offset != null)
-            orders = orders.Skip(offset.Value);
+            orders = orders.Skip(offset.Value).ToList();
         
         if(limit != null)
-            orders = orders.Take(limit.Value);
+            orders = orders.Take(limit.Value).ToList();
 
         ApiResponse response;
         
@@ -60,7 +63,7 @@ public class OrdersController : Controller
         else
         {
             var shortOrdersDto = orders.Adapt<List<ShortOrderDto>>();
-            response = new ApiResponse(shortOrdersDto);
+            response = new ApiResponse(shortOrdersDto, totalCount);
         }
         
         return Ok(response);
@@ -87,16 +90,13 @@ public class OrdersController : Controller
 
         var order = _database.Orders
             .Include(x => x.Asset).ThenInclude(x => x.CustomLicense)
-            .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset).ThenInclude(x => x.Images)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.License)
             .Include(x => x.Asset).ThenInclude(x => x.Studio)
-            .Include(x => x.Asset).ThenInclude(x => x.Comments)
             .Include(x => x.Asset).ThenInclude(x => x.Files)
-            .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
             .FirstOrDefault(x => x.OrderId == orderId);
-        
+        // return Ok(new {order, orderExists, orderId});
         var orderDto = order.Adapt<OrderDto>();
         var response = new ApiResponse(orderDto);
         

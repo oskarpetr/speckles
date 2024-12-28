@@ -15,6 +15,7 @@ public class Member
     public ICollection<BasketAsset> BasketAssets { get; set; }
     public ICollection<SavedAsset> SavedAssets { get; set; }
     public ICollection<StudioMember> Studios { get; set; }
+    public ICollection<UserFollow> Following { get; set; }
 
     public string AddressId { get; set; }
     public virtual Address Address { get; set; }

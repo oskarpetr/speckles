@@ -50,8 +50,8 @@ interface Props {
 }
 
 export const MenuContextProvider = ({ children }: Props) => {
-  // auth session
-  const { data: session, status } = useSession();
+  // session
+  const { data: session } = useSession();
 
   // asset id
   const [assetId, setAssetId] = useState("");
@@ -63,7 +63,7 @@ export const MenuContextProvider = ({ children }: Props) => {
   const basketCountQuery = useQuery({
     queryKey: ["basket", session?.user.memberId, "count"],
     queryFn: () => fetchBasketCount(session?.user.memberId ?? ""),
-    enabled: status === "authenticated",
+    enabled: false,
   });
 
   // post basket
@@ -78,7 +78,7 @@ export const MenuContextProvider = ({ children }: Props) => {
   const savedCountQuery = useQuery({
     queryKey: ["saved", session?.user.memberId ?? "", "count"],
     queryFn: () => fetchSavedCount(session?.user.memberId ?? ""),
-    enabled: status === "authenticated",
+    enabled: false,
   });
 
   // post saved

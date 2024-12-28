@@ -1,4 +1,4 @@
-export interface IImageDto {
+export interface IImage {
   imageId: string;
   alt: string;
 }

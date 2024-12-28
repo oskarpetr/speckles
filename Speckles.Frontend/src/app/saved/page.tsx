@@ -3,12 +3,15 @@
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import Saved from "@/components/saved/Saved";
+import LayoutSection from "@/components/layout/LayoutSection";
 
 export default function SavedPage() {
   return (
     <Layout>
-      <Heading title="Saved assets" />
-      <Saved />
+      <LayoutSection>
+        <Heading title="Saved assets" />
+        <Saved />
+      </LayoutSection>
     </Layout>
   );
 }

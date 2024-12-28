@@ -14,11 +14,11 @@ export default function Heading({
   subtitle,
   animate = true,
   color = "black",
-  delay = 0.1,
+  delay = 0,
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      <FadeIn animate={animate}>
+      <FadeIn animate={animate} delay={delay}>
         <h1
           className={cn(
             "heading text-4xl",
@@ -31,7 +31,7 @@ export default function Heading({
 
       {subtitle && (
         <FadeIn delay={delay} animate={animate}>
-          <h2 className="max-w-[35rem]">{subtitle}</h2>
+          <p className="max-w-[35rem]">{subtitle}</p>
         </FadeIn>
       )}
     </div>

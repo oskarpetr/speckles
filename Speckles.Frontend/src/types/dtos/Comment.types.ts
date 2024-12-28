@@ -1,4 +1,4 @@
-import { IMemberShort } from "./Member.types";
+import { IMemberShort } from "./User.types";
 
 export interface IComment {
   commentId: string;

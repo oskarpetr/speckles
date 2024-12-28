@@ -3,17 +3,14 @@ import Section from "../shared/Section";
 import Button from "../shared/Button";
 import { object, string } from "yup";
 import Input from "./Input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { toastSuccess } from "../shared/Toast";
 
 export default function LoginForm() {
   // router
   const router = useRouter();
-
-  // session
-  const { status } = useSession();
 
   // error response
   const [formError, setFormError] = useState<string | undefined>();
@@ -60,10 +57,6 @@ export default function LoginForm() {
     }
   };
 
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
-
   return (
     <Formik
       initialValues={initialValues}
@@ -80,8 +73,7 @@ export default function LoginForm() {
       }: any) => (
         <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col gap-8">
-            <div>
-              <Section title="Email address" />
+            <Section title="Email address">
               <Input
                 name="email"
                 type="email"
@@ -92,9 +84,8 @@ export default function LoginForm() {
                 error={errors.email}
                 touched={touched.email}
               />
-            </div>
-            <div>
-              <Section title="Password" />
+            </Section>
+            <Section title="Password">
               <Input
                 name="password"
                 type="password"
@@ -105,14 +96,14 @@ export default function LoginForm() {
                 error={errors.password || formError}
                 touched={touched.password}
               />
-            </div>
+            </Section>
 
             {/* <FormError error={formError} touched /> */}
             <Button
-              icon="ArrowRight"
+              icon={{ name: "ArrowRight", iconDirection: "right" }}
               text="Login"
-              iconDirection="right"
               loading={loading}
+              fullWidth
             />
           </div>
         </form>

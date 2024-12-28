@@ -6,3 +6,9 @@ export interface IAddress {
   zip: string;
   country: string;
 }
+
+export interface IAddressShort {
+  addressId: string;
+  city: string;
+  country: string;
+}

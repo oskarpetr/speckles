@@ -1,39 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import FadeIn from "../animation/FadeIn";
 import { fetchSavedAssets } from "@/utils/fetchers";
-import { IAssetShort } from "@/types/Asset.types";
-import Asset from "../asset/Asset";
+import { IAssetShort } from "@/types/dtos/Asset.types";
+import { useSession } from "next-auth/react";
+import AssetList from "../asset/AssetList";
+import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function Saved() {
-  return (
-    <FadeIn delay={0.2}>
-      <SavedList />
-    </FadeIn>
-  );
-}
+  // session
+  const { data: session } = useSession();
 
-function SavedList() {
-  const memberId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
-
-  const savedQuery = useQuery({
-    queryKey: ["saved", memberId],
-    queryFn: () => fetchSavedAssets(memberId),
+  // fetch saved assets
+  const savedQuery = useQuery<ApiResponse<IAssetShort[]>>({
+    queryKey: ["saved", session?.user.memberId],
+    queryFn: () => fetchSavedAssets(session?.user.memberId ?? ""),
+    enabled: !!session,
   });
 
-  const savedAssets = savedQuery.data?.data as IAssetShort[];
+  // saved assets
+  const savedAssets = savedQuery.data?.data ?? [];
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      {savedQuery.isSuccess &&
-        savedAssets.map((asset, index) => (
-          <FadeIn
-            key={`asset_${asset.assetId}`}
-            delay={0.2 + index * 0.05}
-            className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-10 bg-neutral-300"
-          >
-            <Asset asset={asset} />
-          </FadeIn>
-        ))}
-    </div>
+    <FadeIn delay={0.2}>
+      {savedQuery.isSuccess && <AssetList assets={savedAssets} delay={0.2} />}
+    </FadeIn>
   );
 }

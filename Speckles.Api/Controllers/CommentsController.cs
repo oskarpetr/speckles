@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.Lib;
 using Speckles.Database;
+using Speckles.Database.Tables;
 
 namespace Speckles.Api.Controllers;
 
@@ -86,12 +87,34 @@ public class CommentsController : Controller
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Comments.POST_LIKE)]
-    public IActionResult CreateCommentLink(string commentId)
+    public IActionResult CreateCommentLike([FromRoute] string commentId, [FromQuery] string memberId)
     {
         var commentExists = _database.Comments.Any(x => x.CommentId == commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
+        
+        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        
+        if(!memberExists)
+            return NotFound(new ApiError("Member", memberId));
+        
+        var commentLike = _database.UserLikes.FirstOrDefault(x => x.CommentId == commentId && x.MemberId == memberId);
+        
+        if (commentLike != null)
+        {
+            _database.UserLikes.Remove(commentLike);
+        }
+        else
+        {
+            _database.UserLikes.Add(new UserLike()
+            {
+                CommentId = commentId,
+                MemberId = memberId
+            });
+        }
+
+        _database.SaveChanges();
         
         return Ok();
     }

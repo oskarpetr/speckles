@@ -1,10 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
-using Speckles.Database;
 
 namespace Speckles.Api.Controllers;
 
@@ -15,9 +12,9 @@ namespace Speckles.Api.Controllers;
 [Route(ApiEndpoints.API_BASE)]
 public class AssetsController : Controller
 {
-    private readonly ApplicationDbContext _database;
+    private readonly DatabaseService _database;
     
-    public AssetsController(ApplicationDbContext database)
+    public AssetsController(DatabaseService database)
     {
         _database = database;
     }
@@ -34,25 +31,18 @@ public class AssetsController : Controller
     [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var orders = _database.Orders;
+        var orders = _database.GetOrders();
 
-        var assetIds = orders.Select(x => x.AssetId).Distinct();
+        var assetIds = orders.Select(x => x.AssetId).Distinct().ToList();
         
         if (offset != null)
-            assetIds = assetIds.Skip(offset.Value);
+            assetIds = assetIds.Skip(offset.Value).ToList();
         
         if (limit != null)
-            assetIds = assetIds.Take(limit.Value);
+            assetIds = assetIds.Take(limit.Value).ToList();
 
-        var assets = _database.Assets
-            .Where(x => assetIds.Contains(x.AssetId))
-            .Include(x => x.Thumbnail)
-            .Include(x => x.Currency)
-            .Include(x => x.Tags).ThenInclude(x => x.Tag)
-            .ToList();
-
-        var assetsDto = assets.Adapt<List<ShortAssetDto>>();
-        var response = new ApiResponse(assetsDto);
+        var assets = _database.GetAssets(assetIds);
+        var response = new ApiResponse(assets);
         
         return Ok(response);
     }
@@ -69,46 +59,24 @@ public class AssetsController : Controller
     [ProducesResponseType(typeof(ApiResponse<List<AssetDto>>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSET)]
-    public IActionResult GetAsset(string assetId, [FromQuery, Required] string memberId)
+    public IActionResult GetAsset(string assetId, [FromQuery] string? memberId)
     {
-        var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
+        var assetExists = _database.AssetExists(assetId);
         
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
 
-        var asset = _database.Assets
-            .Include(x => x.CustomLicense)
-            .Include(x => x.Thumbnail)
-            .Include(x => x.Images)
-            .Include(x => x.Currency)
-            .Include(x => x.License)
-            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.Member)
-            .Include(x => x.Studio).ThenInclude(x => x.Address)
-            .Include(x => x.Studio).ThenInclude(x => x.Portfolio).ThenInclude(x => x.Projects)
-            .Include(x => x.Comments).ThenInclude(x => x.Member)
-            .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.Member)
-            .Include(x => x.Files)
-            .Include(x => x.Tags).ThenInclude(x => x.Tag)
-            .FirstOrDefault(x => x.AssetId == assetId);
-
-        var assetDto = asset.Adapt<AssetDto>();
-
-        var savedExists =
-            _database.SavedAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
-        
-        var basketExists =
-            _database.BasketAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
-        
-        for (int i = 0; i < assetDto.Comments.Count; i++)
+        if (!string.IsNullOrWhiteSpace(memberId))
         {
-            var liked = asset?.Comments.ToList()[i].LikedBy.Any(x => x.MemberId == memberId);
-            assetDto.Comments[i].Liked = liked ?? false;
+            var memberExists = _database.MemberExists(memberId);
+            
+            if (!memberExists)
+                return NotFound(new ApiError("Member", memberId));
         }
-        
-        assetDto.Saved = savedExists != null;
-        assetDto.InBasket = basketExists != null;
 
-        var response = new ApiResponse(assetDto);
+        var asset = _database.GetAsset(assetId, memberId);
+
+        var response = new ApiResponse(asset);
         
         return Ok(response);
     }
@@ -142,7 +110,7 @@ public class AssetsController : Controller
     [HttpPut(ApiEndpoints.Assets.PUT_ASSET)]
     public IActionResult UpdateAsset(string assetId)
     {
-        var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
+        var assetExists = _database.AssetExists(assetId);
         
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
@@ -164,13 +132,12 @@ public class AssetsController : Controller
     [HttpDelete(ApiEndpoints.Assets.DELETE_ASSET)]
     public IActionResult DeleteAsset(string assetId)
     {
-        var asset = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
+        var assetExists = _database.AssetExists(assetId);
         
-        if(asset == null)
+        if(!assetExists)
             return NotFound(new ApiError("Asset", assetId));
-        
-        _database.Assets.Remove(asset);
-        _database.SaveChanges();
+
+        _database.DeleteAsset(assetId);
         
         return Ok();
     }

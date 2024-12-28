@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/utils/fetchers";
 import { IUser } from "@/types/dtos/User.types";
-import StudiosList from "@/components/studios/StudioList";
+import StudioList from "@/components/studios/StudioList";
 import Section from "@/components/shared/Section";
 import Avatar from "@/components/shared/Avatar";
 import LayoutSection from "@/components/layout/LayoutSection";
@@ -40,7 +40,7 @@ export default function ProfilePage() {
 
             <Section title="Studios" delay={0.1}>
               {user.studios.length > 0 ? (
-                <StudiosList studios={user.studios} delay={0.1} />
+                <StudioList studios={user.studios} delay={0.1} />
               ) : (
                 <div className="text-neutral-500">No studios yet</div>
               )}
@@ -48,7 +48,7 @@ export default function ProfilePage() {
 
             <Section title="Following" delay={0.2}>
               {user.following.length > 0 ? (
-                <StudiosList studios={user.following} delay={0.2} />
+                <StudioList studios={user.following} delay={0.2} />
               ) : (
                 <div className="text-neutral-500">No followings yet</div>
               )}

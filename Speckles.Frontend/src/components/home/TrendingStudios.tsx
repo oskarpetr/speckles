@@ -2,7 +2,7 @@ import { IStudioShort } from "@/types/dtos/Studio.types";
 import Section from "../shared/Section";
 import { fetchStudios } from "@/utils/fetchers";
 import { useQuery } from "@tanstack/react-query";
-import StudiosList from "../studios/StudioList";
+import StudioList from "../studios/StudioList";
 import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function TrendingStudios() {
@@ -15,7 +15,7 @@ export default function TrendingStudios() {
 
   return (
     <Section title="Trending studios" delay={0.4}>
-      {studiosQuery.isSuccess && <StudiosList studios={studios} delay={0.4} />}
+      {studiosQuery.isSuccess && <StudioList studios={studios} delay={0.4} />}
     </Section>
   );
 }

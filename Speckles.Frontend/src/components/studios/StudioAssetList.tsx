@@ -1,7 +1,8 @@
-import { IAssetShort } from "@/types/Asset.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
 import FadeIn from "../animation/FadeIn";
 import Asset from "../asset/AssetItem";
-import { ITag } from "@/types/Tag.types";
+import { ITag } from "@/types/dtos/Tag.types";
+import Grid from "../shared/Grid";
 
 interface Props {
   tags: ITag[];
@@ -16,7 +17,7 @@ export default function StudioAssetList({ tags, assets, selectedTag }: Props) {
       : tags.find((x) => x.tagId == selectedTag)?.assets ?? [];
 
   return (
-    <div className="grid grid-cols-3 gap-6 w-full h-full">
+    <Grid>
       {studioAssets.map((asset, index) => (
         <FadeIn
           key={`asset_${asset.assetId}`}
@@ -26,6 +27,6 @@ export default function StudioAssetList({ tags, assets, selectedTag }: Props) {
           <Asset asset={asset} />
         </FadeIn>
       ))}
-    </div>
+    </Grid>
   );
 }

@@ -1,4 +1,4 @@
-import { IAssetShort } from "@/types/Asset.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
 import FadeIn from "../animation/FadeIn";
 import StudioTags from "./StudioTags";
 import { Fragment, useState } from "react";

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { fetchOrders } from "@/utils/fetchers";
 import { ApiResponse } from "@/types/ApiResponse.types";
+import Grid from "../shared/Grid";
 
 export default function OrdersList() {
   // session
@@ -36,7 +37,7 @@ export default function OrdersList() {
         totalCount={totalCount}
         query={ordersQuery}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Grid>
           {orders.map((order, index) => (
             <FadeIn
               key={`order_${order.orderId}`}
@@ -46,7 +47,7 @@ export default function OrdersList() {
               <Asset asset={order.asset} type="order" orderId={order.orderId} />
             </FadeIn>
           ))}
-        </div>
+        </Grid>
       </LoadMore>
     )
   );

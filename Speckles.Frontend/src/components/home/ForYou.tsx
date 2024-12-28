@@ -2,7 +2,7 @@ import { IAssetShort } from "@/types/dtos/Asset.types";
 import { useQuery } from "@tanstack/react-query";
 import Section from "../shared/Section";
 import { fetchAssets } from "@/utils/fetchers";
-import AssetsList from "../asset/AssetList";
+import AssetList from "../asset/AssetList";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -18,7 +18,7 @@ export default function ForYou() {
 
   return (
     <Section title="For you" delay={0.3}>
-      {assetsQuery.isSuccess && <AssetsList assets={assets} />}
+      {assetsQuery.isSuccess && <AssetList assets={assets} />}
     </Section>
   );
 }

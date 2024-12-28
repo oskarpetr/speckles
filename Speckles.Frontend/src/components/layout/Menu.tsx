@@ -134,7 +134,7 @@ export default function Menu() {
               <PopupTooltip
                 button={
                   <Avatar
-                    memberId={session.user.memberId}
+                    userId={session.user.userId}
                     fullName={session.user.fullName}
                     size={48}
                   />

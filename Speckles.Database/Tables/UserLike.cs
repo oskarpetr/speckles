@@ -4,8 +4,8 @@ public class UserLike
 {
     public string UserLikeId { get; set; } = Guid.NewGuid().ToString();
     
-    public string MemberId { get; set; }
-    public virtual Member Member { get; set; }
+    public string UserId { get; set; }
+    public virtual User User { get; set; }
     
     public string CommentId { get; set; }
     public virtual Comment Comment { get; set; }

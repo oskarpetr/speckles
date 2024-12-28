@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
@@ -27,7 +26,7 @@ public class AssetsController : Controller
     /// </remarks>
     /// <returns>Retrieves all assets in short form.</returns>
     /// <response code="200">Retrieves all assets in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<ShortAssetDto>>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] int? limit, [FromQuery] int? offset)
     {
@@ -59,22 +58,22 @@ public class AssetsController : Controller
     [ProducesResponseType(typeof(ApiResponse<List<AssetDto>>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSET)]
-    public IActionResult GetAsset(string assetId, [FromQuery] string? memberId)
+    public IActionResult GetAsset(string assetId, [FromQuery] string? userId)
     {
         var assetExists = _database.AssetExists(assetId);
         
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
 
-        if (!string.IsNullOrWhiteSpace(memberId))
+        if (!string.IsNullOrWhiteSpace(userId))
         {
-            var memberExists = _database.MemberExists(memberId);
+            var userExists = _database.UserExists(userId);
             
-            if (!memberExists)
-                return NotFound(new ApiError("Member", memberId));
+            if (!userExists)
+                return NotFound(new ApiError("User", userId));
         }
 
-        var asset = _database.GetAsset(assetId, memberId);
+        var asset = _database.GetAsset(assetId, userId);
 
         var response = new ApiResponse(asset);
         

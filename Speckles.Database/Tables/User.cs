@@ -2,9 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace Speckles.Database.Tables;
 
-public class Member
+public class User
 {
-    public string MemberId { get; set; } = Guid.NewGuid().ToString();
+    public string UserId { get; set; } = Guid.NewGuid().ToString();
     public string Username { get; set; }
     public string FullName { get; set; }
     public string Password { get; set; }
@@ -14,7 +14,7 @@ public class Member
     public ICollection<Recommendation> Recommendations { get; set; }
     public ICollection<BasketAsset> BasketAssets { get; set; }
     public ICollection<SavedAsset> SavedAssets { get; set; }
-    public ICollection<StudioMember> Studios { get; set; }
+    public ICollection<StudioUser> Studios { get; set; }
     public ICollection<UserFollow> Following { get; set; }
 
     public string AddressId { get; set; }

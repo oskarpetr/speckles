@@ -18,27 +18,27 @@ public class StudiosController : Controller
     }
     
     /// <summary>
-    /// Retrieves all studios or member's studios in short form.
+    /// Retrieves all studios or user's studios in short form.
     /// </summary>
     /// <remarks>
-    /// This endpoint retrieves a list of all studios or member's studios in their short form.
+    /// This endpoint retrieves a list of all studios or user's studios in their short form.
     /// </remarks>
-    /// <returns>Retrieves all studios or member's studios in short form.</returns>
-    /// <response code="200">Retrieves all studios or member's studios in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<ShortStudioDto>>), 200)]
+    /// <returns>Retrieves all studios or user's studios in short form.</returns>
+    /// <response code="200">Retrieves all studios or user's studios in short form.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<StudioShortDto>>), 200)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIOS)]
-    public IActionResult GetStudios([FromQuery] string? memberId)
+    public IActionResult GetStudios([FromQuery] string? userId)
     {
         ApiResponse response;
         
-        if(memberId == null)
+        if(userId == null)
         {
             var studios = _database.GetStudios();
             response = new ApiResponse(studios);
         }
         else
         {
-            var studios = _database.GetMemberStudios(memberId);
+            var studios = _database.GetMemberStudios(userId);
             response = new ApiResponse(studios);
         }
         
@@ -183,7 +183,7 @@ public class StudiosController : Controller
             {
                 AssetName = g.Key,
                 Ordered = g.Count(),
-                Asset = g.First().Asset.Adapt<ShortAssetDto>(),
+                Asset = g.First().Asset.Adapt<AssetShortDto>(),
                 TotalAmount = g.Sum(p => p.Asset.Price)
             });
         
@@ -192,71 +192,10 @@ public class StudiosController : Controller
         return Ok(response);
     }
 
-    // [HttpGet("gen")]
-    // public IActionResult Gen()
-    // {
-    //     string[] assetIds = new string[]
-    //     {
-    //         "87d14f19-69e7-4340-b80d-152e6006d178",
-    //         "dea96a97-8511-4782-b005-57b60f05b551",
-    //         "198fc68b-dc01-4158-9ab3-b1e84a259c73"
-    //     };
-    //
-    //     string[] paymentMethods = new string[]
-    //     {
-    //         "Stripe",
-    //         "PayPal"
-    //     };
-    //
-    //     string memberId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
-    //
-    //     // Starting date: 100 days ago from today
-    //     DateTime startDate = DateTime.Today.AddDays(-400);
-    //
-    //     // Generate 100 entries, one for each day
-    //     for (int i = 0; i < 400; i++)
-    //     {
-    //         // Calculate the date for each entry
-    //         DateTime orderDate = startDate.AddDays(i);
-    //
-    //         // Alternate between the AssetIds and PaymentMethods
-    //         string randomAssetId = assetIds[i % assetIds.Length];  // Cycle through assetIds
-    //         string randomPaymentMethod = paymentMethods[i % paymentMethods.Length];  // Cycle through paymentMethods
-    //
-    //         // Create and add the new order to the database
-    //         _database.Orders.Add(new Order()
-    //         {
-    //             Date = orderDate,
-    //             AssetId = randomAssetId,
-    //             MemberId = memberId,
-    //             PaymentMethod = randomPaymentMethod
-    //         });
-    //     }
-    //     
-    //     DateTime startDate2 = DateTime.Today.AddDays(-400);
-    //
-    //     // Generate 100 entries, one for each day
-    //     for (int i = 0; i < 400; i++)
-    //     {
-    //         // Calculate the date for each entry
-    //         DateTime orderDate = startDate2.AddDays(i);
-    //
-    //         // Alternate between the AssetIds and PaymentMethods
-    //         string randomAssetId = assetIds[i % assetIds.Length];  // Cycle through assetIds
-    //         string randomPaymentMethod = paymentMethods[i % paymentMethods.Length];  // Cycle through paymentMethods
-    //
-    //         // Create and add the new order to the database
-    //         _database.Orders.Add(new Order()
-    //         {
-    //             Date = orderDate,
-    //             AssetId = randomAssetId,
-    //             MemberId = memberId,
-    //             PaymentMethod = randomPaymentMethod
-    //         });
-    //     }
-    //
-    //     _database.SaveChanges();
-    //
-    //     return Ok();
-    // }
+    [HttpGet("gen")]
+    public IActionResult Gen()
+    {
+        _database.Gen();
+        return Ok();
+    }
 }

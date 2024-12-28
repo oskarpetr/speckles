@@ -22,29 +22,29 @@ public class SavedController : Controller
     }
     
     /// <summary>
-    /// Retrieves all saved assets in short form by member id.
+    /// Retrieves all saved assets in short form by user id.
     /// </summary>
     /// <remarks>
-    /// This endpoint retrieves a list of all saved assets in their short form by a member id.
+    /// This endpoint retrieves a list of all saved assets in their short form by a user id.
     /// </remarks>
-    /// <returns>Retrieves all saved assets in short form by member id.</returns>
-    /// <response code="200">Retrieves all saved assets in short form by member id.</response>
-    /// <response code="404">Member was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<ShortAssetDto>>), 200)]
+    /// <returns>Retrieves all saved assets in short form by user id.</returns>
+    /// <response code="200">Retrieves all saved assets in short form by user id.</response>
+    /// <response code="404">User was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Saved.GET_SAVED)]
-    public IActionResult GetSaved([FromQuery, Required] string memberId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
+    public IActionResult GetSaved([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         
-        if(!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if(!userExists)
+            return NotFound(new ApiError("User", userId));
 
         var savedAssets = _database.SavedAssets
             .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
-            .Where(x => x.MemberId == memberId)
+            .Where(x => x.UserId == userId)
             .Select(x => x.Asset).ToList();
         
         if(offset != null)
@@ -62,7 +62,7 @@ public class SavedController : Controller
         }
         else
         {
-            var savedAssetsDto = savedAssets.Adapt<List<ShortAssetDto>>();
+            var savedAssetsDto = savedAssets.Adapt<List<AssetShortDto>>();
             response = new ApiResponse(savedAssetsDto);
         }
         
@@ -70,31 +70,31 @@ public class SavedController : Controller
     }
     
     /// <summary>
-    /// Creates saved asset for member id.
+    /// Creates saved asset for user id.
     /// </summary>
     /// <remarks>
-    /// This endpoint creates a saved asset for member id.
+    /// This endpoint creates a saved asset for user id.
     /// </remarks>
-    /// <returns>Creates saved asset for member id.</returns>
-    /// <response code="201">Creates saved asset for member id.</response>
-    /// <response code="404">Member or asset was not found.</response>
+    /// <returns>Creates saved asset for user id.</returns>
+    /// <response code="201">Creates saved asset for user id.</response>
+    /// <response code="404">User or asset was not found.</response>
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Saved.POST_SAVED)]
-    public IActionResult PostSaved([FromQuery, Required] string memberId, [FromBody] SavedBody savedBody)
+    public IActionResult PostSaved([FromQuery, Required] string userId, [FromBody] SavedBody savedBody)
     {
         var assetId = savedBody.assetId;
         
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
         
-        if(!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if(!userExists)
+            return NotFound(new ApiError("User", userId));
         
         if(!assetExists)
             return NotFound(new ApiError("Asset", assetId));
         
-        var saved = _database.SavedAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
+        var saved = _database.SavedAssets.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
 
         if (saved != null)
         {
@@ -104,7 +104,7 @@ public class SavedController : Controller
         {
             _database.SavedAssets.Add(new SavedAsset()
             {
-                MemberId = memberId,
+                UserId = userId,
                 AssetId = assetId
             });
         }

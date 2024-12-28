@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speckles.Database;
@@ -11,9 +12,11 @@ using Speckles.Database;
 namespace Speckles.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228185747_24")]
+    partial class _24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,8 +130,11 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("MemberId")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("BasketAssetId");
@@ -306,12 +312,15 @@ namespace Speckles.Database.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("OrderId");
@@ -419,8 +428,11 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("MemberId")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("SavedAssetId");
@@ -565,8 +577,11 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("MemberId")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("UserLikeId");
@@ -640,9 +655,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasOne("Speckles.Database.Tables.User", "User")
                         .WithMany("BasketAssets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Asset");
 
@@ -711,9 +724,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasOne("Speckles.Database.Tables.User", "User")
                         .WithMany("Purchases")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Asset");
 
@@ -752,9 +763,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasOne("Speckles.Database.Tables.User", "User")
                         .WithMany("SavedAssets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Asset");
 
@@ -839,9 +848,7 @@ namespace Speckles.Database.Migrations
 
                     b.HasOne("Speckles.Database.Tables.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Comment");
 

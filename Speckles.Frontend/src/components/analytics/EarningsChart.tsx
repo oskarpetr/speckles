@@ -3,10 +3,10 @@ import React, { Fragment } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { motion } from "framer-motion";
 import { formatPrice } from "@/utils/formatters";
-import { ICurrency } from "@/types/Currency.types";
+import { ICurrency } from "@/types/dtos/Currency.types";
 import Image from "next/image";
 import { getAssetImage } from "@/utils/images";
-import { IAssetShort } from "@/types/Asset.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
 
 const colors = ["#3C672D", "#4C8538", "#569A3D"];
 // const colors = ["#3C672D", "#3C672D", "#3C672D"];
@@ -40,6 +40,7 @@ export default function EarningsChart({ data }: Props) {
           },
           name: "No earnings",
           price: 0,
+          tags: [],
         },
         currency: {
           currencyId: "",
@@ -51,7 +52,7 @@ export default function EarningsChart({ data }: Props) {
       },
     ];
   }
-  // console.log(data);
+
   return (
     <ResponsiveContainer width={250} height={250}>
       <PieChart>
@@ -85,9 +86,9 @@ function CustomTooltip({
   active?: boolean;
   payload?: any[];
 }) {
-  const newPayload = payload[0]?.payload.payload;
-  const isEmpty = payload[0]?.name === "No earnings";
-
+  const newPayload = payload![0].payload.payload;
+  const isEmpty = payload![0].name === "No earnings";
+  console.log(newPayload);
   return (
     <AnimatePresence>
       {active && payload && payload.length && (
@@ -118,7 +119,11 @@ function CustomTooltip({
                   {payload[0].name} ({newPayload.ordered}x)
                 </div>
                 <div className="opacity-80 font-semibold">
-                  {formatPrice(payload[0].value, newPayload.currency)}
+                  {formatPrice(
+                    newPayload.currency.locale,
+                    newPayload.currency.name,
+                    payload[0].value
+                  )}
                 </div>
               </div>
             </Fragment>

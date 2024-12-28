@@ -13,8 +13,8 @@ export default function MyStudios() {
   const { data: session } = useSession();
 
   const studiosQuery = useQuery<ApiResponse<IStudioShort[]>>({
-    queryKey: ["studios", "memberId", session?.user.memberId],
-    queryFn: () => fetchStudios(session?.user.memberId ?? ""),
+    queryKey: ["studios", "userId", session?.user.userId],
+    queryFn: () => fetchStudios(session?.user.userId ?? ""),
     enabled: !!session,
   });
 

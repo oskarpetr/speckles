@@ -12,8 +12,8 @@ export default function Saved() {
 
   // fetch saved assets
   const savedQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: ["saved", session?.user.memberId],
-    queryFn: () => fetchSavedAssets(session?.user.memberId ?? ""),
+    queryKey: ["saved", session?.user.userId],
+    queryFn: () => fetchSavedAssets(session?.user.userId ?? ""),
     enabled: !!session,
   });
 

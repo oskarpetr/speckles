@@ -1,12 +1,12 @@
 import { toastError, toastSuccess } from "@/components/shared/Toast";
 import { IAuthLogin, IAuthRegister } from "@/types/dtos/Auth.types";
+import { IToggleState } from "@/types/UiState.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
-import { ToggleState } from "@/types/ToggleState.types";
 
 // studios
-export async function fetchStudios(memberId?: string) {
+export async function fetchStudios(userId?: string) {
   return fetcher({
-    url: !memberId ? "studios" : `studios?memberId=${memberId}`,
+    url: !userId ? "studios" : `studios?userId=${userId}`,
   });
 }
 
@@ -25,17 +25,17 @@ export async function fetchAssets() {
   return fetcher({ url: `assets?format=short` });
 }
 
-export async function fetchAsset(assetId: string, memberId: string) {
-  return fetcher({ url: `assets/${assetId}?memberId=${memberId}` });
+export async function fetchAsset(assetId: string, userId: string) {
+  return fetcher({ url: `assets/${assetId}?userId=${userId}` });
 }
 
 // saved assets
-export async function fetchSavedAssets(memberId: string) {
-  return fetcher({ url: `saved?memberId=${memberId}&format=short` });
+export async function fetchSavedAssets(userId: string) {
+  return fetcher({ url: `saved?userId=${userId}&format=short` });
 }
 
-export async function fetchSavedCount(memberId: string) {
-  return fetcher({ url: `saved?memberId=${memberId}&format=count` });
+export async function fetchSavedCount(userId: string) {
+  return fetcher({ url: `saved?userId=${userId}&format=count` });
 }
 
 // user
@@ -49,12 +49,12 @@ export async function fetchPromotion() {
 }
 
 export async function postSaved(
-  memberId: string,
+  userId: string,
   assetId: string,
   type: "add" | "remove"
 ) {
   return fetcher({
-    url: `saved?memberId=${memberId}`,
+    url: `saved?userId=${userId}`,
     method: "POST",
     body: { assetId },
     successMessage: type === "add" ? "Added to saved" : "Removed from saved",
@@ -62,21 +62,21 @@ export async function postSaved(
 }
 
 // basket assets
-export async function fetchBasket(memberId: string) {
-  return fetcher({ url: `basket?memberId=${memberId}` });
+export async function fetchBasket(userId: string) {
+  return fetcher({ url: `basket?userId=${userId}` });
 }
 
-export async function fetchBasketCount(memberId: string) {
-  return fetcher({ url: `basket?memberId=${memberId}&format=count` });
+export async function fetchBasketCount(userId: string) {
+  return fetcher({ url: `basket?userId=${userId}&format=count` });
 }
 
 export async function postBasket(
-  memberId: string,
+  userId: string,
   assetId: string,
-  type: ToggleState
+  type: IToggleState
 ) {
   return fetcher({
-    url: `basket?memberId=${memberId}`,
+    url: `basket?userId=${userId}`,
     method: "POST",
     body: { assetId },
     successMessage: type === "add" ? "Added to basket" : "Removed from basket",
@@ -86,11 +86,11 @@ export async function postBasket(
 // comments
 export async function postCommentLike(
   commentId: string,
-  memberId: string,
-  type: ToggleState
+  userId: string,
+  type: IToggleState
 ) {
   return fetcher({
-    url: `comments/${commentId}/like?memberId=${memberId}`,
+    url: `comments/${commentId}/like?userId=${userId}`,
     method: "POST",
     successMessage: type === "add" ? "Liked comment" : "Unliked comment",
   });
@@ -98,16 +98,16 @@ export async function postCommentLike(
 
 // orders
 export async function fetchOrders(
-  memberId: string,
+  userId: string,
   { offset = 0, limit = 0 }: { offset?: number; limit?: number }
 ) {
   return fetcher({
-    url: `orders?memberId=${memberId}&format=short&offset=${offset}&limit=${limit}`,
+    url: `orders?userId=${userId}&format=short&offset=${offset}&limit=${limit}`,
   });
 }
 
-export async function fetchOrderCount(memberId: string) {
-  return fetcher({ url: `orders?memberId=${memberId}&format=count` });
+export async function fetchOrderCount(userId: string) {
+  return fetcher({ url: `orders?userId=${userId}&format=count` });
 }
 
 export async function fetchOrder(orderId: string) {

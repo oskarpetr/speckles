@@ -5,7 +5,7 @@ declare module "next-auth" {
 }
 
 export type SessionUser = {
-  memberId: string;
+  userId: string;
   username: string;
   fullName: string;
   email: string;

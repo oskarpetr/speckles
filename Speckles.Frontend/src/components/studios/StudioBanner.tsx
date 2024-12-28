@@ -2,7 +2,7 @@ import { getStudioLogoAlt } from "@/utils/alts";
 import { getStudioLogo } from "@/utils/images";
 import Image from "next/image";
 import Heading from "../shared/Heading";
-import { IStudio } from "@/types/Studio.types";
+import { IStudio } from "@/types/dtos/Studio.types";
 import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
 import { useState } from "react";
@@ -24,7 +24,7 @@ export default function StudioBanner({ studio }: Props) {
   const [followed, setFollowed] = useState(false);
 
   // permission
-  const canEdit = canEditStudio(studio, session?.user.memberId ?? "");
+  const canEdit = canEditStudio(studio, session?.user.userId ?? "");
 
   function toggleFollow() {
     setFollowed(!followed);

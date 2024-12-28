@@ -1,4 +1,4 @@
-import { IAsset } from "@/types/Asset.types";
+import { IAsset } from "@/types/dtos/Asset.types";
 import AssetThumbnails from "./AssetThumbnails";
 import FadeIn from "../animation/FadeIn";
 import Link from "next/link";
@@ -82,10 +82,15 @@ export default function AssetDetail({ asset }: Props) {
             </FadeIn>
           </div>
 
-          <FadeIn delay={0.4} className="flex flex-col gap-4 relative -z-10">
-            <Description text={asset.description} />
-            <Tags tags={asset.tags} />
-          </FadeIn>
+          <div className="flex flex-col gap-4">
+            <FadeIn delay={0.4} className="relative -z-10">
+              <Description text={asset.description} />
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+              <Tags tags={asset.tags} />
+            </FadeIn>
+          </div>
 
           <FadeIn delay={0.5}>
             <AddToBasket asset={asset} />

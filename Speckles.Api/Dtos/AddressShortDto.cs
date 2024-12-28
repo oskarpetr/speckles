@@ -1,6 +1,6 @@
 namespace Speckles.Api.Dto;
 
-public class ShortAddressDto
+public class AddressShortDto
 {
     public string AddressId { get; set; }
     public string City { get; set; }

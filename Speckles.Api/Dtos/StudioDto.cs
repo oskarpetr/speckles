@@ -10,6 +10,6 @@ public class StudioDto
     public string Slug { get; set; }
     public Address Address { get; set; }
     public Portfolio Portfolio { get; set; }
-    public List<ShortMemberDto> Members { get; set; }
-    public List<ShortAssetDto> Assets { get; set; }
+    public List<UserShortDto> Members { get; set; }
+    public List<AssetShortDto> Assets { get; set; }
 }

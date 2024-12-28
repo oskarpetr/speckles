@@ -20,25 +20,25 @@ public class AuthController : Controller
     }
 
     /// <summary>
-    /// Creates member.
+    /// Creates user.
     /// </summary>
     /// <remarks>
-    /// This endpoint creates a member.
+    /// This endpoint creates a user.
     /// </remarks>
-    /// <returns>This endpoint creates a member.</returns>
-    /// <response code="201">This endpoint creates a member.</response>
-    /// <response code="409">Member with that username or email already exists.</response>
+    /// <returns>This endpoint creates a user.</returns>
+    /// <response code="201">This endpoint creates a user.</response>
+    /// <response code="409">User with that username or email already exists.</response>
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 409)]
     [HttpPost(ApiEndpoints.Auth.REGISTER)]
     public IActionResult Register([FromBody] RegisterBody registerBody)
     {
-        var usernameExists = _database.Members.Any(x => x.Username == registerBody.username);
+        var usernameExists = _database.Users.Any(x => x.Username == registerBody.username);
         
         if (!usernameExists)
             return Conflict(new ApiError("Username", registerBody.username, 409));
         
-        var emailExists = _database.Members.Any(x => x.Email == registerBody.email);
+        var emailExists = _database.Users.Any(x => x.Email == registerBody.email);
         
         if (!emailExists)
             return Conflict(new ApiError("Email", registerBody.email, 409));
@@ -52,7 +52,7 @@ public class AuthController : Controller
             Zip = registerBody.zip
         };
             
-        var member = new Member()
+        var user = new User()
         {
             FullName = registerBody.fullName,
             Email = registerBody.email,
@@ -62,7 +62,7 @@ public class AuthController : Controller
         };
 
         _database.Addresses.Add(address);
-        _database.Members.Add(member);
+        _database.Users.Add(user);
 
         _database.SaveChanges();
         
@@ -70,29 +70,29 @@ public class AuthController : Controller
     }
     
     /// <summary>
-    /// Validates member.
+    /// Validates user.
     /// </summary>
     /// <remarks>
-    /// This endpoint validates a member.
+    /// This endpoint validates a user.
     /// </remarks>
-    /// <returns>This endpoint validates a member.</returns>
-    /// <response code="201">This endpoint validates a member.</response>
-    /// <response code="401">Member's email or password is incorrect.</response>
-    [ProducesResponseType(typeof(ApiResponse<ShortMemberDto>), 201)]
+    /// <returns>This endpoint validates a user.</returns>
+    /// <response code="201">This endpoint validates a user.</response>
+    /// <response code="401">User's email or password is incorrect.</response>
+    [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 201)]
     [ProducesResponseType(typeof(ApiError), 401)]
     [HttpPost(ApiEndpoints.Auth.LOGIN)]
     public IActionResult Login([FromBody] LoginBody loginBody)
     {
-        var member = _database.Members.FirstOrDefault(x => x.Email == loginBody.email);
+        var user = _database.Users.FirstOrDefault(x => x.Email == loginBody.email);
         
-        if (member == null)
+        if (user == null)
             return Unauthorized();
         
-        if(member.Password != loginBody.password)
+        if(user.Password != loginBody.password)
             return Unauthorized();
 
-        var shortMemberDto = member.Adapt<ShortMemberDto>();
-        var response = new ApiResponse(shortMemberDto);
+        var shortUserDto = user.Adapt<UserShortDto>();
+        var response = new ApiResponse(shortUserDto);
         
         return Ok(response);
     }

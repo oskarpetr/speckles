@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<File> Files { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<License> Licenses { get; set; }
-    public DbSet<Member> Members { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Project> Projects { get; set; }
@@ -25,7 +25,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Recommendation> Recommendations { get; set; }
     public DbSet<SavedAsset> SavedAssets { get; set; }
     public DbSet<Studio> Studios { get; set; }
-    public DbSet<StudioMember> StudioMembers { get; set; }
+    public DbSet<StudioUser> StudioUsers { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<UserFollow> UserFollows { get; set; }
     public DbSet<UserLike> UserLikes { get; set; }

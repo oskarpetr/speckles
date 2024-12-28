@@ -34,9 +34,9 @@
 
 //   // fetch orders
 //   const ordersQuery = useQuery({
-//     queryKey: ["orders", session?.user.memberId],
+//     queryKey: ["orders", session?.user.userId],
 //     queryFn: () =>
-//       fetchOrders(session?.user.memberId ?? "", { offset: page * 9, limit: 9 }),
+//       fetchOrders(session?.user.userId ?? "", { offset: page * 9, limit: 9 }),
 //     enabled: !!session,
 //   });
 

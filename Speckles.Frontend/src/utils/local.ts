@@ -1,5 +1,5 @@
-import { BASE_CURRENCY } from "@/components/asset/AssetPrice";
 import storage from "store2";
+import { BASE_CURRENCY } from "./price";
 
 // local storage keys
 const LOCAL_BASKET = "localBasket";

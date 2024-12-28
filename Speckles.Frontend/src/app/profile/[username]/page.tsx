@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
               <Avatar
                 fullName={user.fullName}
-                memberId={user.memberId}
+                userId={user.userId}
                 size={120}
               />
             </div>

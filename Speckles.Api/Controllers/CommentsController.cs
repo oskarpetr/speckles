@@ -87,19 +87,19 @@ public class CommentsController : Controller
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Comments.POST_LIKE)]
-    public IActionResult CreateCommentLike([FromRoute] string commentId, [FromQuery] string memberId)
+    public IActionResult CreateCommentLike([FromRoute] string commentId, [FromQuery] string userId)
     {
         var commentExists = _database.Comments.Any(x => x.CommentId == commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
         
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         
-        if(!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if(!userExists)
+            return NotFound(new ApiError("User", userId));
         
-        var commentLike = _database.UserLikes.FirstOrDefault(x => x.CommentId == commentId && x.MemberId == memberId);
+        var commentLike = _database.UserLikes.FirstOrDefault(x => x.CommentId == commentId && x.UserId == userId);
         
         if (commentLike != null)
         {
@@ -110,7 +110,7 @@ public class CommentsController : Controller
             _database.UserLikes.Add(new UserLike()
             {
                 CommentId = commentId,
-                MemberId = memberId
+                UserId = userId
             });
         }
 

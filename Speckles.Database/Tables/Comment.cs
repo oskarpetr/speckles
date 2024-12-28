@@ -7,6 +7,6 @@ public class Comment
     public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
     
     public string AuthorId { get; set; }
-    public virtual Member Author { get; set; }
+    public virtual User Author { get; set; }
     public ICollection<UserLike> LikedBy { get; set; }
 }

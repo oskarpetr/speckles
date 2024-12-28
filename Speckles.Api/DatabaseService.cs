@@ -27,9 +27,9 @@ public class DatabaseService
         _database.SaveChanges();
     }
 
-    public bool MemberExists(string memberId)
+    public bool UserExists(string memberId)
     {
-        return _database.Members.Any(x => x.MemberId == memberId);
+        return _database.Users.Any(x => x.UserId == memberId);
     }
     
     public bool StudioExists(string slug)
@@ -47,25 +47,25 @@ public class DatabaseService
             .ToList();
     }
     
-    public List<ShortStudioDto> GetStudios()
+    public List<StudioShortDto> GetStudios()
     {
         return _database.Studios
             .ToList()
             
             // Studio -> ShortStudioDto
-            .Adapt<List<ShortStudioDto>>();
+            .Adapt<List<StudioShortDto>>();
     }
     
-    public List<ShortStudioDto> GetMemberStudios(string memberId) {
+    public List<StudioShortDto> GetMemberStudios(string memberId) {
         return _database.Studios
             .Include(x => x.Members)
             
             // Search studios by memberId
-            .Where(x => x.Members.Any(y => y.MemberId == memberId))
+            .Where(x => x.Members.Any(y => y.UserId == memberId))
             .ToList()
             
             // Studio -> ShortStudioDto
-            .Adapt<List<ShortStudioDto>>();
+            .Adapt<List<StudioShortDto>>();
     }
     
     public StudioDto GetStudio(string slug)
@@ -77,7 +77,7 @@ public class DatabaseService
             .Include(x => x.Assets).ThenInclude(x => x.Images)
             .Include(x => x.Assets).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
             .Include(x => x.Assets).ThenInclude(x => x.Currency)
-            .Include(x => x.Members).ThenInclude(x => x.Member)
+            .Include(x => x.Members).ThenInclude(x => x.User)
             
             // Search studio by slug
             .FirstOrDefault(x => x.Slug == slug)
@@ -110,7 +110,7 @@ public class DatabaseService
         return _database.Orders.ToList();
     }
     
-    public List<ShortAssetDto> GetAssets(List<string> assetIds)
+    public List<AssetShortDto> GetAssets(List<string> assetIds)
     {
         return _database.Assets
             .Where(x => assetIds.Contains(x.AssetId))
@@ -120,7 +120,7 @@ public class DatabaseService
             .ToList()
             
             // Asset -> ShortAssetDto
-            .Adapt<List<ShortAssetDto>>();
+            .Adapt<List<AssetShortDto>>();
     }
     
     public bool AssetExists(string assetId)
@@ -136,11 +136,11 @@ public class DatabaseService
             .Include(x => x.Images)
             .Include(x => x.Currency)
             .Include(x => x.License)
-            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.Member)
+            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.User)
             .Include(x => x.Studio).ThenInclude(x => x.Address)
             .Include(x => x.Studio).ThenInclude(x => x.Portfolio).ThenInclude(x => x.Projects)
             .Include(x => x.Comments).ThenInclude(x => x.Author)
-            .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.Member)
+            .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.User)
             .Include(x => x.Files)
             .Include(x => x.Tags).ThenInclude(x => x.Tag)
             
@@ -177,16 +177,16 @@ public class DatabaseService
         
         var savedExists =
             _database.SavedAssets.FirstOrDefault(x =>
-                x.MemberId == memberId && x.AssetId == assetId);
+                x.UserId == memberId && x.AssetId == assetId);
         
         var basketExists =
             _database.BasketAssets.FirstOrDefault(x =>
-                x.MemberId == memberId && x.AssetId == assetId);
+                x.UserId == memberId && x.AssetId == assetId);
 
         var likedComments = new List<string>();
         foreach (var comment in asset.Comments)
         {
-            var liked = comment.LikedBy.Any(x => x.MemberId == memberId);
+            var liked = comment.LikedBy.Any(x => x.UserId == memberId);
             if (liked) likedComments.Add(comment.CommentId);
         }
         
@@ -196,5 +196,70 @@ public class DatabaseService
             Saved = savedExists != null,
             InBasket = basketExists != null
         };
+    }
+    
+    public void Gen()
+    {
+        string[] assetIds = new string[]
+        {
+            "87d14f19-69e7-4340-b80d-152e6006d178",
+            "dea96a97-8511-4782-b005-57b60f05b551",
+            "198fc68b-dc01-4158-9ab3-b1e84a259c73"
+        };
+    
+        string[] paymentMethods = new string[]
+        {
+            "Stripe",
+            "PayPal"
+        };
+    
+        string userId = "0f44ee84-dcf2-483c-a084-102712b6b19e";
+    
+        // Starting date: 100 days ago from today
+        DateTime startDate = DateTime.Today.AddDays(-400);
+    
+        // Generate 100 entries, one for each day
+        for (int i = 0; i < 400; i++)
+        {
+            // Calculate the date for each entry
+            DateTime orderDate = startDate.AddDays(i);
+    
+            // Alternate between the AssetIds and PaymentMethods
+            string randomAssetId = assetIds[i % assetIds.Length];  // Cycle through assetIds
+            string randomPaymentMethod = paymentMethods[i % paymentMethods.Length];  // Cycle through paymentMethods
+    
+            // Create and add the new order to the database
+            _database.Orders.Add(new Order()
+            {
+                Date = orderDate,
+                AssetId = randomAssetId,
+                UserId = userId,
+                PaymentMethod = randomPaymentMethod
+            });
+        }
+        
+        DateTime startDate2 = DateTime.Today.AddDays(-400);
+    
+        // Generate 100 entries, one for each day
+        for (int i = 0; i < 400; i++)
+        {
+            // Calculate the date for each entry
+            DateTime orderDate = startDate2.AddDays(i);
+    
+            // Alternate between the AssetIds and PaymentMethods
+            string randomAssetId = assetIds[i % assetIds.Length];  // Cycle through assetIds
+            string randomPaymentMethod = paymentMethods[i % paymentMethods.Length];  // Cycle through paymentMethods
+    
+            // Create and add the new order to the database
+            _database.Orders.Add(new Order()
+            {
+                Date = orderDate,
+                AssetId = randomAssetId,
+                UserId = userId,
+                PaymentMethod = randomPaymentMethod
+            });
+        }
+    
+        _database.SaveChanges();
     }
 }

@@ -15,7 +15,7 @@ import {
 } from "react";
 import { QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { ToggleState } from "@/types/ToggleState.types";
+import { IToggleState } from "@/types/UiState.types";
 
 interface MenuContextType {
   basketCountQuery: QueryObserverResult<any> | undefined;
@@ -27,8 +27,8 @@ interface MenuContextType {
   assetId: string;
   setAssetId: Dispatch<SetStateAction<string>>;
 
-  setBasketType: Dispatch<SetStateAction<ToggleState | null>>;
-  setSavedType: Dispatch<SetStateAction<ToggleState | null>>;
+  setBasketType: Dispatch<SetStateAction<IToggleState | null>>;
+  setSavedType: Dispatch<SetStateAction<IToggleState | null>>;
 }
 
 export const MenuContext = createContext<MenuContextType>({
@@ -56,35 +56,34 @@ export const MenuContextProvider = ({ children }: Props) => {
   // asset id
   const [assetId, setAssetId] = useState("");
 
-  const [basketType, setBasketType] = useState<ToggleState | null>(null);
-  const [savedType, setSavedType] = useState<ToggleState | null>(null);
+  const [basketType, setBasketType] = useState<IToggleState | null>(null);
+  const [savedType, setSavedType] = useState<IToggleState | null>(null);
 
   // fetch basket count
   const basketCountQuery = useQuery({
-    queryKey: ["basket", session?.user.memberId, "count"],
-    queryFn: () => fetchBasketCount(session?.user.memberId ?? ""),
+    queryKey: ["basket", session?.user.userId, "count"],
+    queryFn: () => fetchBasketCount(session?.user.userId ?? ""),
     enabled: false,
   });
 
   // post basket
   const postBasketQuery = useQuery({
-    queryKey: ["basket", session?.user.memberId, assetId],
-    queryFn: () =>
-      postBasket(session?.user.memberId ?? "", assetId, basketType!),
+    queryKey: ["basket", session?.user.userId, assetId],
+    queryFn: () => postBasket(session?.user.userId ?? "", assetId, basketType!),
     enabled: false,
   });
 
   // fetch saved count
   const savedCountQuery = useQuery({
-    queryKey: ["saved", session?.user.memberId ?? "", "count"],
-    queryFn: () => fetchSavedCount(session?.user.memberId ?? ""),
+    queryKey: ["saved", session?.user.userId ?? "", "count"],
+    queryFn: () => fetchSavedCount(session?.user.userId ?? ""),
     enabled: false,
   });
 
   // post saved
   const postSavedQuery = useQuery({
-    queryKey: ["saved", session?.user.memberId ?? "", assetId],
-    queryFn: () => postSaved(session?.user.memberId ?? "", assetId, savedType!),
+    queryKey: ["saved", session?.user.userId ?? "", assetId],
+    queryFn: () => postSaved(session?.user.userId ?? "", assetId, savedType!),
     enabled: false,
   });
 

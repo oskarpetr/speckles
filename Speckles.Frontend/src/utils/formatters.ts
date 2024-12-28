@@ -1,4 +1,9 @@
+import { IRates } from "@/types/dtos/Rates.types";
+import { getLocalCurrency } from "./local";
+import { convertPrice } from "./price";
+
 export function formatPrice(locale: string, currency: string, price: number) {
+  // currency formatter
   const formatter = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency,
@@ -7,6 +12,25 @@ export function formatPrice(locale: string, currency: string, price: number) {
   });
 
   return formatter.format(price);
+}
+
+export function formatPriceToLocal(price: number, rates?: IRates["rates"]) {
+  // browser locale
+  const userLocale = navigator.language;
+
+  // currency from local storage
+  const localCurrency = getLocalCurrency();
+
+  // no conversion needed
+  if (rates === undefined) {
+    return formatPrice(userLocale, localCurrency, price);
+  }
+
+  // convert price
+  const rate = rates[localCurrency];
+  const convertedPrice = convertPrice(price, rate);
+
+  return formatPrice(userLocale, localCurrency, convertedPrice);
 }
 
 export function formatDate(date: string, long: boolean = true) {

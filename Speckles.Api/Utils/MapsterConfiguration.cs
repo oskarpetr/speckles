@@ -9,25 +9,25 @@ public class MapsterConfiguration
     public static void Configure()
     {
         // User -> UserDto
-        TypeAdapterConfig<Member, UserDto>.NewConfig()
-            .Map(dest => dest.ShortAddress, src => src.Address.Adapt<ShortAddressDto>())
-            .Map(dest => dest.Studios, src => src.Studios.Adapt<List<ShortStudioDto>>())
-            .Map(dest => dest.Following, src => src.Following.Adapt<List<ShortStudioDto>>());
+        TypeAdapterConfig<User, UserDto>.NewConfig()
+            .Map(dest => dest.AddressShort, src => src.Address.Adapt<AddressShortDto>())
+            .Map(dest => dest.Studios, src => src.Studios.Adapt<List<StudioShortDto>>())
+            .Map(dest => dest.Following, src => src.Following.Adapt<List<StudioShortDto>>());
 
         // StudioMember -> ShortStudioDto
-        TypeAdapterConfig<StudioMember, ShortStudioDto>.NewConfig()
+        TypeAdapterConfig<StudioUser, StudioShortDto>.NewConfig()
             .Map(dest => dest, src => src.Studio);
         
         // Following -> ShortStudioDto
-        TypeAdapterConfig<UserFollow, ShortStudioDto>.NewConfig()
+        TypeAdapterConfig<UserFollow, StudioShortDto>.NewConfig()
             .Map(dest => dest, src => src.Studio);
         
         // StudioMember -> ShortMemberDto
-        TypeAdapterConfig<StudioMember, ShortMemberDto>.NewConfig()
-            .Map(dest => dest.MemberId, src => src.Member.MemberId)
-            .Map(dest => dest.Username, src => src.Member.Username)
-            .Map(dest => dest.FullName, src => src.Member.FullName)
-            .Map(dest => dest.Email, src => src.Member.Email);
+        TypeAdapterConfig<StudioUser, UserShortDto>.NewConfig()
+            .Map(dest => dest.UserId, src => src.User.UserId)
+            .Map(dest => dest.Username, src => src.User.Username)
+            .Map(dest => dest.FullName, src => src.User.FullName)
+            .Map(dest => dest.Email, src => src.User.Email);
         
         // Comment -> CommentDto
         TypeAdapterConfig<Comment, CommentDto>.NewConfig()
@@ -37,15 +37,15 @@ public class MapsterConfiguration
         TypeAdapterConfig<AssetTag, TagDto>.NewConfig()
             .Map(dest => dest.TagId, src => src.Tag.TagId)
             .Map(dest => dest.Name, src => src.Tag.Name)
-            .Map(dest => dest.Assets, src => src.Tag.Assets.Adapt<List<ShortAssetDto>>());
+            .Map(dest => dest.Assets, src => src.Tag.Assets.Adapt<List<AssetShortDto>>());
         
         // AssetTag -> ShortTagDto
-        TypeAdapterConfig<AssetTag, ShortTagDto>.NewConfig()
+        TypeAdapterConfig<AssetTag, TagShortDto>.NewConfig()
             .Map(dest => dest.TagId, src => src.Tag.TagId)
             .Map(dest => dest.Name, src => src.Tag.Name);
         
         // AssetTag -> ShortAssetDto
-        TypeAdapterConfig<AssetTag, ShortAssetDto>.NewConfig()
+        TypeAdapterConfig<AssetTag, AssetShortDto>.NewConfig()
             .Map(dest => dest, src => src.Asset);
     }
 }

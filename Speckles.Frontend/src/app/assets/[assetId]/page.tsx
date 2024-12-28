@@ -27,7 +27,7 @@ export default function AssetPage() {
   // fetch asset
   const assetQuery = useQuery<ApiResponse<IAsset>>({
     queryKey: ["asset", assetId],
-    queryFn: () => fetchAsset(assetId as string, session?.user.memberId ?? ""),
+    queryFn: () => fetchAsset(assetId as string, session?.user.userId ?? ""),
     enabled:
       (status === "authenticated" && !!session) ||
       status === "unauthenticated" ||

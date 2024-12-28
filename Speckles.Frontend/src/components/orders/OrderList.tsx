@@ -17,9 +17,9 @@ export default function OrdersList() {
 
   // fetch orders
   const ordersQuery = useQuery<ApiResponse<IOrderShort[]>>({
-    queryKey: ["orders", session?.user.memberId],
+    queryKey: ["orders", session?.user.userId],
     queryFn: () =>
-      fetchOrders(session?.user.memberId ?? "", {
+      fetchOrders(session?.user.userId ?? "", {
         limit: page * PAGINATION_LIMIT,
       }),
     enabled: status === "authenticated",

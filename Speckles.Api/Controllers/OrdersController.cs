@@ -20,29 +20,29 @@ public class OrdersController : Controller
     }
     
     /// <summary>
-    /// Retrieves all orders in short form by member id.
+    /// Retrieves all orders in short form by user id.
     /// </summary>
     /// <remarks>
-    /// This endpoint retrieves a list of all orders in their short form by a member id.
+    /// This endpoint retrieves a list of all orders in their short form by a user id.
     /// </remarks>
-    /// <returns>Retrieves all orders in short form by member id.</returns>
-    /// <response code="200">Retrieves all orders in short form by member id.</response>
-    /// <response code="404">Member was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<ShortOrderDto>>), 200)]
+    /// <returns>Retrieves all orders in short form by user id.</returns>
+    /// <response code="200">Retrieves all orders in short form by user id.</response>
+    /// <response code="404">User was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<OrderShortDto>>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Orders.GET_ORDERS)]
-    public IActionResult GetOrders([FromQuery, Required] string memberId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
+    public IActionResult GetOrders([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         
-        if(!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if(!userExists)
+            return NotFound(new ApiError("User", userId));
 
         var orders = _database.Orders
             .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
-            .Where(x => x.MemberId == memberId)
+            .Where(x => x.UserId == userId)
             .ToList();
 
         var totalCount = orders.Count;
@@ -62,7 +62,7 @@ public class OrdersController : Controller
         }
         else
         {
-            var shortOrdersDto = orders.Adapt<List<ShortOrderDto>>();
+            var shortOrdersDto = orders.Adapt<List<OrderShortDto>>();
             response = new ApiResponse(shortOrdersDto, totalCount);
         }
         

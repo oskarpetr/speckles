@@ -22,34 +22,29 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          console.log("here1");
-
           if (!credentials || !credentials.email || !credentials.password)
             return null;
-          console.log("here2");
 
           const res = await postLogin({
             email: credentials.email,
             password: credentials.password,
           });
-          console.log("here3");
           console.log(res);
 
-          const member = res.data;
+          const user = res.data;
 
           // const passwordMatch = bcrypt.compareSync(
           //   credentials.password,
           //   user.password
           // );
           // await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-          console.log(member);
-
+          console.log(user);
           return {
-            id: member.memberId,
-            memberId: member.memberId,
-            fullName: member.fullName,
-            email: member.email,
-            username: member.username,
+            id: user.userId,
+            userId: user.userId,
+            fullName: user.fullName,
+            email: user.email,
+            username: user.username,
           };
         } catch (error) {
           if (axios.isAxiosError(error)) {
@@ -81,19 +76,19 @@ export const authOptions: NextAuthOptions = {
       const userSession = user as SessionUser;
 
       if (user) {
-        token.memberId = userSession.memberId;
+        token.userId = userSession.userId;
         token.username = userSession.username;
         token.fullName = userSession.fullName;
       }
 
       if (account && account.access_token) {
-        token.accessToken = account.access_token; // Save access_token in token object
+        token.accessToken = account.access_token;
       }
 
       return token;
     },
     session({ session, token }: { session: any; token: any }) {
-      session.user.memberId = token?.memberId;
+      session.user.userId = token?.userId;
       session.user.username = token?.username;
       session.user.fullName = token?.fullName;
       session.user.accessToken = token?.accessToken;

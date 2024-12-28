@@ -3,16 +3,16 @@ import { getAvatar } from "@/utils/images";
 import Image from "next/image";
 
 interface Props {
-  memberId: string;
+  userId: string;
   fullName: string;
   size: number;
 }
 
-export default function Avatar({ memberId, fullName, size }: Props) {
+export default function Avatar({ userId, fullName, size }: Props) {
   return (
     <div className="relative group overflow-hidden rounded-full">
       <Image
-        src={getAvatar(memberId)}
+        src={getAvatar(userId)}
         alt={getAvatarAlt(fullName)}
         width={100}
         height={100}

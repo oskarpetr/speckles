@@ -21,11 +21,11 @@ export default function Comment({ comment }: Props) {
   const [liked, setLiked] = useState(comment.liked);
 
   const commentLikeQuery = useQuery({
-    queryKey: ["comments", comment.commentId, "like", session?.user?.memberId],
+    queryKey: ["comments", comment.commentId, "like", session?.user?.userId],
     queryFn: () =>
       postCommentLike(
         comment.commentId,
-        session?.user?.memberId ?? "",
+        session?.user?.userId ?? "",
         liked ? "remove" : "add"
       ),
     enabled: false,
@@ -55,7 +55,7 @@ export default function Comment({ comment }: Props) {
     <div className="flex gap-6">
       <Link href={`/profile/${comment.author.username}`}>
         <Avatar
-          memberId={comment.author.memberId}
+          userId={comment.author.userId}
           fullName={comment.author.fullName}
           size={60}
         />

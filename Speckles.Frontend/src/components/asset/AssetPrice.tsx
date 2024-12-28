@@ -1,14 +1,10 @@
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { fetchCurrencyRates } from "@/utils/fetchers";
-import { formatPrice } from "@/utils/formatters";
-import { formatPriceToLocal } from "@/utils/price";
+import { formatPrice, formatPriceToLocal } from "@/utils/formatters";
 import { useQuery } from "@tanstack/react-query";
 import Tooltip from "../shared/Tooltip";
 import Icon from "../shared/Icon";
 import { IRates } from "@/types/dtos/Rates.types";
-
-// base currency
-export const BASE_CURRENCY = "EUR";
 
 interface Props {
   price: number;
@@ -26,17 +22,20 @@ export default function AssetPrice({
   const currencyRatesQuery = useQuery<IRates>({
     queryKey: ["currency", currency],
     queryFn: () => fetchCurrencyRates(currency.name),
-    enabled: showOriginal,
   });
 
+  // rates
   const rates = currencyRatesQuery?.data as IRates;
+
+  // prices
+  const convertedPrice = formatPriceToLocal(price, rates?.rates ?? {});
   const formattedPrice = formatPrice(currency.locale, currency.name, price);
 
   return (
     currencyRatesQuery.isSuccess && (
       <div className="flex items-center gap-2">
         <div className={color === "black" ? "text-black" : "text-white"}>
-          {formatPriceToLocal(price, rates.rates)}
+          {convertedPrice}
         </div>
 
         {showOriginal && (
@@ -45,7 +44,7 @@ export default function AssetPrice({
               Converted from {formattedPrice}
             </div>
 
-            <Tooltip direction="bottom" text="Conversions from CEB">
+            <Tooltip direction="bottom" text="From ExchangeRate">
               <Icon
                 name="Info"
                 size={18}

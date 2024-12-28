@@ -19,13 +19,13 @@ import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function BasketPage() {
   // session
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   // fetch basket
   const basketQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: ["basket", session?.user.memberId],
-    queryFn: () => fetchBasket(session?.user.memberId ?? ""),
-    enabled: !!session?.user.memberId,
+    queryKey: ["basket", session?.user.userId],
+    queryFn: () => fetchBasket(session?.user.userId ?? ""),
+    enabled: status === "authenticated",
   });
 
   // basket

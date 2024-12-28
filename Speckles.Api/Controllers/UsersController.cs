@@ -26,16 +26,16 @@ public class UsersController : Controller
     /// </remarks>
     /// <returns>Retrieves user in short form.</returns>
     /// <response code="200">Retrieves user in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<ShortMemberDto>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 200)]
     [HttpGet(ApiEndpoints.Users.GET_USER)]
     public IActionResult GetUser([FromRoute] string username)
     {
-        var userExists = _database.Members.Any(x => x.Username == username);
+        var userExists = _database.Users.Any(x => x.Username == username);
         
         if (!userExists)
             return NotFound(new ApiError("User", username));
         
-        var user = _database.Members
+        var user = _database.Users
             .Include(x => x.Following).ThenInclude(x => x.Studio)
             .Include(x => x.Studios).ThenInclude(x => x.Studio)
             .Include(x => x.Address)

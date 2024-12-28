@@ -22,29 +22,29 @@ public class BasketController : Controller
     }
     
     /// <summary>
-    /// Retrieves all basket assets in short form by member id.
+    /// Retrieves all basket assets in short form by user id.
     /// </summary>
     /// <remarks>
-    /// This endpoint retrieves a list of all basket assets in their short form by a member id.
+    /// This endpoint retrieves a list of all basket assets in their short form by a user id.
     /// </remarks>
-    /// <returns>Retrieves all basket assets in short form by member id.</returns>
-    /// <response code="200">Retrieves all basket assets in short form by member id.</response>
-    /// <response code="404">Member was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<ShortAssetDto>>), 200)]
+    /// <returns>Retrieves all basket assets in short form by user id.</returns>
+    /// <response code="200">Retrieves all basket assets in short form by user id.</response>
+    /// <response code="404">User was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Basket.GET_BASKET)]
-    public IActionResult GetBasket([FromQuery, Required] string memberId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
+    public IActionResult GetBasket([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         
-        if (!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if (!userExists)
+            return NotFound(new ApiError("User", userId));
 
         var basketAssets = _database.BasketAssets
             .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
-            .Where(x => x.MemberId == memberId)
+            .Where(x => x.UserId == userId)
             .Select(x => x.Asset).ToList();
 
         if(offset != null)
@@ -62,7 +62,7 @@ public class BasketController : Controller
         }
         else
         {
-            var basketAssetsDto = basketAssets.Adapt<List<ShortAssetDto>>();
+            var basketAssetsDto = basketAssets.Adapt<List<AssetShortDto>>();
             response = new ApiResponse(basketAssetsDto);
         }
         
@@ -70,31 +70,31 @@ public class BasketController : Controller
     }
     
     /// <summary>
-    /// Creates basket asset for member id.
+    /// Creates basket asset for user id.
     /// </summary>
     /// <remarks>
-    /// This endpoint creates a basket asset for member id.
+    /// This endpoint creates a basket asset for user id.
     /// </remarks>
-    /// <returns>Creates basket asset for member id.</returns>
-    /// <response code="201">Creates basket asset for member id.</response>
-    /// <response code="404">Member or asset was not found.</response>
+    /// <returns>Creates basket asset for user id.</returns>
+    /// <response code="201">Creates basket asset for user id.</response>
+    /// <response code="404">User or asset was not found.</response>
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Basket.POST_BASKET)]
-    public IActionResult PostBasket([FromQuery, Required] string memberId, [FromBody] SavedBody savedBody)
+    public IActionResult PostBasket([FromQuery, Required] string userId, [FromBody] SavedBody savedBody)
     {
         var assetId = savedBody.assetId;
         
-        var memberExists = _database.Members.Any(x => x.MemberId == memberId);
+        var userExists = _database.Users.Any(x => x.UserId == userId);
         var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
         
-        if(!memberExists)
-            return NotFound(new ApiError("Member", memberId));
+        if(!userExists)
+            return NotFound(new ApiError("User", userId));
 
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
         
-        var basket = _database.BasketAssets.FirstOrDefault(x => x.MemberId == memberId && x.AssetId == assetId);
+        var basket = _database.BasketAssets.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
 
         if (basket != null)
         {
@@ -104,7 +104,7 @@ public class BasketController : Controller
         {
             _database.BasketAssets.Add(new BasketAsset()
             {
-                MemberId = memberId,
+                UserId = userId,
                 AssetId = assetId
             });
         }

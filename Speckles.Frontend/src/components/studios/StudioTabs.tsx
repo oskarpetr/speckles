@@ -1,6 +1,6 @@
 import Tabs from "../shared/Tabs";
 import { TabItem } from "../shared/TabItem";
-import { IStudio } from "@/types/Studio.types";
+import { IStudio } from "@/types/dtos/Studio.types";
 import StudioAssets from "./StudioAssets";
 import StudioMembers from "./StudioMembers";
 import StudioAbout from "./StudioAbout";
@@ -18,7 +18,7 @@ export default function StudioTabs({ studio }: Props) {
   const { data: session } = useSession();
 
   // permission
-  const canEdit = canEditStudio(studio, session?.user.memberId ?? "");
+  const canEdit = canEditStudio(studio, session?.user.userId ?? "");
 
   return (
     <Tabs>

@@ -10,8 +10,8 @@ export function getAssetImage(assetId: string, imageId: string) {
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 
-export function getAvatar(memberId: string) {
-  const uri = encodeURIComponent(`avatars/${memberId}.png`);
+export function getAvatar(userId: string) {
+  const uri = encodeURIComponent(`avatars/${userId}.png`);
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 

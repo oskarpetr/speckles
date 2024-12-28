@@ -1,5 +1,5 @@
-import { IStudio } from "@/types/Studio.types";
+import { IStudio } from "@/types/dtos/Studio.types";
 
 export function canEditStudio(studio: IStudio, userId: string) {
-  return studio.members.some((x) => x.memberId === userId);
+  return studio.members.some((x) => x.userId === userId);
 }

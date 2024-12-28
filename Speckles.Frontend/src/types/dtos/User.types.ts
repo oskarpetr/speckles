@@ -2,7 +2,7 @@ import { IAddress } from "./Address.types";
 import { IStudioShort } from "./Studio.types";
 
 export interface IUser {
-  memberId: string;
+  userId: string;
   username: string;
   email: string;
   fullName: string;
@@ -12,7 +12,7 @@ export interface IUser {
 }
 
 export interface IUserShort {
-  memberId: string;
+  userId: string;
   username: string;
   email: string;
   fullName: string;

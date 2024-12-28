@@ -1,10 +1,10 @@
-import { IMemberShort } from "./User.types";
+import { IUserShort } from "./User.types";
 
 export interface IComment {
   commentId: string;
   text: string;
   date: string;
-  author: IMemberShort;
+  author: IUserShort;
   likes: number;
   liked: boolean;
 }

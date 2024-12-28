@@ -16,7 +16,7 @@ public class AssetDto
     public ImageDto Thumbnail { get; set; }
     public List<ImageDto> Images { get; set; }
     public List<FileDto> Files { get; set; }
-    public List<ShortTagDto> Tags { get; set; }
+    public List<TagShortDto> Tags { get; set; }
     public List<CommentDto> Comments { get; set; }
     public bool Saved { get; set; }
     public bool InBasket { get; set; }

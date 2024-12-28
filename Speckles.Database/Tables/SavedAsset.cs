@@ -7,6 +7,6 @@ public class SavedAsset
     public string AssetId { get; set; }
     public virtual Asset Asset { get; set; }
     
-    public string MemberId { get; set; }
-    public virtual Member Member { get; set; }
+    public string UserId { get; set; }
+    public virtual User User { get; set; }
 }

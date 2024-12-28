@@ -3,6 +3,7 @@
 import { IComment } from "@/types/dtos/Comment.types";
 import FadeIn from "../animation/FadeIn";
 import CommentItem from "./CommentItem";
+import NoItemsYet from "../shared/NoItemsYet";
 
 interface Props {
   comments: IComment[];
@@ -18,7 +19,7 @@ export default function Comments({ comments }: Props) {
           </FadeIn>
         ))
       ) : (
-        <div className="opacity-80">No comments yet.</div>
+        <NoItemsYet items="comments" />
       )}
     </FadeIn>
   );

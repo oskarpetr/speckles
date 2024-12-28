@@ -32,11 +32,7 @@ export default function ProfilePage() {
             <div>
               <Heading title={user.username} />
 
-              <Avatar
-                fullName={user.fullName}
-                userId={user.userId}
-                size={120}
-              />
+              <Avatar user={user} size={120} />
             </div>
 
             <Section title="Studios" delay={0.1}>

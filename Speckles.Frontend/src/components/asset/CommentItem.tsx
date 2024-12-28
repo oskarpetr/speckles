@@ -53,17 +53,11 @@ export default function Comment({ comment }: Props) {
 
   return (
     <div className="flex gap-6">
-      <Link href={`/profile/${comment.author.username}`}>
-        <Avatar
-          userId={comment.author.userId}
-          fullName={comment.author.fullName}
-          size={60}
-        />
-      </Link>
+      <Avatar user={comment.author} size={60} link />
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <Link href={`/profile/${comment.author.username}`}>
+          <Link href={`/profiles/${comment.author.username}`}>
             <div className="font-extrabold">{comment.author.fullName}</div>
           </Link>
 

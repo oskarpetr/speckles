@@ -22,7 +22,7 @@ export default function Menu() {
 
   const userMenuItems: IMenuItem[] = [
     {
-      link: `/profile/${session?.user.username}`,
+      link: `/profiles/${session?.user.username}`,
       text: "Profile",
       icon: "User",
     },
@@ -45,7 +45,7 @@ export default function Menu() {
 
   const menuItems: IMenuItem[] = [
     {
-      link: `/profile/${session?.user.username}`,
+      link: `/profiles/${session?.user.username}`,
       text: "Profile",
       icon: "User",
     },
@@ -131,15 +131,7 @@ export default function Menu() {
         {status === "authenticated" ? (
           <div className="hidden md:block">
             <div className="flex items-center">
-              <PopupTooltip
-                button={
-                  <Avatar
-                    userId={session.user.userId}
-                    fullName={session.user.fullName}
-                    size={48}
-                  />
-                }
-              >
+              <PopupTooltip button={<Avatar user={session.user} size={48} />}>
                 <DropdownMenu items={userMenuItems} />
               </PopupTooltip>
             </div>

@@ -43,7 +43,7 @@ export function existsInLocalBasket(assetId: string) {
   return localBasket.includes(assetId);
 }
 
-export function localBasketToggle(inBasket: boolean, assetId: string) {
+export function localBasketToggle(assetId: string, inBasket: boolean) {
   const localBasket = getLocalBasket();
 
   // add to basket
@@ -71,7 +71,7 @@ export function existsInLocalSaved(assetId: string) {
   return localSaved.includes(assetId);
 }
 
-export function localSavedToggle(saved: boolean, assetId: string) {
+export function localSavedToggle(assetId: string, saved: boolean) {
   const localSaved = getLocalSaved();
 
   // add to saved

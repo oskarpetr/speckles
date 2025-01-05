@@ -11,16 +11,10 @@ import { useAssetQuery } from "@/hooks/useApi";
 export default function AssetPage() {
   // asset id param
   const { assetId } = useParams();
-  // const menuContext = useContext(MenuContext);
-  // const { setAssetId } = menuContext;
 
   // fetch asset
   const assetQuery = useAssetQuery(assetId as string);
   const asset = assetQuery.data?.data as IAsset;
-
-  // useEffect(() => {
-  //   setAssetId(assetId as string);
-  // }, []);
 
   return (
     <Layout>

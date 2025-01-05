@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../shared/Button";
 import { useSession } from "next-auth/react";
 import { existsInLocalBasket, localBasketToggle } from "@/utils/local";
@@ -25,20 +25,13 @@ export default function AddToBasket({ asset }: Props) {
   // added to basket state
   const [inBasket, setInBasket] = useState(determineInBasket);
 
-  // menu context
-  // const menuContext = useContext(MenuContext);
-  // const { postBasketQuery, basketCountQuery, setBasketType } = menuContext;
-
   // post basket
-  const basketMutation = useBasketMutation(
-    asset.assetId,
-    inBasket ? "remove" : "add"
-  );
+  const basketMutation = useBasketMutation(asset.assetId, inBasket);
 
   // basket animation
   //   const assetControls = useAnimationControlsT();
 
-  const toggleAddToBasket = async () => {
+  const toggleAddToBasket = () => {
     // if (!addedToBasket) {
     //   await assetControls.start({ scale: 1 }, { duration: 0.3 });
     //   await assetControls.start({ top: 14, right: 155 });
@@ -46,20 +39,13 @@ export default function AddToBasket({ asset }: Props) {
     // }
 
     if (status === "authenticated") {
-      await basketMutation.mutateAsync();
-      // await basketCountQuery?.refetch();
+      basketMutation.mutate();
     } else {
-      localBasketToggle(inBasket, asset.assetId);
+      localBasketToggle(asset.assetId, inBasket);
     }
 
     setInBasket((prev) => !prev);
-    // setBasketType((prev) => (prev === "add" ? "remove" : "add"));
   };
-
-  // useEffect(() => {
-  // setBasketType(inBasket ? "remove" : "add");
-  //   setInBasket(inBasket);
-  // }, [inBasket]);
 
   return (
     <Button

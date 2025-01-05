@@ -147,7 +147,7 @@ export function useBasketCountQuery() {
   return basketCountQuery;
 }
 
-export function useBasketMutation(assetId: string, type: IToggleState) {
+export function useBasketMutation(assetId: string, inBasket: boolean) {
   // session
   const { data: session } = useSession();
   const userId = session?.user.userId ?? "";
@@ -164,7 +164,7 @@ export function useBasketMutation(assetId: string, type: IToggleState) {
         queryKey: BASKET_COUNT_QUERY_KEY(userId),
       });
       toastSuccess(
-        type === "add"
+        inBasket
           ? toastMessages.user.addedToBasket
           : toastMessages.user.removedFromBasket
       );
@@ -299,7 +299,7 @@ export function useSavedCountQuery() {
   return savedCountQuery;
 }
 
-export function useSavedMutation(assetId: string, type: IToggleState) {
+export function useSavedMutation(assetId: string, saved: boolean) {
   // session
   const { data: session } = useSession();
   const userId = session?.user.userId ?? "";
@@ -316,7 +316,7 @@ export function useSavedMutation(assetId: string, type: IToggleState) {
         queryKey: SAVED_COUNT_QUERY_KEY(userId),
       });
       toastSuccess(
-        type === "add"
+        saved
           ? toastMessages.user.addedToSaved
           : toastMessages.user.removedFromSaved
       );

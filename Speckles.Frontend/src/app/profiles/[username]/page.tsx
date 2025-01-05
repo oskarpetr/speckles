@@ -3,25 +3,20 @@
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/utils/fetchers";
 import { IUser } from "@/types/dtos/User.types";
 import StudioList from "@/components/studios/StudioList";
 import Section from "@/components/shared/Section";
 import Avatar from "@/components/shared/Avatar";
 import LayoutSection from "@/components/layout/LayoutSection";
-import { ApiResponse } from "@/types/ApiResponse.types";
 import NoItemsYet from "@/components/shared/NoItemsYet";
+import { useUserQuery } from "@/hooks/useApi";
 
 export default function ProfilePage() {
   // username param
   const { username } = useParams();
 
-  const userQuery = useQuery<ApiResponse<IUser>>({
-    queryKey: ["users", username],
-    queryFn: () => fetchUser(username as string),
-  });
-
+  // fetch user
+  const userQuery = useUserQuery(username as string);
   const user = userQuery.data?.data as IUser;
 
   return (

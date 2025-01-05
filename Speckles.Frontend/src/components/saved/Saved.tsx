@@ -1,27 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import FadeIn from "../animation/FadeIn";
-import { fetchSavedAssets } from "@/utils/fetchers";
-import { IAssetShort } from "@/types/dtos/Asset.types";
-import { useSession } from "next-auth/react";
 import AssetList from "../asset/AssetList";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import NoItemsYet from "../shared/NoItemsYet";
+import { useSavedQuery } from "@/hooks/useApi";
 
 export default function Saved() {
-  // session
-  const { data: session } = useSession();
-
   // fetch saved assets
-  const savedQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: ["saved", session?.user.userId],
-    queryFn: () => fetchSavedAssets(session?.user.userId ?? ""),
-    enabled: !!session,
-  });
-
-  // saved assets
+  const savedQuery = useSavedQuery();
   const savedAssets = savedQuery.data?.data ?? [];
 
   return (
     <FadeIn delay={0.2}>
+      {(savedQuery.isLoading ||
+        savedQuery.isError ||
+        savedAssets.length === 0) && <NoItemsYet items="saved assets" />}
       {savedQuery.isSuccess && <AssetList assets={savedAssets} delay={0.2} />}
     </FadeIn>
   );

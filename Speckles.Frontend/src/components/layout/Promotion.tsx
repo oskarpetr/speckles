@@ -1,20 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import Icon from "../shared/Icon";
-import { fetchPromotion } from "@/utils/fetchers";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 import { layoutSectionPadding } from "./LayoutSection";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import { usePromotionQuery } from "@/hooks/useApi";
 
 export default function Promotion() {
   const [visible, setVisible] = useState(true);
 
-  const promotionQuery = useQuery<ApiResponse<IPromotion>>({
-    queryKey: ["promotion"],
-    queryFn: fetchPromotion,
-  });
-
+  // fetch promotion
+  const promotionQuery = usePromotionQuery();
   const promotion = promotionQuery.data?.data as IPromotion;
 
   return (

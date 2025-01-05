@@ -47,9 +47,13 @@ export default function Comment({ comment }: Props) {
     commentLikeQuery.refetch();
   };
 
-  const commentDistance = formatDistance(new Date(comment.date), new Date(), {
-    addSuffix: true,
-  });
+  const commentDistance = formatDistance(
+    new Date(comment.createdAt),
+    new Date(),
+    {
+      addSuffix: true,
+    }
+  );
 
   return (
     <div className="flex gap-6">

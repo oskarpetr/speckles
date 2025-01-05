@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 import { Dispatch, SetStateAction } from "react";
 
-export const timeIntervals = ["1d", "1w", "1m", "1y", "all time"];
+export const TIME_INTERVALS = ["1d", "1w", "1m", "1y", "all time"];
 
 interface Props {
   timeInterval: string;
@@ -14,7 +14,7 @@ export default function SelectTimeInterval({
 }: Props) {
   return (
     <div className="flex p-0.5 gap-1 h-fit bg-green-primary bg-opacity-10 border border-black-primary border-opacity-10 rounded-full">
-      {timeIntervals.map((time) => (
+      {TIME_INTERVALS.map((time) => (
         <button
           key={time}
           className={cn(

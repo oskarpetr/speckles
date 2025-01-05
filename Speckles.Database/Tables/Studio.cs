@@ -6,6 +6,7 @@ public class Studio
     public string Name { get; set; }
     public string ContactEmail { get; set; }
     public string Slug { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public Address Address { get; set; }
     public Portfolio Portfolio { get; set; }
     

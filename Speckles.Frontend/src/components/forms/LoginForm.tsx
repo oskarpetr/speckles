@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toastSuccess } from "../shared/Toast";
+import toastMessages from "@/utils/toastMessages";
 
 export default function LoginForm() {
   // router
@@ -51,7 +52,7 @@ export default function LoginForm() {
 
     if (signInRes?.ok) {
       router.push(signInRes.url!);
-      toastSuccess("You have been signed in.");
+      toastSuccess(toastMessages.user.login);
     } else if (signInRes?.error) {
       setFormError("Invalid email or password");
     }

@@ -262,4 +262,36 @@ public class DatabaseService
     
         _database.SaveChanges();
     }
+    
+    public List<AssetShortDto> GetSearchPrompts(string query, int take)
+    {
+        var assets = _database.Assets.Where(x => x.Name.Contains(query)).ToList();
+        var orders = _database.Orders.Where(x => x.Asset.Name.Contains(query)).ToList();
+        
+        // Sort assets by popularity of buying
+        var popularOrders = orders
+            .GroupBy(x => x.AssetId)
+            .OrderByDescending(x => x.Count())
+            .Select(x => x.First().Asset)
+            .Take(take)
+            .ToList();
+
+        // Add newest assets if there are not enough popular assets
+        if (popularOrders.Count < take)
+        {
+            var newestAssets = assets
+                .OrderByDescending(x => x.CreatedAt)
+                
+                // Exclude popular assets
+                .Where(x => !popularOrders.Contains(x))
+                
+                // Take the remaining assets
+                .Take(take - popularOrders.Count)
+                .ToList();
+            
+            popularOrders.AddRange(newestAssets);
+        }
+        
+        return popularOrders.Adapt<List<AssetShortDto>>();
+    }
 }

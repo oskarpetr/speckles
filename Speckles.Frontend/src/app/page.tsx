@@ -7,6 +7,7 @@ import Layout from "@/components/layout/Layout";
 import ForYou from "@/components/home/ForYou";
 import AboutSpeckles from "@/components/home/AboutSpeckles";
 import LayoutSection from "@/components/layout/LayoutSection";
+import CurrencyDialog from "@/components/dialogs/CurrencyDialog";
 
 export default function HomePage() {
   return (
@@ -36,6 +37,8 @@ export default function HomePage() {
       <LayoutSection padding={false}>
         <AboutSpeckles />
       </LayoutSection>
+
+      <CurrencyDialog />
     </Layout>
   );
 }

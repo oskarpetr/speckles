@@ -11,7 +11,7 @@ const nextConfig = {
     reactStrictMode: false,
     experimental: {
         serverComponentsExternalPackages: ['@react-pdf/renderer'],
-    }
+    },
 };
 
 export default withPlaiceholder(nextConfig);

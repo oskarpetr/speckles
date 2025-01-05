@@ -57,6 +57,9 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("AssetId")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("CurrencyId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -152,7 +155,7 @@ namespace Speckles.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("Date")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Text")
@@ -444,6 +447,9 @@ namespace Speckles.Database.Migrations
                     b.Property<string>("ContactEmail")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()

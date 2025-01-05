@@ -1,13 +1,13 @@
 import Image from "next/image";
 import FadeIn from "../animation/FadeIn";
 import { getAssetImage } from "@/utils/images";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/utils/cn";
-import { MenuContext } from "../context/MenuContext";
 import Like from "../shared/Like";
 import { useSession } from "next-auth/react";
 import { existsInLocalSaved, localSavedToggle } from "@/utils/local";
-import { IAsset } from "@/types/Asset.types";
+import { IAsset } from "@/types/dtos/Asset.types";
+import { useSavedMutation } from "@/hooks/useApi";
 
 interface Props {
   asset: IAsset;
@@ -16,10 +16,6 @@ interface Props {
 export default function AssetThumbnails({ asset }: Props) {
   // session
   const { status } = useSession();
-
-  // menu context
-  const menuContext = useContext(MenuContext);
-  const { savedCountQuery, postSavedQuery, setSavedType } = menuContext;
 
   // active image state
   const [activeImage, setActiveImage] = useState(0);
@@ -36,16 +32,21 @@ export default function AssetThumbnails({ asset }: Props) {
   // saved asset state
   const [savedAsset, setSavedAsset] = useState(determineSaved);
 
+  // post saved
+  const savedMutation = useSavedMutation(
+    asset.assetId,
+    savedAsset ? "remove" : "add"
+  );
+
   // toggle save asset
   const toggleSaveAsset = async () => {
     if (status === "authenticated") {
-      await postSavedQuery?.refetch();
-      await savedCountQuery?.refetch();
-    } else if (status === "unauthenticated") {
+      await savedMutation.mutateAsync();
+    } else {
       localSavedToggle(savedAsset, asset.assetId);
     }
 
-    setSavedType((prev) => (prev === "add" ? "remove" : "add"));
+    // setSavedType((prev) => (prev === "add" ? "remove" : "add"));
   };
 
   // next image in slider
@@ -66,9 +67,9 @@ export default function AssetThumbnails({ asset }: Props) {
   //   }
   // };
 
-  useEffect(() => {
-    setSavedType(savedAsset ? "remove" : "add");
-  }, [savedAsset]);
+  // useEffect(() => {
+  //   setSavedType(savedAsset ? "remove" : "add");
+  // }, [savedAsset]);
 
   return (
     <FadeIn delay={0.1} className="flex flex-col gap-4">

@@ -2,12 +2,16 @@ import { toastError, toastSuccess } from "@/components/shared/Toast";
 import { IAuthLogin, IAuthRegister } from "@/types/dtos/Auth.types";
 import { IToggleState } from "@/types/UiState.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
+import toastMessages from "./toastMessages";
+import { ApiOffsetLimit } from "@/types/ApiResponse.types";
 
 // studios
-export async function fetchStudios(userId?: string) {
-  return fetcher({
-    url: !userId ? "studios" : `studios?userId=${userId}`,
-  });
+export async function fetchStudios() {
+  return fetcher({ url: "studios" });
+}
+
+export async function fetchMyStudios(userId: string) {
+  return fetcher({ url: `studios?userId=${userId}` });
 }
 
 export async function fetchStudio(studioId: string) {
@@ -48,16 +52,28 @@ export async function fetchPromotion() {
   return fetcher({ url: "promotion" });
 }
 
-export async function postSaved(
-  userId: string,
-  assetId: string,
-  type: "add" | "remove"
-) {
+// search
+export async function fetchSearchPrompts(search: string) {
+  return fetcher({ url: `search-prompts?query=${search}` });
+}
+
+// geo
+export async function fetchGeo() {
+  return fetcher({
+    url: "json?fields=country,countryCode,currency",
+    origin: "http://ip-api.com/",
+  });
+}
+
+export async function postSaved(userId: string, assetId: string) {
   return fetcher({
     url: `saved?userId=${userId}`,
     method: "POST",
     body: { assetId },
-    successMessage: type === "add" ? "Added to saved" : "Removed from saved",
+    // successMessage:
+    //   type === "add"
+    //     ? toastMessages.user.savedAsset
+    //     : toastMessages.user.removedSavedAsset,
   });
 }
 
@@ -70,16 +86,15 @@ export async function fetchBasketCount(userId: string) {
   return fetcher({ url: `basket?userId=${userId}&format=count` });
 }
 
-export async function postBasket(
-  userId: string,
-  assetId: string,
-  type: IToggleState
-) {
+export async function postBasket(userId: string, assetId: string) {
   return fetcher({
     url: `basket?userId=${userId}`,
     method: "POST",
     body: { assetId },
-    successMessage: type === "add" ? "Added to basket" : "Removed from basket",
+    // successMessage:
+    //   type === "add"
+    //     ? toastMessages.user.addedToBasket
+    //     : toastMessages.user.removedFromBasket,
   });
 }
 
@@ -99,7 +114,7 @@ export async function postCommentLike(
 // orders
 export async function fetchOrders(
   userId: string,
-  { offset = 0, limit = 0 }: { offset?: number; limit?: number }
+  { offset = 0, limit = 0 }: ApiOffsetLimit
 ) {
   return fetcher({
     url: `orders?userId=${userId}&format=short&offset=${offset}&limit=${limit}`,
@@ -130,7 +145,7 @@ export async function postLogin(loginBody: IAuthLogin) {
 }
 
 // tags
-export async function fetchAssetsByTag(tagId: string) {
+export async function fetchTag(tagId: string) {
   return fetcher({ url: `tags/${tagId}` });
 }
 

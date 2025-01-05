@@ -1,10 +1,9 @@
 import { ICurrency } from "@/types/dtos/Currency.types";
-import { fetchCurrencyRates } from "@/utils/fetchers";
 import { formatPrice, formatPriceToLocal } from "@/utils/formatters";
-import { useQuery } from "@tanstack/react-query";
 import Tooltip from "../shared/Tooltip";
 import Icon from "../shared/Icon";
 import { IRates } from "@/types/dtos/Rates.types";
+import { useRatesQuery } from "@/hooks/useApi";
 
 interface Props {
   price: number;
@@ -19,12 +18,8 @@ export default function AssetPrice({
   color,
   showOriginal = false,
 }: Props) {
-  const currencyRatesQuery = useQuery<IRates>({
-    queryKey: ["currency", currency],
-    queryFn: () => fetchCurrencyRates(currency.name),
-  });
-
-  // rates
+  // fetch rates
+  const currencyRatesQuery = useRatesQuery(currency.name);
   const rates = currencyRatesQuery?.data as IRates;
 
   // prices

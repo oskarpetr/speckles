@@ -2,33 +2,20 @@
 
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
-import { fetchBasket } from "@/utils/fetchers";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Fragment } from "react";
 import { DownloadSimple, FileText } from "@phosphor-icons/react";
 import { getAssetImage } from "@/utils/images";
 import Section from "@/components/shared/Section";
 import FadeIn from "@/components/animation/FadeIn";
-import { useSession } from "next-auth/react";
-import { IAssetShort } from "@/types/dtos/Asset.types";
 import { getAssetThumbnailAlt } from "@/utils/alts";
 import LayoutSection from "@/components/layout/LayoutSection";
 import AssetPrice from "@/components/asset/AssetPrice";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import { useBasketQuery } from "@/hooks/useApi";
 
 export default function BasketPage() {
-  // session
-  const { data: session, status } = useSession();
-
   // fetch basket
-  const basketQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: ["basket", session?.user.userId],
-    queryFn: () => fetchBasket(session?.user.userId ?? ""),
-    enabled: status === "authenticated",
-  });
-
-  // basket
+  const basketQuery = useBasketQuery();
   const basket = basketQuery.data?.data ?? [];
 
   return (

@@ -1,31 +1,16 @@
 import { useState } from "react";
 import FadeIn from "../animation/FadeIn";
 import Asset from "../asset/AssetItem";
-import { IOrderShort } from "@/types/dtos/Order.types";
 import LoadMore, { PAGINATION_LIMIT } from "../shared/LoadMore";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { fetchOrders } from "@/utils/fetchers";
-import { ApiResponse } from "@/types/ApiResponse.types";
 import Grid from "../shared/Grid";
+import { useOrdersQuery } from "@/hooks/useApi";
 
 export default function OrdersList() {
-  // session
-  const { data: session, status } = useSession();
-
   // page
   const [page, setPage] = useState(1);
 
   // fetch orders
-  const ordersQuery = useQuery<ApiResponse<IOrderShort[]>>({
-    queryKey: ["orders", session?.user.userId],
-    queryFn: () =>
-      fetchOrders(session?.user.userId ?? "", {
-        limit: page * PAGINATION_LIMIT,
-      }),
-    enabled: status === "authenticated",
-  });
-
+  const ordersQuery = useOrdersQuery(page);
   const orders = ordersQuery.data?.data ?? [];
   const totalCount = ordersQuery.data?.totalCount ?? 0;
 

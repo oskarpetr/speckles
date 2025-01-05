@@ -1,6 +1,6 @@
 import { cn } from "@/utils/cn";
 import { Menu, MenuButton, MenuItems, Transition } from "@headlessui/react";
-import { Fragment, ReactNode } from "react";
+import { ComponentProps, Fragment, ReactNode } from "react";
 
 interface Props {
   button: ReactNode;
@@ -14,12 +14,14 @@ interface Props {
     | "top start"
     | "bottom end"
     | "bottom start";
+  className?: ComponentProps<"div">["className"];
 }
 
 export default function PopupTooltip({
   button,
   children,
   anchor = "bottom end",
+  className,
 }: Props) {
   return (
     <Menu>
@@ -42,8 +44,10 @@ export default function PopupTooltip({
               ? "mt-4 ml-8"
               : anchor === "top end"
               ? "-mt-4"
-              : ""
+              : "",
+            className
           )}
+          autoFocus={false}
         >
           {children}
         </MenuItems>

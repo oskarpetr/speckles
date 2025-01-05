@@ -1,5 +1,5 @@
 import { formatDate, formatPrice } from "@/utils/formatters";
-import { IOrder } from "@/types/Order.types";
+import { IOrder } from "@/types/dtos/Order.types";
 import Button from "../shared/Button";
 
 interface Props {
@@ -17,7 +17,13 @@ export default function OrderSummary({ order }: Props) {
 
         <div className="flex justify-between">
           <div>Amount paid</div>
-          <div>{formatPrice(order.asset.price, order.asset.currency)}</div>
+          <div>
+            {formatPrice(
+              order.asset.currency.locale,
+              order.asset.currency.name,
+              order.asset.price
+            )}
+          </div>
         </div>
 
         <div className="flex justify-between">

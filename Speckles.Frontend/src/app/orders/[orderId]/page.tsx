@@ -3,27 +3,20 @@
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { IOrder } from "@/types/dtos/Order.types";
-import { fetchOrder } from "@/utils/fetchers";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { Fragment } from "react";
 import Section from "@/components/shared/Section";
 import OrderFiles from "@/components/orders/OrderFiles";
 import OrderSummary from "@/components/orders/OrderSummary";
 import LayoutSection from "@/components/layout/LayoutSection";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import { useOrderQuery } from "@/hooks/useApi";
 
 export default function OrderPage() {
   // orderId param
   const { orderId } = useParams();
 
   // fetch order
-  const orderQuery = useQuery<ApiResponse<IOrder>>({
-    queryKey: ["orders", orderId],
-    queryFn: () => fetchOrder(orderId as string),
-  });
-
-  // order
+  const orderQuery = useOrderQuery(orderId as string);
   const order = orderQuery.data?.data as IOrder;
 
   return (

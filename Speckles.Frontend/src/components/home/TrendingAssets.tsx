@@ -1,25 +1,17 @@
-import { IAssetShort } from "@/types/dtos/Asset.types";
-import { useQuery } from "@tanstack/react-query";
 import FadeIn from "../animation/FadeIn";
 import Section from "../shared/Section";
-import { fetchAssets } from "@/utils/fetchers";
 import RoundedButton from "../shared/RoundedButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import Asset, { SkeletonAsset } from "../asset/AssetItem";
+import { useAssetsQuery } from "@/hooks/useApi";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import { ApiResponse } from "@/types/ApiResponse.types";
 
 export default function TrendingAssets() {
-  // assets query
-  const assetsQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: ["assets"],
-    queryFn: fetchAssets,
-  });
-
-  // assets
+  // fetch assets
+  const assetsQuery = useAssetsQuery();
   const assets = assetsQuery.data?.data ?? [];
 
   return (

@@ -1,6 +1,6 @@
 /* fonts */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -39,8 +39,8 @@ body {
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px #F3F3F3 inset !important;
-  box-shadow: 0 0 0 30px #F3F3F3 inset !important;
+  -webkit-box-shadow: 0 0 0 30px #f3f3f3 inset !important;
+  box-shadow: 0 0 0 30px #f3f3f3 inset !important;
 }
 
 * {
@@ -69,3 +69,9 @@ position: absolute !important;
   background-color: #ff0000;
   opacity: 1;
 } */
+
+@layer base {
+  img {
+    display: initial;
+  }
+}

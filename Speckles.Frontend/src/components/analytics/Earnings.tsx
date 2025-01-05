@@ -1,11 +1,8 @@
-import { IEarning } from "@/types/dtos/Earning.types";
-import { fetchStudioEarnings } from "@/utils/fetchers";
-import { useQuery } from "@tanstack/react-query";
 import EarningsChart from "./EarningsChart";
-import { timeIntervals } from "./SelectTimeInterval";
+import { TIME_INTERVALS } from "./SelectTimeInterval";
 import { useEffect, useState } from "react";
 import SelectTimeInterval from "./SelectTimeInterval";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import { useStudioEarningsQuery } from "@/hooks/useApi";
 
 interface Props {
   slug: string;
@@ -13,15 +10,10 @@ interface Props {
 
 export default function Earnings({ slug }: Props) {
   // time interval
-  const [timeInterval, setTimeInterval] = useState(timeIntervals[0]);
+  const [timeInterval, setTimeInterval] = useState(TIME_INTERVALS[0]);
 
   // earnings query
-  const studioEarningsQuery = useQuery<ApiResponse<IEarning[]>>({
-    queryKey: ["studios", slug, "earnings"],
-    queryFn: () => fetchStudioEarnings(slug, timeInterval),
-  });
-
-  // earnings
+  const studioEarningsQuery = useStudioEarningsQuery(slug, timeInterval);
   const earnings = studioEarningsQuery.data?.data ?? [];
 
   // earnings chart data

@@ -8,6 +8,7 @@ export interface IStudio {
   name: string;
   contactEmail: string;
   slug: string;
+  createdAt: string;
   address: IAddress;
   portfolio: IPortfolio;
   members: IUserShort[];

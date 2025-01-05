@@ -5,24 +5,17 @@ import Asset from "@/components/asset/AssetItem";
 import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { ITag } from "@/types/dtos/Tag.types";
-import { fetchAssetsByTag } from "@/utils/fetchers";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { Fragment } from "react";
 import LayoutSection from "@/components/layout/LayoutSection";
-import { ApiResponse } from "@/types/ApiResponse.types";
+import { useTagQuery } from "@/hooks/useApi";
 
 export default function TagPage() {
   // tag id param
   const { tagId } = useParams();
 
   // fetch tag
-  const tagQuery = useQuery<ApiResponse<ITag>>({
-    queryKey: ["tag", tagId],
-    queryFn: () => fetchAssetsByTag(tagId as string),
-  });
-
-  // tag
+  const tagQuery = useTagQuery(tagId as string);
   const tag = tagQuery.data?.data as ITag;
 
   return (

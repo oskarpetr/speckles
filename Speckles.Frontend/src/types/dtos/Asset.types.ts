@@ -11,6 +11,7 @@ export interface IAsset {
   assetId: string;
   name: string;
   price: number;
+  createdAt: string;
   currency: ICurrency;
   description: string;
   license: ILicense;

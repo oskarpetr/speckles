@@ -6,13 +6,14 @@ import { cn } from "@/utils/cn";
 interface Props {
   type?: "text" | "email" | "password";
   name: string;
-  onChange: (event: ChangeEvent) => void;
-  onBlur: (event: FocusEvent) => void;
-  placeholder: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent) => void;
+  placeholder?: string;
   value: string;
-  error: string | undefined;
-  touched: boolean | undefined;
+  error?: string | undefined;
+  touched?: boolean | undefined;
   icon?: string;
+  autocomplete?: boolean;
 }
 
 export default function Input({
@@ -25,6 +26,7 @@ export default function Input({
   error,
   touched,
   icon,
+  autocomplete = true,
 }: Props) {
   return (
     <Fragment>
@@ -49,6 +51,7 @@ export default function Input({
           onChange={onChange}
           onBlur={onBlur}
           value={value}
+          autoComplete={autocomplete ? "on" : "off"}
         />
       </div>
 

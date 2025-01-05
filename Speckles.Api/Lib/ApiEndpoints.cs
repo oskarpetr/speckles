@@ -79,4 +79,9 @@ public static class ApiEndpoints
     {
         public const string GET_PROMOTION = "promotion";
     }
+
+    public static class Search
+    {
+        public const string GET_SEARCH_PROMPTS = "search-prompts";
+    }
 }

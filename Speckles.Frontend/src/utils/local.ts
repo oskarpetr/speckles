@@ -6,11 +6,13 @@ const SPECKLES = "speckles";
 const LOCAL_BASKET = "local-basket";
 const LOCAL_SAVED = "local-saved";
 const LOCAL_CURRENCY = "local-currency";
+const LOCAL_CURRENCY_SET = "local-currency-set";
 
 const defaultValues = {
   [LOCAL_BASKET]: [] as string[],
   [LOCAL_SAVED]: [] as string[],
   [LOCAL_CURRENCY]: BASE_CURRENCY as string,
+  [LOCAL_CURRENCY_SET]: false as boolean,
 };
 
 function getLocal(): typeof defaultValues {
@@ -95,4 +97,14 @@ export function getLocalCurrency() {
 
 export function setLocalCurrency(currency: string) {
   setLocal(LOCAL_CURRENCY, currency);
+  setCurrencySet(true);
+}
+
+export function getCurrencySet() {
+  const local = getLocal();
+  return local[LOCAL_CURRENCY_SET] ?? defaultValues[LOCAL_CURRENCY_SET];
+}
+
+export function setCurrencySet(value: boolean) {
+  setLocal(LOCAL_CURRENCY_SET, value);
 }

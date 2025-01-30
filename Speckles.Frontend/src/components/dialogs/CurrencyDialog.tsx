@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Dialog from "../shared/Dialog";
+import Modal from "../shared/Modal";
 import { IGeo } from "@/types/dtos/Geo.types";
 import Button from "../shared/Button";
 import { setLocalCurrency } from "@/utils/local";
@@ -22,7 +22,7 @@ export default function CurrencyDialog() {
   };
 
   return (
-    <Dialog title="Local currency" open={open} setOpen={setOpen}>
+    <Modal title="Local currency" open={open} setOpen={setOpen}>
       {geoQuery.isSuccess && (
         <div className="flex flex-col gap-6">
           <p className="leading-relaxed">
@@ -38,6 +38,6 @@ export default function CurrencyDialog() {
           />
         </div>
       )}
-    </Dialog>
+    </Modal>
   );
 }

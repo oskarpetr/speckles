@@ -30,17 +30,7 @@ public class AssetsController : Controller
     [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var orders = _database.GetOrders();
-
-        var assetIds = orders.Select(x => x.AssetId).Distinct().ToList();
-        
-        if (offset != null)
-            assetIds = assetIds.Skip(offset.Value).ToList();
-        
-        if (limit != null)
-            assetIds = assetIds.Take(limit.Value).ToList();
-
-        var assets = _database.GetAssets(assetIds);
+        var assets = _database.GetAssets(limit ?? SearchController.PAGINATION_LIMIT);
         var response = new ApiResponse(assets);
         
         return Ok(response);

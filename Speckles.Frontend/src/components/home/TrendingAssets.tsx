@@ -3,7 +3,7 @@ import Section from "../shared/Section";
 import RoundedButton from "../shared/RoundedButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
-import Asset, { SkeletonAsset } from "../asset/AssetItem";
+import Asset, { SkeletonAssetItem } from "../asset/AssetItem";
 import { useAssetsQuery } from "@/hooks/useApi";
 
 import "swiper/css";
@@ -54,7 +54,7 @@ export default function TrendingAssets() {
                       delay={0.2 + index * 0.05}
                       className="relative rounded-lg overflow-hidden group aspect-w-16 aspect-h-10 bg-neutral-300"
                     >
-                      <SkeletonAsset />
+                      <SkeletonAssetItem />
                     </FadeIn>
                   </SwiperSlide>
                 ))}

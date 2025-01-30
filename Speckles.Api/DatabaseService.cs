@@ -110,17 +110,9 @@ public class DatabaseService
         return _database.Orders.ToList();
     }
     
-    public List<AssetShortDto> GetAssets(List<string> assetIds)
+    public List<AssetShortDto> GetAssets(int limit)
     {
-        return _database.Assets
-            .Where(x => assetIds.Contains(x.AssetId))
-            .Include(x => x.Thumbnail)
-            .Include(x => x.Currency)
-            .Include(x => x.Tags).ThenInclude(x => x.Tag)
-            .ToList()
-            
-            // Asset -> ShortAssetDto
-            .Adapt<List<AssetShortDto>>();
+        return GetPopularAssets(limit, null);
     }
     
     public bool AssetExists(string assetId)
@@ -265,19 +257,34 @@ public class DatabaseService
     
     public List<AssetShortDto> GetSearchPrompts(string query, int take)
     {
-        var assets = _database.Assets.Where(x => x.Name.Contains(query)).ToList();
-        var orders = _database.Orders.Where(x => x.Asset.Name.Contains(query)).ToList();
+        return GetPopularAssets(take, query);
+    }
+
+    private List<AssetShortDto> GetPopularAssets(int limit, string? query)
+    {
+        var trimmedQuery = query?.ToLower().Trim() ?? string.Empty;
+        
+        var assets = _database.Assets
+            .Include(x => x.Currency)
+            .Include(x => x.Thumbnail)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
+            .Where(x => x.Name.ToLower().Contains(trimmedQuery)).ToList();
+        var orders = _database.Orders
+            .Include(x => x.Asset).ThenInclude(x => x.Currency)
+            .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
+            .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
+            .Where(x => x.Asset.Name.ToLower().Contains(trimmedQuery)).ToList();
         
         // Sort assets by popularity of buying
         var popularOrders = orders
             .GroupBy(x => x.AssetId)
             .OrderByDescending(x => x.Count())
             .Select(x => x.First().Asset)
-            .Take(take)
+            .Take(limit)
             .ToList();
 
         // Add newest assets if there are not enough popular assets
-        if (popularOrders.Count < take)
+        if (popularOrders.Count < limit)
         {
             var newestAssets = assets
                 .OrderByDescending(x => x.CreatedAt)
@@ -286,12 +293,29 @@ public class DatabaseService
                 .Where(x => !popularOrders.Contains(x))
                 
                 // Take the remaining assets
-                .Take(take - popularOrders.Count)
+                .Take(limit - popularOrders.Count)
                 .ToList();
             
             popularOrders.AddRange(newestAssets);
         }
         
         return popularOrders.Adapt<List<AssetShortDto>>();
+    }
+    
+    public List<AssetShortDto> GetSearch(string query, int limit, int offset)
+    {
+        var trimmedQuery = query.ToLower().Trim();
+
+        return _database.Assets 
+            .Where(x => x.Name.ToLower().Contains(trimmedQuery))
+            .Include(x => x.Thumbnail)
+            .Include(x => x.Currency)
+            .Include(x => x.Tags).ThenInclude(x => x.Tag)
+            .Skip(offset)
+            .Take(limit)
+            .ToList()
+            
+            // Asset -> ShortAssetDto
+            .Adapt<List<AssetShortDto>>();
     }
 }

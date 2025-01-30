@@ -2,6 +2,7 @@ import { PAGINATION_LIMIT } from "@/components/shared/LoadMore";
 import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
 import { IAsset, IAssetShort } from "@/types/dtos/Asset.types";
+import { IAuthRegister } from "@/types/dtos/Auth.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
 import { IOrder, IOrderShort } from "@/types/dtos/Order.types";
@@ -10,7 +11,6 @@ import { IRates } from "@/types/dtos/Rates.types";
 import { IStudio, IStudioShort } from "@/types/dtos/Studio.types";
 import { ITag } from "@/types/dtos/Tag.types";
 import { IUser } from "@/types/dtos/User.types";
-import { IToggleState } from "@/types/UiState.types";
 import {
   fetchAsset,
   fetchAssets,
@@ -24,6 +24,7 @@ import {
   fetchPromotion,
   fetchSavedAssets,
   fetchSavedCount,
+  fetchSearch,
   fetchSearchPrompts,
   fetchStudio,
   fetchStudioEarnings,
@@ -31,6 +32,8 @@ import {
   fetchTag,
   fetchUser,
   postBasket,
+  postCommentLike,
+  postRegister,
   postSaved,
 } from "@/utils/fetchers";
 import {
@@ -39,15 +42,18 @@ import {
   BASKET_COUNT_QUERY_KEY,
   BASKET_MUTATION_KEY,
   BASKET_QUERY_KEY,
+  COMMENT_LIKE_MUTATION_KEY,
   MY_STUDIOS_QUERY_KEY,
   ORDER_QUERY_KEY,
   ORDERS_QUERY_KEY,
   PROMOTION_QUERY_KEY,
   RATES_QUERY_KEY,
+  REGISTER_MUTATION_KEY,
   SAVED_COUNT_QUERY_KEY,
   SAVED_MUTATION_KEY,
   SAVED_QUERY_KEY,
   SEARCH_PROMPTS_QUERY_KEY,
+  SEARCH_QUERY_KEY,
   STUDIO_EARNINGS_QUERY_KEY,
   STUDIO_QUERY_KEY,
   STUDIOS_QUERY_KEY,
@@ -229,11 +235,17 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   return studioEarningsQuery;
 }
 
-export function useTagQuery(tagId: string) {
+export function useTagQuery(tagId: string, page: number) {
+  // fetch tag
+  const query = () =>
+    fetchTag(tagId, {
+      limit: page * PAGINATION_LIMIT,
+    });
+
   // query
   const tagQuery = useQuery<ApiResponse<ITag>>({
     queryKey: TAG_QUERY_KEY(tagId),
-    queryFn: () => fetchTag(tagId),
+    queryFn: query,
   });
 
   return tagQuery;
@@ -326,13 +338,57 @@ export function useSavedMutation(assetId: string, saved: boolean) {
   return postSavedMutation;
 }
 
-export function useSearchPromptsQuery(search: string) {
+export function useSearchQuery(query: string) {
+  const trimmedQuery = query.toLowerCase().trim();
+
+  // query
+  const searchQuery = useQuery<ApiResponse<IAssetShort[]>>({
+    queryKey: SEARCH_QUERY_KEY(trimmedQuery),
+    queryFn: () => fetchSearch(trimmedQuery),
+    enabled: trimmedQuery.length > 0,
+  });
+
+  return searchQuery;
+}
+
+export function useSearchPromptsQuery(query: string) {
+  const trimmedQuery = query.toLowerCase().trim();
+
   // query
   const searchPromptsQuery = useQuery<ApiResponse<IAssetShort[]>>({
-    queryKey: SEARCH_PROMPTS_QUERY_KEY(search),
-    queryFn: () => fetchSearchPrompts(search),
-    enabled: search.length > 0 && search.trim().length > 0,
+    queryKey: SEARCH_PROMPTS_QUERY_KEY(trimmedQuery),
+    queryFn: () => fetchSearchPrompts(trimmedQuery),
+    enabled: trimmedQuery.length > 0,
   });
 
   return searchPromptsQuery;
+}
+
+export function useCommentLikeMutation(commentId: string, liked: boolean) {
+  // session
+  const { data: session } = useSession();
+  const userId = session?.user?.userId ?? "";
+
+  const commentLikeMutation = useMutation({
+    mutationKey: COMMENT_LIKE_MUTATION_KEY(userId, commentId),
+    mutationFn: () => postCommentLike(commentId, userId),
+    onSuccess: () =>
+      toastSuccess(
+        liked
+          ? toastMessages.user.likeComment
+          : toastMessages.user.unlikeComment
+      ),
+  });
+
+  return commentLikeMutation;
+}
+
+export function useRegisterMutation() {
+  const registerMutation = useMutation({
+    mutationKey: REGISTER_MUTATION_KEY,
+    mutationFn: (registerBody: IAuthRegister) => postRegister(registerBody),
+    onSuccess: () => toastSuccess(toastMessages.user.register),
+  });
+
+  return registerMutation;
 }

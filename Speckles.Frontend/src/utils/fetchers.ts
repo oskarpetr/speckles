@@ -1,8 +1,6 @@
 import { toastError, toastSuccess } from "@/components/shared/Toast";
 import { IAuthLogin, IAuthRegister } from "@/types/dtos/Auth.types";
-import { IToggleState } from "@/types/UiState.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
-import toastMessages from "./toastMessages";
 import { ApiOffsetLimit } from "@/types/ApiResponse.types";
 
 // studios
@@ -53,8 +51,12 @@ export async function fetchPromotion() {
 }
 
 // search
-export async function fetchSearchPrompts(search: string) {
-  return fetcher({ url: `search-prompts?query=${search}` });
+export async function fetchSearch(query: string) {
+  return fetcher({ url: `search?query=${query}` });
+}
+
+export async function fetchSearchPrompts(query: string) {
+  return fetcher({ url: `search-prompts?query=${query}` });
 }
 
 // geo
@@ -99,15 +101,10 @@ export async function postBasket(userId: string, assetId: string) {
 }
 
 // comments
-export async function postCommentLike(
-  commentId: string,
-  userId: string,
-  type: IToggleState
-) {
+export async function postCommentLike(commentId: string, userId: string) {
   return fetcher({
     url: `comments/${commentId}/like?userId=${userId}`,
     method: "POST",
-    successMessage: type === "add" ? "Liked comment" : "Unliked comment",
   });
 }
 
@@ -116,6 +113,7 @@ export async function fetchOrders(
   userId: string,
   { offset = 0, limit = 0 }: ApiOffsetLimit
 ) {
+  console.log("LIMIT", limit);
   return fetcher({
     url: `orders?userId=${userId}&format=short&offset=${offset}&limit=${limit}`,
   });
@@ -145,8 +143,12 @@ export async function postLogin(loginBody: IAuthLogin) {
 }
 
 // tags
-export async function fetchTag(tagId: string) {
-  return fetcher({ url: `tags/${tagId}` });
+export async function fetchTag(
+  tagId: string,
+  { offset = 0, limit = 0 }: ApiOffsetLimit
+) {
+  console.log("LIMIT", limit);
+  return fetcher({ url: `tags/${tagId}?offset=${offset}&limit=${limit}` });
 }
 
 // currency

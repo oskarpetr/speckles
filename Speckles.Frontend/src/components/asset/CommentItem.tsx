@@ -1,6 +1,4 @@
 import { IComment } from "@/types/dtos/Comment.types";
-import { postCommentLike } from "@/utils/fetchers";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toastError } from "../shared/Toast";
@@ -8,6 +6,7 @@ import Link from "next/link";
 import Avatar from "../shared/Avatar";
 import { formatDistance } from "date-fns";
 import Like from "../shared/Like";
+import { useCommentLikeMutation } from "@/hooks/useApi";
 
 interface Props {
   comment: IComment;
@@ -15,25 +14,16 @@ interface Props {
 
 export default function Comment({ comment }: Props) {
   // session
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   // like state
   const [liked, setLiked] = useState(comment.liked);
 
-  const commentLikeQuery = useQuery({
-    queryKey: ["comments", comment.commentId, "like", session?.user?.userId],
-    queryFn: () =>
-      postCommentLike(
-        comment.commentId,
-        session?.user?.userId ?? "",
-        liked ? "remove" : "add"
-      ),
-    enabled: false,
-  });
+  const commentLikeMutation = useCommentLikeMutation(comment.commentId, liked);
 
   // toggle like comment
-  const toggleLikeComment = async () => {
-    if (status === "unauthenticated") {
+  const toggleLikeComment = () => {
+    if (status !== "authenticated") {
       toastError("You need to be logged in.");
       return;
     }
@@ -44,15 +34,13 @@ export default function Comment({ comment }: Props) {
       comment.likes++;
     }
 
-    commentLikeQuery.refetch();
+    commentLikeMutation.mutate();
   };
 
   const commentDistance = formatDistance(
     new Date(comment.createdAt),
     new Date(),
-    {
-      addSuffix: true,
-    }
+    { addSuffix: true }
   );
 
   return (

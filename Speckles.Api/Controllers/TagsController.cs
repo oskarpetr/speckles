@@ -35,14 +35,15 @@ public class TagsController : Controller
             return NotFound(new ApiError("Tag", tagId));
         
         var tag = _database.GetTag(tagId);
-        
+        var totalCount = tag.Assets.Count;
+
         if(offset != null)
             tag.Assets = tag.Assets.Skip(offset.Value).ToList();
             
         if(limit != null)
             tag.Assets = tag.Assets.Take(limit.Value).ToList();
         
-        var response = new ApiResponse(tag);
+        var response = new ApiResponse(tag, totalCount);
         
         return Ok(response);
     }

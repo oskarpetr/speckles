@@ -24,6 +24,9 @@ const userMessages = {
 
   // profile
   updatedAvatar: "Avatar updated",
+
+  // register
+  register: "You have been registered",
 };
 
 const studioMessages = {

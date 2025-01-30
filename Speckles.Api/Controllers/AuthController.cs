@@ -35,12 +35,12 @@ public class AuthController : Controller
     {
         var usernameExists = _database.Users.Any(x => x.Username == registerBody.username);
         
-        if (!usernameExists)
+        if (usernameExists)
             return Conflict(new ApiError("Username", registerBody.username, 409));
         
         var emailExists = _database.Users.Any(x => x.Email == registerBody.email);
         
-        if (!emailExists)
+        if (emailExists)
             return Conflict(new ApiError("Email", registerBody.email, 409));
 
         var address = new Address()

@@ -6,17 +6,23 @@ import Heading from "@/components/shared/Heading";
 import Layout from "@/components/layout/Layout";
 import { ITag } from "@/types/dtos/Tag.types";
 import { useParams } from "next/navigation";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import LayoutSection from "@/components/layout/LayoutSection";
 import { useTagQuery } from "@/hooks/useApi";
+import Grid from "@/components/shared/Grid";
+import LoadMore from "@/components/shared/LoadMore";
 
 export default function TagPage() {
   // tag id param
   const { tagId } = useParams();
 
+  // page
+  const [page, setPage] = useState(1);
+
   // fetch tag
-  const tagQuery = useTagQuery(tagId as string);
+  const tagQuery = useTagQuery(tagId as string, page);
   const tag = tagQuery.data?.data as ITag;
+  const totalCount = tagQuery.data?.totalCount ?? 0;
 
   return (
     <Layout>
@@ -24,9 +30,15 @@ export default function TagPage() {
         {tagQuery.isSuccess && (
           <Fragment>
             <Heading title={tag.name} />
-            <div className="grid grid-cols-3 gap-6">
-              {tagQuery.isSuccess &&
-                tag.assets.map((asset, index) => (
+
+            <LoadMore
+              page={page}
+              setPage={setPage}
+              totalCount={totalCount}
+              query={tagQuery}
+            >
+              <Grid>
+                {tag.assets.map((asset, index) => (
                   <FadeIn
                     key={`asset_${asset.assetId}`}
                     delay={0.2 + index * 0.05}
@@ -35,7 +47,8 @@ export default function TagPage() {
                     <Asset asset={asset} />
                   </FadeIn>
                 ))}
-            </div>
+              </Grid>
+            </LoadMore>
           </Fragment>
         )}
       </LayoutSection>

@@ -6,10 +6,10 @@ import Input from "./Input";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { BEZIER_CURVE } from "@/utils/animation";
-import { useQuery } from "@tanstack/react-query";
-import { postRegister } from "@/utils/fetchers";
 import { IAuthRegister } from "@/types/dtos/Auth.types";
 import { passwordSchema } from "@/utils/validationSchemas";
+import { useRegisterMutation } from "@/hooks/useApi";
+import { useRouter } from "next/navigation";
 
 interface Props {
   step: number;
@@ -19,11 +19,11 @@ interface Props {
 export default function RegisterForm({ step, setStep }: Props) {
   const [registerBody, setRegisterBody] = useState<IAuthRegister>();
 
-  const postRegisterQuery = useQuery({
-    queryKey: ["register"],
-    queryFn: () => postRegister(registerBody!),
-    enabled: false,
-  });
+  // router
+  const router = useRouter();
+
+  // register mutation
+  const postRegisterMutation = useRegisterMutation();
 
   const validationSchemaStep1 = object({
     fullName: string().required("Full name is required"),
@@ -79,15 +79,14 @@ export default function RegisterForm({ step, setStep }: Props) {
     const { confirmPassword, ...data } = values;
     setRegisterBody((prev) => ({ ...prev, ...data }));
 
-    if (step < 3) {
+    if (step !== 3) {
       setStep((prev) => {
         incrementAnimation(prev);
         return prev + 1;
       });
-    }
-
-    if (step === 3) {
-      postRegisterQuery.refetch();
+    } else {
+      postRegisterMutation.mutate(data);
+      router.push("/login");
     }
   };
 
@@ -162,6 +161,27 @@ export default function RegisterForm({ step, setStep }: Props) {
   const step1Controls = useAnimationControls();
   const step2Controls = useAnimationControls();
   const step3Controls = useAnimationControls();
+
+  function FormButtons({ step, goBack }: { step: number; goBack: () => void }) {
+    return (
+      <div className="flex gap-6">
+        {step !== 1 && (
+          <Button
+            icon={{ name: "ArrowLeft" }}
+            text="Go back"
+            type="cancel"
+            onClick={goBack}
+          />
+        )}
+        <Button
+          icon={{ name: "ArrowRight", iconDirection: "right" }}
+          text={step === 3 ? "Register" : "Continue"}
+          loading={postRegisterMutation.isPending}
+          fullWidth
+        />
+      </div>
+    );
+  }
 
   return (
     <Formik
@@ -337,25 +357,5 @@ export default function RegisterForm({ step, setStep }: Props) {
         </form>
       )}
     </Formik>
-  );
-}
-
-function FormButtons({ step, goBack }: { step: number; goBack: () => void }) {
-  return (
-    <div className="flex gap-6">
-      {step !== 1 && (
-        <Button
-          icon={{ name: "ArrowLeft" }}
-          text="Go back"
-          type="cancel"
-          onClick={goBack}
-        />
-      )}
-      <Button
-        icon={{ name: "ArrowRight", iconDirection: "right" }}
-        text={step === 3 ? "Register" : "Continue"}
-        fullWidth
-      />
-    </div>
   );
 }

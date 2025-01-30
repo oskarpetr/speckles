@@ -15,7 +15,7 @@ export default function Toast() {
       //   marginTop: "156px", // 112px
       //   marginRight: "16px",
       // }}
-      position="bottom-center"
+      position="bottom-left"
       toastOptions={{
         style: {
           borderRadius: "10px",

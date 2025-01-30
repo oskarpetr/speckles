@@ -25,8 +25,7 @@ export default function LoadMore({
   const maxPage = Math.ceil(totalCount / limit);
 
   useEffect(() => {
-    console.log("refetch");
-    console.log("page", page);
+    console.log("PAGE", page);
     query.refetch();
   }, [page]);
 
@@ -38,11 +37,10 @@ export default function LoadMore({
         {page !== maxPage && (
           <Button
             onClick={() => {
-              setPage((prev) => {
-                console.log(page < maxPage ? prev + 1 : prev);
-                return page < maxPage ? prev + 1 : prev;
-              });
-              console.log("here");
+              // console.log(page < maxPage ? prev + 1 : prev);
+              if (page < maxPage) {
+                setPage((prev) => prev + 1);
+              }
             }}
             text="Load more"
             marginTop

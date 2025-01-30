@@ -54,7 +54,7 @@ export default function AssetItem({ asset, type = "asset", orderId }: Props) {
   );
 }
 
-export function SkeletonAsset() {
+export function SkeletonAssetItem() {
   const userLocale = navigator.language;
   const localCurrency = getLocalCurrency();
   const price = formatPrice(userLocale, localCurrency, 0);

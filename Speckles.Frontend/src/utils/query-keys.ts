@@ -61,7 +61,17 @@ export const SAVED_MUTATION_KEY = (userId: string, assetId: string) => [
 ];
 
 // search
-export const SEARCH_PROMPTS_QUERY_KEY = (search: string) => [
+export const SEARCH_QUERY_KEY = (query: string) => ["search", query];
+export const SEARCH_PROMPTS_QUERY_KEY = (query: string) => [
   "search-prompts",
-  search,
+  query,
 ];
+
+// comments
+export const COMMENT_LIKE_MUTATION_KEY = (
+  userId: string,
+  commentId: string
+) => ["comments", commentId, "like", userId];
+
+// register
+export const REGISTER_MUTATION_KEY = ["register"];

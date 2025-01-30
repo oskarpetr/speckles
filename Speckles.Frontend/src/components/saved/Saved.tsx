@@ -13,7 +13,11 @@ export default function Saved() {
       {(savedQuery.isLoading ||
         savedQuery.isError ||
         savedAssets.length === 0) && <NoItemsYet items="saved assets" />}
-      {savedQuery.isSuccess && <AssetList assets={savedAssets} delay={0.2} />}
+      <AssetList
+        assets={savedAssets}
+        delay={0.2}
+        skeleton={savedQuery.isLoading || savedQuery.isError}
+      />
     </FadeIn>
   );
 }

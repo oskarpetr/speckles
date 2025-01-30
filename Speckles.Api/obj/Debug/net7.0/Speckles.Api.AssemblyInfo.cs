@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Speckles.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70752c3b95c72213601b151edc8c1631c1f039aa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0f3b305b75ff9209ea708237078865d818983e81")]
 [assembly: System.Reflection.AssemblyProductAttribute("Speckles.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Speckles.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

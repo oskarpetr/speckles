@@ -85,4 +85,14 @@ public static class ApiEndpoints
         public const string GET_SEARCH = "search";
         public const string GET_SEARCH_PROMPTS = "search-prompts";
     }
+    
+    public static class Licenses
+    {
+        public const string GET_LICENSES = "licenses";
+    }
+
+    public static class Currencies
+    {
+        public const string GET_CURRENCIES = "currencies";
+    }
 }

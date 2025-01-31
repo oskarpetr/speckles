@@ -163,6 +163,15 @@ export async function fetchCurrencyRates(currency: string) {
   });
 }
 
+export async function fetchCurrencies() {
+  return fetcher({ url: "currencies" });
+}
+
+// licenses
+export async function fetchLicenses() {
+  return fetcher({ url: "licenses" });
+}
+
 // fetcher
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 const FRONTEND_URL = "http://localhost:3000/";

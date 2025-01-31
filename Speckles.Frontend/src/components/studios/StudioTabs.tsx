@@ -8,6 +8,7 @@ import StudioAnalytics from "./StudioAnalytics";
 import Button from "../shared/Button";
 import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface Props {
   studio: IStudio;
@@ -22,22 +23,19 @@ export default function StudioTabs({ studio }: Props) {
 
   return (
     <Tabs>
-      {canEdit ? (
+      {/* {canEdit ? (
         <TabItem title="Analytics">
           <StudioAnalytics slug={studio.slug} />
         </TabItem>
-      ) : null}
+      ) : null} */}
 
       <TabItem
         title="Assets"
         button={
           canEdit ? (
-            <Button
-              icon={{ name: "Plus" }}
-              text="Add asset"
-              size="small"
-              onClick={() => {}}
-            />
+            <Link href={`/studios/${studio.slug}/assets`}>
+              <Button icon={{ name: "Plus" }} text="Add asset" size="small" />
+            </Link>
           ) : null
         }
       >

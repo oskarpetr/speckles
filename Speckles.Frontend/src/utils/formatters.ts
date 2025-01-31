@@ -1,6 +1,9 @@
 import { IRates } from "@/types/dtos/Rates.types";
 import { getLocalCurrency } from "./local";
 import { convertPrice } from "./price";
+import { ICurrency } from "@/types/dtos/Currency.types";
+import { SelectOption } from "@/components/forms/Input";
+import { ILicense } from "@/types/dtos/License.types";
 
 export function formatPrice(locale: string, currency: string, price: number) {
   // currency formatter
@@ -51,4 +54,30 @@ export function formatFileSize(size: number) {
   }
 
   return `${size.toFixed(1)} ${units[unit]}`;
+}
+
+export function formatCurrencies(currencies: ICurrency[]) {
+  const formattedCurrencies: SelectOption[] = [];
+
+  currencies.forEach((currency) =>
+    formattedCurrencies.push({
+      label: currency.name,
+      value: currency.currencyId,
+    })
+  );
+
+  return formattedCurrencies;
+}
+
+export function formatLicenses(licenses: ILicense[]) {
+  const formattedLicenses: SelectOption[] = [];
+
+  licenses.forEach((license) =>
+    formattedLicenses.push({
+      label: license.name,
+      value: license.licenseId,
+    })
+  );
+
+  return formattedLicenses;
 }

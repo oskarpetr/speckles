@@ -1,56 +1,45 @@
 import { Formik } from "formik";
 import Section from "../shared/Section";
 import Button from "../shared/Button";
-import { object, string } from "yup";
-import Input from "./Input";
+import { number, object, string } from "yup";
+import Input, { SelectOption } from "./Input";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
-export default function AddAssetForm() {
-  // router
-  const router = useRouter();
+interface Props {
+  currencies: SelectOption[];
+  licenses: SelectOption[];
+}
 
-  // session
-  const { status } = useSession();
-
-  // error response
-  const [formError, setFormError] = useState<string | undefined>();
-
+export default function AddAssetForm({ currencies, licenses }: Props) {
   // loading
   const [loading, setLoading] = useState(false);
 
   // validation schema for fields
   const validationSchema = object({
-    assetName: string().required("Asset name is required"),
-    assetDescription: string().required("Asset description is required"),
+    name: string().required("Asset name is required"),
+    description: string().required("Asset description is required"),
+    price: number().required("Asset price is required"),
+    currency: string().required("Asset currency is required"),
+    license: string().required("Asset license are required"),
   });
 
   // initial values for fields
   const initialValues = {
-    assetName: "",
-    assetDescription: "",
+    name: "",
+    description: "",
+    price: "",
+    currency: "",
+    license: "",
   };
 
   // on submit handler
   const onSubmit = async (values: any) => {
     setLoading(true);
 
-    // const signInRes = await signIn("credentials", {
-    //   email: values.email,
-    //   password: values.password,
-    //   callbackUrl: "/",
-    //   redirect: false,
-    // });
+    console.log(values);
+    // api
 
     setLoading(false);
-
-    // if (signInRes?.ok) {
-    //   router.push(signInRes.url!);
-    //   toastSuccess("You have been signed in.");
-    // } else if (signInRes?.error) {
-    //   setFormError("Invalid email or password");
-    // }
   };
 
   return (
@@ -71,24 +60,64 @@ export default function AddAssetForm() {
           <div className="flex flex-col gap-8">
             <Section title="Name">
               <Input
-                name="assetName"
+                name="name"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.assetName}
+                value={values.name}
                 placeholder="Enter name"
-                error={errors.assetName}
-                touched={touched.assetName}
+                error={errors.name}
+                touched={touched.name}
               />
             </Section>
             <Section title="Description">
               <Input
-                name="assetDescription"
+                name="description"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.assetDescription}
+                value={values.description}
                 placeholder="Enter description"
-                error={errors.assetDescription}
-                touched={touched.assetDescription}
+                error={errors.description}
+                touched={touched.description}
+              />
+            </Section>
+            <div className="flex gap-6">
+              <Section title="Price">
+                <Input
+                  name="price"
+                  type="number"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.price}
+                  placeholder="Enter price"
+                  error={errors.price}
+                  touched={touched.price}
+                />
+              </Section>
+              <Section title="Currency">
+                <Input
+                  type="select"
+                  options={currencies}
+                  name="currency"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.currency}
+                  placeholder="Select currency"
+                  error={errors.currency}
+                  touched={touched.currency}
+                />
+              </Section>
+            </div>
+            <Section title="License">
+              <Input
+                type="select"
+                options={licenses}
+                name="license"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.license}
+                placeholder="Select license"
+                error={errors.license}
+                touched={touched.license}
               />
             </Section>
 

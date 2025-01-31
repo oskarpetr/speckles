@@ -38,11 +38,12 @@ export const STUDIO_EARNINGS_QUERY_KEY = (
 // tags
 export const TAG_QUERY_KEY = (tagId: string) => ["tags", tagId];
 
-// rates
+// currency
 export const RATES_QUERY_KEY = (currencyName: string) => [
   "rates",
   currencyName,
 ];
+export const CURRENCIES_QUERY_KEY = ["currencies"];
 
 // promotion
 export const PROMOTION_QUERY_KEY = ["promotion"];
@@ -75,3 +76,6 @@ export const COMMENT_LIKE_MUTATION_KEY = (
 
 // register
 export const REGISTER_MUTATION_KEY = ["register"];
+
+// licenses
+export const LICENSES_QUERY_KEY = ["licenses"];

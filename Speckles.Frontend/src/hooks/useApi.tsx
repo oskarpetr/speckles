@@ -3,8 +3,10 @@ import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
 import { IAsset, IAssetShort } from "@/types/dtos/Asset.types";
 import { IAuthRegister } from "@/types/dtos/Auth.types";
+import { ICurrency } from "@/types/dtos/Currency.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
+import { ILicense } from "@/types/dtos/License.types";
 import { IOrder, IOrderShort } from "@/types/dtos/Order.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
@@ -16,8 +18,10 @@ import {
   fetchAssets,
   fetchBasket,
   fetchBasketCount,
+  fetchCurrencies,
   fetchCurrencyRates,
   fetchGeo,
+  fetchLicenses,
   fetchMyStudios,
   fetchOrder,
   fetchOrders,
@@ -43,6 +47,8 @@ import {
   BASKET_MUTATION_KEY,
   BASKET_QUERY_KEY,
   COMMENT_LIKE_MUTATION_KEY,
+  CURRENCIES_QUERY_KEY,
+  LICENSES_QUERY_KEY,
   MY_STUDIOS_QUERY_KEY,
   ORDER_QUERY_KEY,
   ORDERS_QUERY_KEY,
@@ -391,4 +397,24 @@ export function useRegisterMutation() {
   });
 
   return registerMutation;
+}
+
+export function useCurrenciesQuery() {
+  // query
+  const currenciesQuery = useQuery<ApiResponse<ICurrency[]>>({
+    queryKey: CURRENCIES_QUERY_KEY,
+    queryFn: fetchCurrencies,
+  });
+
+  return currenciesQuery;
+}
+
+export function useLicensesQuery() {
+  // query
+  const licensesQuery = useQuery<ApiResponse<ILicense[]>>({
+    queryKey: LICENSES_QUERY_KEY,
+    queryFn: fetchLicenses,
+  });
+
+  return licensesQuery;
 }

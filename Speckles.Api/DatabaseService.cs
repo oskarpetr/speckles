@@ -318,4 +318,14 @@ public class DatabaseService
             // Asset -> ShortAssetDto
             .Adapt<List<AssetShortDto>>();
     }
+    
+    public List<License> GetLicenses()
+    {
+        return _database.Licenses.ToList();
+    }
+    
+    public List<Currency> GetCurrencies()
+    {
+        return _database.Currencies.ToList();
+    }
 }

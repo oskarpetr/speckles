@@ -16,27 +16,19 @@ export default function AssetList({
 }: Props) {
   return (
     <Grid>
-      {!skeleton
-        ? assets.map((asset, index) => (
-            <FadeIn
-              key={`asset_${asset.assetId}`}
-              delay={delay + index * 0.05}
-              className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-10 bg-neutral-300"
-            >
-              <AssetItem asset={asset} />
-            </FadeIn>
-          ))
-        : Array(3)
-            .fill("")
-            .map((_, index) => (
-              <FadeIn
-                key={`skeleton_asset_${index}`}
-                delay={delay + index * 0.05}
-                className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-10 bg-neutral-300"
-              >
-                <SkeletonAssetItem />
-              </FadeIn>
-            ))}
+      {!skeleton &&
+        assets.map((asset, index) => (
+          <FadeIn key={`asset_${asset.assetId}`} delay={delay + index * 0.05}>
+            <AssetItem asset={asset} />
+          </FadeIn>
+        ))}
+
+      {skeleton &&
+        [...Array(3)].map((_, index) => (
+          <FadeIn key={`skeleton_asset_${index}`} delay={delay + index * 0.05}>
+            <SkeletonAssetItem />
+          </FadeIn>
+        ))}
     </Grid>
   );
 }

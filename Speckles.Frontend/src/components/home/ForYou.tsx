@@ -12,7 +12,7 @@ export default function ForYou() {
 
   return (
     <Section title="For you" delay={0.3}>
-      {assetsQuery.isSuccess && <AssetList assets={assets} />}
+      <AssetList assets={assets} skeleton={!assetsQuery.isSuccess} />
     </Section>
   );
 }

@@ -9,7 +9,11 @@ export default function TrendingStudios() {
 
   return (
     <Section title="Trending studios" delay={0.4}>
-      {studiosQuery.isSuccess && <StudioList studios={studios} delay={0.4} />}
+      <StudioList
+        studios={studios}
+        delay={0.4}
+        skeleton={!studiosQuery.isSuccess}
+      />
     </Section>
   );
 }

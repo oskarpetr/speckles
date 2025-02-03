@@ -6,7 +6,6 @@ import Footer from "./Footer";
 import RoundedButton from "../shared/RoundedButton";
 import { smoothScroll } from "@/utils/smoothScroll";
 import PopupTooltip from "../shared/PopupTooltip";
-import Section from "../shared/Section";
 import Input from "../forms/Input";
 import Promotion from "./Promotion";
 
@@ -36,33 +35,27 @@ export default function Layout({ children, belowMenu, aboveFooter }: Props) {
       <div className="fixed bottom-8 right-8">
         <PopupTooltip button={<RoundedButton icon="Globe" />} anchor="top end">
           <div className="flex flex-col gap-8 p-6 w-72">
-            <div>
-              <Section title="Language">
-                <Input
-                  name="Language"
-                  placeholder="Language"
-                  onChange={() => {}}
-                  onBlur={() => {}}
-                  value=""
-                  error=""
-                  touched={false}
-                />
-              </Section>
-            </div>
+            <Input
+              title="Language"
+              name="Language"
+              placeholder="Language"
+              onChange={() => {}}
+              onBlur={() => {}}
+              value=""
+              error=""
+              touched={false}
+            />
 
-            <div>
-              <Section title="Currency">
-                <Input
-                  name="Currency"
-                  placeholder="Currency"
-                  onChange={() => {}}
-                  onBlur={() => {}}
-                  value=""
-                  error=""
-                  touched={false}
-                />
-              </Section>
-            </div>
+            <Input
+              title="Currency"
+              name="Currency"
+              placeholder="Currency"
+              onChange={() => {}}
+              onBlur={() => {}}
+              value=""
+              error=""
+              touched={false}
+            />
           </div>
         </PopupTooltip>
       </div>

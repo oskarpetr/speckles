@@ -34,6 +34,7 @@ export const STUDIO_EARNINGS_QUERY_KEY = (
   slug: string,
   timeInterval: string
 ) => ["studios", slug, "earnings", timeInterval];
+export const ASSET_MUTATION_KEY = (slug: string) => ["assets", slug];
 
 // tags
 export const TAG_QUERY_KEY = (tagId: string) => ["tags", tagId];

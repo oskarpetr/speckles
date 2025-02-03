@@ -34,3 +34,16 @@ export interface IAssetShort {
   tags: ITagShort[];
   thumbnail: IImage;
 }
+
+export interface IAssetBody {
+  name: string;
+  price: number;
+  description: string;
+  currencyId: string;
+  licenseId: string;
+  images: IImage[];
+  files: IFile[];
+  tags: string[];
+  customTags: string[];
+  thumbnail: IImage;
+}

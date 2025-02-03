@@ -75,3 +75,10 @@ position: absolute !important;
     display: initial;
   }
 }
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+}

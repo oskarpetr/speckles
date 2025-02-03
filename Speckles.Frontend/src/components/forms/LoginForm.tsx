@@ -1,5 +1,4 @@
 import { Formik } from "formik";
-import Section from "../shared/Section";
 import Button from "../shared/Button";
 import { object, string } from "yup";
 import Input from "./Input";
@@ -74,30 +73,29 @@ export default function LoginForm() {
       }: any) => (
         <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col gap-8">
-            <Section title="Email address">
-              <Input
-                name="email"
-                type="email"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-                placeholder="Enter email address"
-                error={errors.email}
-                touched={touched.email}
-              />
-            </Section>
-            <Section title="Password">
-              <Input
-                name="password"
-                type="password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                placeholder="Enter password"
-                error={errors.password || formError}
-                touched={touched.password}
-              />
-            </Section>
+            <Input
+              title="Email address"
+              name="email"
+              type="email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              placeholder="Enter email address"
+              error={errors.email}
+              touched={touched.email}
+            />
+
+            <Input
+              title="Password"
+              name="password"
+              type="password"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+              placeholder="Enter password"
+              error={errors.password || formError}
+              touched={touched.password}
+            />
 
             {/* <FormError error={formError} touched /> */}
             <Button

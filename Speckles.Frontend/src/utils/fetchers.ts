@@ -1,7 +1,8 @@
 import { toastError, toastSuccess } from "@/components/shared/Toast";
-import { IAuthLogin, IAuthRegister } from "@/types/dtos/Auth.types";
+import { IRegisterBody, ILoginBody } from "@/types/dtos/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { ApiOffsetLimit } from "@/types/ApiResponse.types";
+import { IAssetBody } from "@/types/dtos/Asset.types";
 
 // studios
 export async function fetchStudios() {
@@ -19,6 +20,14 @@ export async function fetchStudio(studioId: string) {
 export async function fetchStudioEarnings(slug: string, timeInterval: string) {
   return fetcher({
     url: `studios/${slug}/earnings?timeInterval=${timeInterval}`,
+  });
+}
+
+export async function postAsset(slug: string, body: IAssetBody) {
+  return fetcher({
+    url: `studios/${slug}/assets`,
+    method: "POST",
+    body,
   });
 }
 
@@ -133,13 +142,13 @@ export async function fetchDownload() {
 }
 
 // register
-export async function postRegister(registerBody: IAuthRegister) {
-  return fetcher({ url: "auth/register", method: "POST", body: registerBody });
+export async function postRegister(body: IRegisterBody) {
+  return fetcher({ url: "auth/register", method: "POST", body });
 }
 
 // login
-export async function postLogin(loginBody: IAuthLogin) {
-  return fetcher({ url: "auth/login", method: "POST", body: loginBody });
+export async function postLogin(body: ILoginBody) {
+  return fetcher({ url: "auth/login", method: "POST", body });
 }
 
 // tags

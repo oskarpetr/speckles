@@ -1,5 +1,5 @@
 import { IStudioShort } from "@/types/dtos/Studio.types";
-import Studio, { SkeletonStudioItem } from "./StudioItem";
+import StudioItem, { SkeletonStudioItem } from "./StudioItem";
 import FadeIn from "../animation/FadeIn";
 import Grid from "../shared/Grid";
 
@@ -22,7 +22,7 @@ export default function StudioList({
             delay={delay + index * 0.05}
             key={`studio_${studio.studioId}`}
           >
-            <Studio studio={studio} />
+            <StudioItem studio={studio} />
           </FadeIn>
         ))}
 

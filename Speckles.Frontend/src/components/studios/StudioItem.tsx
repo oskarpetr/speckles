@@ -10,7 +10,7 @@ export default function StudioItem({ studio }: Props) {
   return (
     <GridCard
       title={studio.name}
-      link={`/studios/${studio.studioId}`}
+      link={`/studios/${studio.slug}`}
       imageSrc={getStudioLogo(studio.studioId)}
       imageAlt={`${studio.name}'s Logo`}
     />

@@ -1,8 +1,8 @@
 import { PAGINATION_LIMIT } from "@/components/shared/LoadMore";
 import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
-import { IAsset, IAssetShort } from "@/types/dtos/Asset.types";
-import { IAuthRegister } from "@/types/dtos/Auth.types";
+import { IAsset, IAssetShort, IAssetBody } from "@/types/dtos/Asset.types";
+import { IRegisterBody } from "@/types/dtos/Auth.types";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
@@ -35,12 +35,14 @@ import {
   fetchStudios,
   fetchTag,
   fetchUser,
+  postAsset,
   postBasket,
   postCommentLike,
   postRegister,
   postSaved,
 } from "@/utils/fetchers";
 import {
+  ASSET_MUTATION_KEY,
   ASSET_QUERY_KEY,
   ASSETS_QUERY_KEY,
   BASKET_COUNT_QUERY_KEY,
@@ -241,6 +243,19 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   return studioEarningsQuery;
 }
 
+export function useAssetMutation(slug: string) {
+  // mutation
+  const postAssetMutation = useMutation({
+    mutationKey: ASSET_MUTATION_KEY(slug),
+    mutationFn: (body: IAssetBody) => postAsset(slug, body),
+    onSuccess: () => {
+      toastSuccess(toastMessages.studio.createdAsset);
+    },
+  });
+
+  return postAssetMutation;
+}
+
 export function useTagQuery(tagId: string, page: number) {
   // fetch tag
   const query = () =>
@@ -325,7 +340,7 @@ export function useSavedMutation(assetId: string, saved: boolean) {
   // query client
   const queryClient = useQueryClient();
 
-  // query
+  // mutation
   const postSavedMutation = useMutation({
     mutationKey: SAVED_MUTATION_KEY(userId, assetId),
     mutationFn: () => postSaved(userId, assetId),
@@ -375,6 +390,7 @@ export function useCommentLikeMutation(commentId: string, liked: boolean) {
   const { data: session } = useSession();
   const userId = session?.user?.userId ?? "";
 
+  // mutation
   const commentLikeMutation = useMutation({
     mutationKey: COMMENT_LIKE_MUTATION_KEY(userId, commentId),
     mutationFn: () => postCommentLike(commentId, userId),
@@ -390,9 +406,10 @@ export function useCommentLikeMutation(commentId: string, liked: boolean) {
 }
 
 export function useRegisterMutation() {
+  // mutation
   const registerMutation = useMutation({
     mutationKey: REGISTER_MUTATION_KEY,
-    mutationFn: (registerBody: IAuthRegister) => postRegister(registerBody),
+    mutationFn: (body: IRegisterBody) => postRegister(body),
     onSuccess: () => toastSuccess(toastMessages.user.register),
   });
 

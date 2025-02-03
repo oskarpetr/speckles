@@ -4,6 +4,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 import { layoutSectionPadding } from "./LayoutSection";
 import { usePromotionQuery } from "@/hooks/useApi";
+import { getPromotionSeen, setPromotionSeen } from "@/utils/local";
 
 export default function Promotion() {
   const [visible, setVisible] = useState(true);
@@ -12,8 +13,17 @@ export default function Promotion() {
   const promotionQuery = usePromotionQuery();
   const promotion = promotionQuery.data?.data as IPromotion;
 
+  // promotion seen
+  const promotionSeen = getPromotionSeen();
+
+  const closePromotion = () => {
+    setVisible(false);
+    setPromotionSeen(true);
+  };
+
   return (
-    promotion && (
+    promotion &&
+    !promotionSeen && (
       <div
         className={cn(
           "flex justify-between items-center gap-12 bg-black-primary transition-transform",
@@ -26,7 +36,7 @@ export default function Promotion() {
           {promotion.description}
         </div>
 
-        <button onClick={() => setVisible(false)}>
+        <button onClick={closePromotion}>
           <Icon name="X" color="white" size={20} />
         </button>
       </div>

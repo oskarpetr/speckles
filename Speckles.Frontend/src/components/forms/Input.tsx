@@ -1,9 +1,11 @@
-import { ChangeEvent, FocusEvent, Fragment } from "react";
+import { ChangeEvent, FocusEvent } from "react";
 import FormError from "./FormError";
 import Icon from "../shared/Icon";
 import { cn } from "@/utils/cn";
+import Section from "../shared/Section";
 
 type Props = {
+  title: string;
   name: string;
   onBlur?: (event: FocusEvent) => void;
   placeholder?: string;
@@ -50,7 +52,7 @@ export default function Input(p: Props) {
           type={p.type}
           name={p.name}
           className={cn(
-            "focus:ring-4 ring-opacity-5 ring-neutral-600 transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10",
+            "focus:ring-4 ring-opacity-30 ring-green-primary transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10",
             p.icon ? "pl-[3.25rem]" : "pl-6"
           )}
           placeholder={p.placeholder}
@@ -65,33 +67,36 @@ export default function Input(p: Props) {
 
   if (p.type === "select") {
     inputElement = (
-      <select
-        key={p.name}
-        name={p.name}
-        value={p.value}
-        onChange={p.onChange}
-        onBlur={p.onBlur}
-        className="focus:ring-4 ring-opacity-5 ring-neutral-600 transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10 pl-6"
-      >
-        {p.placeholder && (
-          <option value="" disabled selected>
-            {p.placeholder}
-          </option>
-        )}
-        {p.options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div className="relative flex items-center">
+        <select
+          key={p.name}
+          name={p.name}
+          value={p.value}
+          onChange={p.onChange}
+          onBlur={p.onBlur}
+          className="cursor-pointer relative focus:ring-4 ring-opacity-30 ring-green-primary transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10 pl-6"
+        >
+          {p.placeholder && (
+            <option value="" disabled>
+              {p.placeholder}
+            </option>
+          )}
+          {p.options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <Icon name="CaretDown" size={20} className="absolute right-4" />
+      </div>
     );
   }
 
   return (
-    <Fragment>
+    <Section title={p.title}>
       {inputElement}
 
       <FormError error={p.error} touched={p.touched} />
-    </Fragment>
+    </Section>
   );
 }

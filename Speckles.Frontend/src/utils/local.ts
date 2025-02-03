@@ -7,12 +7,14 @@ const LOCAL_BASKET = "local-basket";
 const LOCAL_SAVED = "local-saved";
 const LOCAL_CURRENCY = "local-currency";
 const LOCAL_CURRENCY_SET = "local-currency-set";
+const LOCAL_PROMOTION_SEEN = "local-promotion-seen";
 
 const defaultValues = {
   [LOCAL_BASKET]: [] as string[],
   [LOCAL_SAVED]: [] as string[],
   [LOCAL_CURRENCY]: BASE_CURRENCY as string,
   [LOCAL_CURRENCY_SET]: false as boolean,
+  [LOCAL_PROMOTION_SEEN]: false as boolean,
 };
 
 function getLocal(): typeof defaultValues {
@@ -107,4 +109,13 @@ export function getCurrencySet() {
 
 export function setCurrencySet(value: boolean) {
   setLocal(LOCAL_CURRENCY_SET, value);
+}
+
+export function getPromotionSeen() {
+  const local = getLocal();
+  return local[LOCAL_PROMOTION_SEEN] ?? defaultValues[LOCAL_PROMOTION_SEEN];
+}
+
+export function setPromotionSeen(value: boolean) {
+  setLocal(LOCAL_PROMOTION_SEEN, value);
 }

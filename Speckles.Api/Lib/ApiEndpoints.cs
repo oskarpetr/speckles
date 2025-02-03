@@ -32,6 +32,8 @@ public static class ApiEndpoints
         public const string PUT_STUDIO = "studios/{slug}";
         public const string DELETE_STUDIO = "studios/{slug}";
         
+        public const string POST_ASSET = "studios/{slug}/assets";
+        
         public const string GET_STUDIO_EARNINGS = "studios/{slug}/earnings";
     }
 

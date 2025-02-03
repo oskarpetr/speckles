@@ -1,9 +1,11 @@
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Speckles.Api.BodyModels;
 using Speckles.Api.Dto;
 using Speckles.Api.Models;
 using Speckles.Database;
 using Speckles.Database.Tables;
+using File = Speckles.Database.Tables.File;
 
 namespace Speckles.Api;
 
@@ -84,6 +86,80 @@ public class DatabaseService
             
             // Studio -> StudioDto
             .Adapt<StudioDto>();
+    }
+    
+    public void PostAsset(string slug, PostAssetBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        
+        var asset = new Asset()
+        {
+            Name = body.name,
+            Price = body.price,
+            Description = body.description,
+            CurrencyId = body.currencyId,
+            LicenseId = body.licenseId,
+            StudioId = studio!.StudioId,
+        };
+        
+        _database.Assets.Add(asset);
+        _database.SaveChanges();
+        
+        // Add tags
+        foreach (var tag in body.tags)
+        {
+            _database.AssetsTags.Add(new AssetTag()
+            {
+                AssetId = asset.AssetId,
+                TagId = tag,
+            });
+        }
+        
+        // Add custom tags
+        foreach (var tag in body.customTags)
+        {
+            var customTag = new Tag() { Name = tag };
+            _database.Tags.Add(customTag);
+            _database.AssetsTags.Add(new AssetTag()
+            {
+                AssetId = asset.AssetId,
+                TagId = customTag.TagId,
+            });
+        }
+
+        // Add files
+        foreach (var file in body.files)
+        {
+            _database.Files.Add(new File()
+            {
+                AssetId = asset.AssetId,
+                Name = file.Name,
+                FileName = file.FileName,
+                Size = file.Size,
+            });
+        }
+        
+        // Add images
+        foreach (var image in body.images)
+        {
+            _database.Images.Add(new Image()
+            {
+                AssetId = asset.AssetId,
+                Alt = image.Alt,
+            });
+        }
+        
+        // Add thumbnail
+        var thumbnail = new Image()
+        {
+            AssetId = asset.AssetId,
+            Alt = body.thumbnail.Alt,
+        };
+        
+        _database.Images.Add(thumbnail);
+        asset.ThumbnailId = thumbnail.ImageId;
+        
+        _database.SaveChanges();
     }
     
     public bool TagExists(string tagId)

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Speckles.Api.BodyModels;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
@@ -190,6 +191,19 @@ public class StudiosController : Controller
         ApiResponse response = new ApiResponse(earnings);
         
         return Ok(response);
+    }
+    
+    [HttpPost(ApiEndpoints.Studios.POST_ASSET)]
+    public IActionResult PostAsset(string slug, [FromBody] PostAssetBody body)
+    {
+        var studioExists = _database.StudioExists(slug);
+
+        if (!studioExists)
+            return NotFound(new ApiError("Studio", slug));
+
+        _database.PostAsset(slug, body);
+        
+        return Ok();
     }
 
     [HttpGet("gen")]

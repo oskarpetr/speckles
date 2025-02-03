@@ -1,12 +1,10 @@
 import { Formik } from "formik";
-import Section from "../shared/Section";
 import Button from "../shared/Button";
 import { object, ref, string } from "yup";
 import Input from "./Input";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { BEZIER_CURVE } from "@/utils/animation";
-import { IAuthRegister } from "@/types/dtos/Auth.types";
 import { passwordSchema } from "@/utils/validationSchemas";
 import { useRegisterMutation } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
@@ -17,8 +15,6 @@ interface Props {
 }
 
 export default function RegisterForm({ step, setStep }: Props) {
-  const [registerBody, setRegisterBody] = useState<IAuthRegister>();
-
   // router
   const router = useRouter();
 
@@ -75,16 +71,15 @@ export default function RegisterForm({ step, setStep }: Props) {
   };
 
   const onSubmit = (values: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword, ...data } = values;
-    setRegisterBody((prev) => ({ ...prev, ...data }));
-
     if (step !== 3) {
       setStep((prev) => {
         incrementAnimation(prev);
         return prev + 1;
       });
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword, ...data } = values;
+
       postRegisterMutation.mutate(data);
       router.push("/login");
     }
@@ -206,29 +201,28 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <Section title="Full name">
-                  <Input
-                    name="fullName"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.fullName}
-                    placeholder="Enter full name"
-                    error={errors.fullName}
-                    touched={touched.fullName}
-                  />
-                </Section>
-                <Section title="Email address">
-                  <Input
-                    name="email"
-                    type="email"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.email}
-                    placeholder="Enter email address"
-                    error={errors.email}
-                    touched={touched.email}
-                  />
-                </Section>
+                <Input
+                  title="Full name"
+                  name="fullName"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.fullName}
+                  placeholder="Enter full name"
+                  error={errors.fullName}
+                  touched={touched.fullName}
+                />
+
+                <Input
+                  title="Email address"
+                  name="email"
+                  type="email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  placeholder="Enter email address"
+                  error={errors.email}
+                  touched={touched.email}
+                />
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>
@@ -243,41 +237,40 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <Section title="Username">
-                  <Input
-                    name="username"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.username}
-                    placeholder="Enter username"
-                    error={errors.username}
-                    touched={touched.username}
-                  />
-                </Section>
-                <Section title="Password">
-                  <Input
-                    name="password"
-                    type="password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.password}
-                    placeholder="Enter password"
-                    error={errors.password}
-                    touched={touched.password}
-                  />
-                </Section>
-                <Section title="Confirm password">
-                  <Input
-                    name="confirmPassword"
-                    type="password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.confirmPassword}
-                    placeholder="Enter password again"
-                    error={errors.confirmPassword}
-                    touched={touched.confirmPassword}
-                  />
-                </Section>
+                <Input
+                  title="Username"
+                  name="username"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.username}
+                  placeholder="Enter username"
+                  error={errors.username}
+                  touched={touched.username}
+                />
+
+                <Input
+                  title="Password"
+                  name="password"
+                  type="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  placeholder="Enter password"
+                  error={errors.password}
+                  touched={touched.password}
+                />
+
+                <Input
+                  title="Confirm password"
+                  name="confirmPassword"
+                  type="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.confirmPassword}
+                  placeholder="Enter password again"
+                  error={errors.confirmPassword}
+                  touched={touched.confirmPassword}
+                />
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>
@@ -292,63 +285,62 @@ export default function RegisterForm({ step, setStep }: Props) {
                 transition={{ duration: 0.3, ease: BEZIER_CURVE }}
                 className="flex flex-col gap-8"
               >
-                <Section title="Country">
-                  <Input
-                    name="country"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.country}
-                    placeholder="Enter country"
-                    error={errors.country}
-                    touched={touched.country}
-                  />
-                </Section>
-                <Section title="State">
-                  <Input
-                    name="state"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.state}
-                    placeholder="Enter state"
-                    error={errors.state}
-                    touched={touched.state}
-                  />
-                </Section>
+                <Input
+                  title="Country"
+                  name="country"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.country}
+                  placeholder="Enter country"
+                  error={errors.country}
+                  touched={touched.country}
+                />
+
+                <Input
+                  title="State"
+                  name="state"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.state}
+                  placeholder="Enter state"
+                  error={errors.state}
+                  touched={touched.state}
+                />
+
                 <div className="flex gap-6">
-                  <Section title="City">
-                    <Input
-                      name="city"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.city}
-                      placeholder="Enter city"
-                      error={errors.city}
-                      touched={touched.city}
-                    />
-                  </Section>
-                  <Section title="ZIP">
-                    <Input
-                      name="zip"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.zip}
-                      placeholder="Enter zip"
-                      error={errors.zip}
-                      touched={touched.zip}
-                    />
-                  </Section>
-                </div>
-                <Section title="Street">
                   <Input
-                    name="street"
+                    title="City"
+                    name="city"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.street}
-                    placeholder="Enter street"
-                    error={errors.street}
-                    touched={touched.street}
+                    value={values.city}
+                    placeholder="Enter city"
+                    error={errors.city}
+                    touched={touched.city}
                   />
-                </Section>
+
+                  <Input
+                    title="ZIP"
+                    name="zip"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.zip}
+                    placeholder="Enter zip"
+                    error={errors.zip}
+                    touched={touched.zip}
+                  />
+                </div>
+
+                <Input
+                  title="Street"
+                  name="street"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.street}
+                  placeholder="Enter street"
+                  error={errors.street}
+                  touched={touched.street}
+                />
 
                 <FormButtons step={step} goBack={goBack} />
               </motion.div>

@@ -1,4 +1,4 @@
-export interface IRegisterBody {
+export interface IRegisterPostBody {
   fullName: string;
   email: string;
   username: string;
@@ -10,7 +10,7 @@ export interface IRegisterBody {
   street: string;
 }
 
-export interface ILoginBody {
+export interface ILoginPostBody {
   email: string;
   password: string;
 }

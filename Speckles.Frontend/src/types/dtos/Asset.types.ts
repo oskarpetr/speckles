@@ -35,7 +35,7 @@ export interface IAssetShort {
   thumbnail: IImage;
 }
 
-export interface IAssetBody {
+export interface IAssetPostBody {
   name: string;
   price: number;
   description: string;
@@ -46,4 +46,8 @@ export interface IAssetBody {
   tags: string[];
   customTags: string[];
   thumbnail: IImage;
+}
+
+export interface IAssetDeleteBody {
+  assetId: string;
 }

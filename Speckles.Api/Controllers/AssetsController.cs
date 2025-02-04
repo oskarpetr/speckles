@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Speckles.Api.BodyModels;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
@@ -80,9 +82,11 @@ public class AssetsController : Controller
     /// <response code="201">Creates asset.</response>
     [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Assets.POST_ASSET)]
-    public IActionResult CreateAsset()
+    public IActionResult CreateAsset([FromBody, Required] PostAssetBody body)
     {
-        return Ok();
+        _database.CreateAsset(body);
+        
+        return NoContent();
     }
     
     /// <summary>
@@ -128,6 +132,6 @@ public class AssetsController : Controller
 
         _database.DeleteAsset(assetId);
         
-        return Ok();
+        return NoContent();
     }
 }

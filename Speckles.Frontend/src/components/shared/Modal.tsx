@@ -43,13 +43,13 @@ export default function Modal({ title, open, setOpen, children }: Props) {
             )}
           >
             <div className="flex items-center justify-between mb-6">
-              {title && <Heading title={title} heading="h4" />}
+              {title && <Heading title={title} heading="h4" animate={false} />}
               <button onClick={() => setOpen(false)}>
                 <Icon name="X" />
               </button>
             </div>
 
-            {children}
+            <div className="flex flex-col gap-6">{children}</div>
           </DialogPanel>
         </div>
       </div>

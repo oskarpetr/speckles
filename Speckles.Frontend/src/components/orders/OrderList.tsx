@@ -4,6 +4,7 @@ import Asset from "../asset/AssetItem";
 import LoadMore, { PAGINATION_LIMIT } from "../shared/LoadMore";
 import Grid from "../shared/Grid";
 import { useOrdersQuery } from "@/hooks/useApi";
+import { gridCardDelay } from "../shared/GridCard";
 
 export default function OrdersList() {
   // page
@@ -26,7 +27,10 @@ export default function OrdersList() {
           {orders.map((order, index) => (
             <FadeIn
               key={`order_${order.orderId}`}
-              delay={(page === 1 ? 0.2 : 0) + (index % PAGINATION_LIMIT) * 0.05}
+              delay={gridCardDelay(
+                page === 1 ? 0.2 : 0,
+                index % PAGINATION_LIMIT
+              )}
               className="relative rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-10 bg-neutral-300"
             >
               <Asset asset={order.asset} type="order" orderId={order.orderId} />

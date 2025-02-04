@@ -12,6 +12,7 @@ import { getAssetThumbnailAlt } from "@/utils/alts";
 import LayoutSection from "@/components/layout/LayoutSection";
 import AssetPrice from "@/components/asset/AssetPrice";
 import { useBasketQuery } from "@/hooks/useApi";
+import { gridCardDelay } from "@/components/shared/GridCard";
 
 export default function BasketPage() {
   // fetch basket
@@ -30,7 +31,7 @@ export default function BasketPage() {
                 {basket.map((asset, index) => (
                   <Fragment key={`asset_${asset.assetId}`}>
                     <FadeIn
-                      delay={0.2 + index * 0.05}
+                      delay={gridCardDelay(0.2, index)}
                       className="flex justify-between items-center"
                     >
                       <div className="flex items-center gap-4">
@@ -62,7 +63,7 @@ export default function BasketPage() {
                     </FadeIn>
 
                     {index !== basket.length - 1 && (
-                      <FadeIn delay={0.2 + index * 0.05}>
+                      <FadeIn delay={gridCardDelay(0.2, index)}>
                         <div className="border-b border-black-primary border-opacity-10"></div>
                       </FadeIn>
                     )}

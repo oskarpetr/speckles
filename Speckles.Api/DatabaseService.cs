@@ -88,9 +88,9 @@ public class DatabaseService
             .Adapt<StudioDto>();
     }
     
-    public void PostAsset(string slug, PostAssetBody body)
+    public void CreateAsset(PostAssetBody body)
     {
-        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == body.slug);
         
         var asset = new Asset()
         {

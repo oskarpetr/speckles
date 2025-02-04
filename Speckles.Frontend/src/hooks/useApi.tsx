@@ -1,8 +1,13 @@
 import { PAGINATION_LIMIT } from "@/components/shared/LoadMore";
 import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
-import { IAsset, IAssetShort, IAssetBody } from "@/types/dtos/Asset.types";
-import { IRegisterBody } from "@/types/dtos/Auth.types";
+import {
+  IAsset,
+  IAssetShort,
+  IAssetDeleteBody,
+  IAssetPostBody,
+} from "@/types/dtos/Asset.types";
+import { IRegisterPostBody } from "@/types/dtos/Auth.types";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
@@ -14,6 +19,7 @@ import { IStudio, IStudioShort } from "@/types/dtos/Studio.types";
 import { ITag } from "@/types/dtos/Tag.types";
 import { IUser } from "@/types/dtos/User.types";
 import {
+  deleteAsset,
   fetchAsset,
   fetchAssets,
   fetchBasket,
@@ -42,6 +48,7 @@ import {
   postSaved,
 } from "@/utils/fetchers";
 import {
+  ASSET_DELETE_KEY,
   ASSET_MUTATION_KEY,
   ASSET_QUERY_KEY,
   ASSETS_QUERY_KEY,
@@ -243,17 +250,30 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   return studioEarningsQuery;
 }
 
-export function useAssetMutation(slug: string) {
+export function useAssetMutation() {
   // mutation
   const postAssetMutation = useMutation({
-    mutationKey: ASSET_MUTATION_KEY(slug),
-    mutationFn: (body: IAssetBody) => postAsset(slug, body),
+    mutationKey: ASSET_MUTATION_KEY,
+    mutationFn: (body: IAssetPostBody) => postAsset(body),
     onSuccess: () => {
       toastSuccess(toastMessages.studio.createdAsset);
     },
   });
 
   return postAssetMutation;
+}
+
+export function useAssetDelete(assetId: string) {
+  // delete
+  const deleteAssetMutation = useMutation({
+    mutationKey: ASSET_DELETE_KEY(assetId),
+    mutationFn: () => deleteAsset(assetId),
+    onSuccess: () => {
+      toastSuccess(toastMessages.studio.deletedAsset);
+    },
+  });
+
+  return deleteAssetMutation;
 }
 
 export function useTagQuery(tagId: string, page: number) {
@@ -409,7 +429,7 @@ export function useRegisterMutation() {
   // mutation
   const registerMutation = useMutation({
     mutationKey: REGISTER_MUTATION_KEY,
-    mutationFn: (body: IRegisterBody) => postRegister(body),
+    mutationFn: (body: IRegisterPostBody) => postRegister(body),
     onSuccess: () => toastSuccess(toastMessages.user.register),
   });
 

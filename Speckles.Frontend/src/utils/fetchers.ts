@@ -1,8 +1,8 @@
 import { toastError, toastSuccess } from "@/components/shared/Toast";
-import { IRegisterBody, ILoginBody } from "@/types/dtos/Auth.types";
+import { ILoginPostBody, IRegisterPostBody } from "@/types/dtos/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { ApiOffsetLimit } from "@/types/ApiResponse.types";
-import { IAssetBody } from "@/types/dtos/Asset.types";
+import { IAssetPostBody, IAssetDeleteBody } from "@/types/dtos/Asset.types";
 
 // studios
 export async function fetchStudios() {
@@ -23,14 +23,6 @@ export async function fetchStudioEarnings(slug: string, timeInterval: string) {
   });
 }
 
-export async function postAsset(slug: string, body: IAssetBody) {
-  return fetcher({
-    url: `studios/${slug}/assets`,
-    method: "POST",
-    body,
-  });
-}
-
 // assets
 export async function fetchAssets() {
   return fetcher({ url: `assets?format=short` });
@@ -47,6 +39,21 @@ export async function fetchSavedAssets(userId: string) {
 
 export async function fetchSavedCount(userId: string) {
   return fetcher({ url: `saved?userId=${userId}&format=count` });
+}
+
+export async function postAsset(body: IAssetPostBody) {
+  return fetcher({
+    url: "assets",
+    method: "POST",
+    body,
+  });
+}
+
+export async function deleteAsset(assetId: string) {
+  return fetcher({
+    url: `assets/${assetId}`,
+    method: "DELETE",
+  });
 }
 
 // user
@@ -142,12 +149,12 @@ export async function fetchDownload() {
 }
 
 // register
-export async function postRegister(body: IRegisterBody) {
+export async function postRegister(body: IRegisterPostBody) {
   return fetcher({ url: "auth/register", method: "POST", body });
 }
 
 // login
-export async function postLogin(body: ILoginBody) {
+export async function postLogin(body: ILoginPostBody) {
   return fetcher({ url: "auth/login", method: "POST", body });
 }
 

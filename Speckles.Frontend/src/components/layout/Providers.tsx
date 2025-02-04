@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
 import Toast from "../shared/Toast";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +21,7 @@ export default function Providers({ children, session }: Props) {
 
         <Toast />
 
-        <ReactQueryDevtools initialIsOpen />
+        {/* <ReactQueryDevtools initialIsOpen /> */}
       </QueryClientProvider>
     </SessionProvider>
   );

@@ -3,11 +3,13 @@ import Section from "../shared/Section";
 import RoundedButton from "../shared/RoundedButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
-import Asset, { SkeletonAssetItem } from "../asset/AssetItem";
+import AssetItem from "../asset/AssetItem";
 import { useAssetsQuery } from "@/hooks/useApi";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import AssetList from "../asset/AssetList";
+import { gridCardDelay } from "../shared/GridCard";
 
 export default function TrendingAssets() {
   // fetch assets
@@ -38,26 +40,16 @@ export default function TrendingAssets() {
           className="rounded-lg w-full"
           // pagination={{ clickable: true, dynamicBullets: true }}
         >
-          {assetsQuery.isSuccess
-            ? assets.map((asset, index) => (
-                <SwiperSlide key={`asset_${asset.assetId}`}>
-                  <FadeIn delay={0.2 + index * 0.05}>
-                    <Asset asset={asset} />
-                  </FadeIn>
-                </SwiperSlide>
-              ))
-            : Array(3)
-                .fill(" ")
-                .map((_, index) => (
-                  <SwiperSlide key={`skeleton_asset_${index}`}>
-                    <FadeIn
-                      delay={0.2 + index * 0.05}
-                      className="relative rounded-lg overflow-hidden group aspect-w-16 aspect-h-10 bg-neutral-300"
-                    >
-                      <SkeletonAssetItem />
-                    </FadeIn>
-                  </SwiperSlide>
-                ))}
+          {assetsQuery.isSuccess &&
+            assets.map((asset, index) => (
+              <SwiperSlide key={`asset_${asset.assetId}`}>
+                <FadeIn delay={gridCardDelay(0.2, index)}>
+                  <AssetItem asset={asset} />
+                </FadeIn>
+              </SwiperSlide>
+            ))}
+
+          {!assetsQuery.isSuccess && <AssetList delay={0.2} skeleton />}
         </Swiper>
 
         <FadeIn delay={0.3} className="flex gap-4 justify-end">

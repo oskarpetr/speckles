@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "../shared/Button";
 import FadeIn from "../animation/FadeIn";
 import { ITag } from "@/types/dtos/Tag.types";
+import { gridCardDelay } from "../shared/GridCard";
 
 interface Props {
   tags: ITag[];
@@ -17,7 +18,7 @@ export default function StudioTags({
   return (
     <FadeIn delay={0} className="flex flex-col gap-2 w-80 h-fit sticky top-44">
       {tags.map((tag, index) => (
-        <FadeIn key={`tag_${tag.tagId}`} delay={0 + index * 0.05}>
+        <FadeIn key={`tag_${tag.tagId}`} delay={gridCardDelay(0, index)}>
           <Button
             key={tag.tagId}
             text={tag.name}

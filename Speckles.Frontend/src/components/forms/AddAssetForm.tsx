@@ -4,7 +4,7 @@ import { array, number, object, string } from "yup";
 import Input, { SelectOption } from "./Input";
 import { useAssetMutation } from "@/hooks/useApi";
 import { useParams } from "next/navigation";
-import { IAssetBody } from "@/types/dtos/Asset.types";
+import { IAssetPostBody } from "@/types/dtos/Asset.types";
 
 interface Props {
   currencies: SelectOption[];
@@ -46,7 +46,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   });
 
   // initial values for fields
-  const initialValues: IAssetBody = {
+  const initialValues: IAssetPostBody = {
     name: "",
     description: "",
     price: 0,
@@ -72,7 +72,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   };
 
   // on submit handler
-  const onSubmit = async (values: IAssetBody) => {
+  const onSubmit = async (values: IAssetPostBody) => {
     console.log(values);
     postAssetMutation.mutate(values);
   };

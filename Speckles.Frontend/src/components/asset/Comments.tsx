@@ -4,6 +4,7 @@ import { IComment } from "@/types/dtos/Comment.types";
 import FadeIn from "../animation/FadeIn";
 import CommentItem from "./CommentItem";
 import NoItemsYet from "../shared/NoItemsYet";
+import { gridCardDelay } from "../shared/GridCard";
 
 interface Props {
   comments: IComment[];
@@ -14,7 +15,7 @@ export default function Comments({ comments }: Props) {
     <FadeIn delay={0} className="flex flex-col gap-8">
       {comments.length > 0 ? (
         comments.map((comment, index) => (
-          <FadeIn delay={index * 0.05} key={comment.commentId}>
+          <FadeIn delay={gridCardDelay(0, index)} key={comment.commentId}>
             <CommentItem comment={comment} />
           </FadeIn>
         ))

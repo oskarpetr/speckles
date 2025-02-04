@@ -35,6 +35,7 @@ const studioMessages = {
   updatedAsset: "Asset updated",
   removedAsset: "Asset removed",
   createdAsset: "Asset created",
+  deletedAsset: "Asset deleted",
 
   // comments
   removedComment: "Comment removed",

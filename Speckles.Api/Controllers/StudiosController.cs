@@ -192,19 +192,6 @@ public class StudiosController : Controller
         
         return Ok(response);
     }
-    
-    [HttpPost(ApiEndpoints.Studios.POST_ASSET)]
-    public IActionResult PostAsset(string slug, [FromBody] PostAssetBody body)
-    {
-        var studioExists = _database.StudioExists(slug);
-
-        if (!studioExists)
-            return NotFound(new ApiError("Studio", slug));
-
-        _database.PostAsset(slug, body);
-        
-        return Ok();
-    }
 
     [HttpGet("gen")]
     public IActionResult Gen()

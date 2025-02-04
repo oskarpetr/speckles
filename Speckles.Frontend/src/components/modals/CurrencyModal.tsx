@@ -5,9 +5,8 @@ import Button from "../shared/Button";
 import { getCurrencySet, setLocalCurrency } from "@/utils/local";
 import { countryCodeEmoji } from "country-code-emoji";
 import { useGeoQuery } from "@/hooks/useApi";
-import FadeIn from "../animation/FadeIn";
 
-export default function CurrencyDialog() {
+export default function CurrencyModal() {
   const [open, setOpen] = useState(false);
 
   // fetch geo
@@ -40,7 +39,7 @@ export default function CurrencyDialog() {
   return (
     <Modal title="Local currency" open={open} setOpen={setOpen}>
       {geoQuery.isSuccess && (
-        <FadeIn delay={0.1} className="flex flex-col gap-6">
+        <div>
           <p className="leading-relaxed">
             We&apos;ve detected that you&apos;re currently in{" "}
             <span className="font-bold">{geo.country}</span>{" "}
@@ -52,7 +51,7 @@ export default function CurrencyDialog() {
             text={`Continue with ${geo.currency}`}
             onClick={handleContinue}
           />
-        </FadeIn>
+        </div>
       )}
     </Modal>
   );

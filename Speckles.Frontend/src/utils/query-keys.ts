@@ -1,3 +1,5 @@
+import { IAssetDeleteBody, IAssetPostBody } from "@/types/dtos/Asset.types";
+
 // assets
 export const ASSETS_QUERY_KEY = ["assets"];
 export const ASSET_QUERY_KEY = (assetId: string) => ["assets", assetId];
@@ -34,7 +36,8 @@ export const STUDIO_EARNINGS_QUERY_KEY = (
   slug: string,
   timeInterval: string
 ) => ["studios", slug, "earnings", timeInterval];
-export const ASSET_MUTATION_KEY = (slug: string) => ["assets", slug];
+export const ASSET_MUTATION_KEY = ["assets"];
+export const ASSET_DELETE_KEY = (assetId: string) => ["assets", assetId];
 
 // tags
 export const TAG_QUERY_KEY = (tagId: string) => ["tags", tagId];

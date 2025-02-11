@@ -1,6 +1,5 @@
 using Speckles.Api.Dto;
 using Speckles.Database.Tables;
-using File = Speckles.Database.Tables.File;
 
 namespace Speckles.Api.BodyModels;
 

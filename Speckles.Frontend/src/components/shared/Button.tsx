@@ -59,7 +59,7 @@ export default function Button({
           : type === "cancel"
           ? "bg-neutral-600 hover:bg-neutral-700 ring-neutral-600 *:font-bold"
           : type === "white"
-          ? "bg-white hover:bg-neutral-200 text-black-primary ring-white"
+          ? "bg-neutral-100 border border-neutral-200 hover:bg-neutral-200 text-black-primary ring-white"
           : type === "black"
           ? "bg-black-primary hover:bg-neutral-900 text-white ring-neutral-900"
           : "",

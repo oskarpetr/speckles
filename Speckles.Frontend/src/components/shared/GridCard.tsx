@@ -87,13 +87,13 @@ interface MenuProps {
   menuItems: IMenuItem[];
 }
 
-function GridCardMenu({ hovered, menuItems }: MenuProps) {
+export function GridCardMenu({ hovered, menuItems }: MenuProps) {
   return (
     <PopupTooltip
       button={
         <div
           className={cn(
-            "absolute top-4 right-4 w-10 h-10 z-10 flex items-center justify-center transition-all duration-200 transform",
+            "absolute top-4 right-4 w-10 h-10 z-10 flex items-center justify-center transition-all duration-200 origin-bottom-left",
             hovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
           )}
         >

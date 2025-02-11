@@ -19,7 +19,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<License> Licenses { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
     public DbSet<Recommendation> Recommendations { get; set; }

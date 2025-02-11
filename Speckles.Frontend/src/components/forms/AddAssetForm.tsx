@@ -16,7 +16,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   const { slug } = useParams();
 
   // asset mutation
-  const postAssetMutation = useAssetMutation(slug as string);
+  const postAssetMutation = useAssetMutation();
 
   // validation schema for fields
   const validationSchema = object({
@@ -74,7 +74,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   // on submit handler
   const onSubmit = async (values: IAssetPostBody) => {
     console.log(values);
-    postAssetMutation.mutate(values);
+    postAssetMutation.mutate({ slug: slug as string, ...values });
   };
 
   return (

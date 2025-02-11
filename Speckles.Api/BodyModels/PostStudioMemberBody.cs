@@ -1,0 +1,6 @@
+namespace Speckles.Api.BodyModels;
+
+public class PostStudioMemberBody
+{
+    public string userId { get; set; }
+}

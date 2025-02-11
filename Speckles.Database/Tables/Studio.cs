@@ -6,10 +6,11 @@ public class Studio
     public string Name { get; set; }
     public string ContactEmail { get; set; }
     public string Slug { get; set; }
+    public string About { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public Address Address { get; set; }
-    public Portfolio Portfolio { get; set; }
     
+    public ICollection<Project> Projects { get; set; }
     public ICollection<StudioUser> Members { get; set; } = new List<StudioUser>();
     public ICollection<Asset> Assets { get; set; } = new List<Asset>();
 }

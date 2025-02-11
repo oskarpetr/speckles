@@ -98,12 +98,14 @@ public class StudiosController : Controller
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Studios.PUT_STUDIO)]
-    public IActionResult UpdateStudio(string slug)
+    public IActionResult UpdateStudio(string slug, [FromBody, Required] PutStudioBody body)
     {
         var studioExists = _database.StudioExists(slug);
         
         if (!studioExists)
             return NotFound(new ApiError("Studio", slug));
+        
+        _database.UpdateStudio(slug, body);
         
         return NoContent();
     }
@@ -198,5 +200,53 @@ public class StudiosController : Controller
     {
         _database.Gen();
         return Ok();
+    }
+    
+    /// <summary>
+    /// Creates studio member.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint creates a studio member.
+    /// </remarks>
+    /// <returns>Creates studio member.</returns>
+    /// <response code="201">Creates studio member.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpDelete(ApiEndpoints.Studios.POST_STUDIO_MEMBER)]
+    public IActionResult CreateStudioMember(string slug, [FromBody, Required] PostStudioMemberBody body)
+    {
+        var studioExists = _database.StudioExists(slug);
+        
+        if(!studioExists)
+            return NotFound(new ApiError("Studio", slug));
+
+        _database.CreateStudioMember(slug, body);
+        
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Deletes studio member.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint deletes a studio member.
+    /// </remarks>
+    /// <returns>Deletes studio member.</returns>
+    /// <response code="204">Deletes studio member.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpDelete(ApiEndpoints.Studios.DELETE_STUDIO_MEMBER)]
+    public IActionResult DeleteStudioMember(string slug, [FromBody, Required] DeleteStudioMemberBody body)
+    {
+        var studioExists = _database.StudioExists(slug);
+        
+        if(!studioExists)
+            return NotFound(new ApiError("Studio", slug));
+
+        _database.DeleteStudioMember(slug, body);
+        
+        return NoContent();
     }
 }

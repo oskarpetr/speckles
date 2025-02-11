@@ -21,11 +21,8 @@ export default function EditAssetModal({ asset, open, setOpen }: Props) {
 
   return (
     <Modal title={asset.name} open={open} setOpen={setOpen}>
-      <p className="leading-relaxed">
-        Are you sure you want to delete the asset "{asset.name}"? This action
-        cannot be undone.
-      </p>
-      <Button text="Edit asset" onClick={handleContinue} />
+      <p className="leading-relaxed"></p>
+      <Button text="Save asset" onClick={handleContinue} />
     </Modal>
   );
 }

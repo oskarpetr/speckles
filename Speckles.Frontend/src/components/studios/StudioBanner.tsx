@@ -12,6 +12,7 @@ import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
 import { cn } from "@/utils/cn";
 import { layoutSectionPadding } from "../layout/LayoutSection";
+import StudioSettingsModal from "../modals/StudioSettingsModal";
 
 interface Props {
   studio: IStudio;
@@ -21,7 +22,11 @@ export default function StudioBanner({ studio }: Props) {
   // session
   const { data: session } = useSession();
 
+  // followed state
   const [followed, setFollowed] = useState(false);
+
+  // settings modal
+  const [openSettingsModal, setOpenSettingsModal] = useState(false);
 
   // permission
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
@@ -98,8 +103,14 @@ export default function StudioBanner({ studio }: Props) {
               text="Settings"
               type="white"
               size="small"
+              onClick={() => setOpenSettingsModal(true)}
             />
           )}
+
+          <StudioSettingsModal
+            open={openSettingsModal}
+            setOpen={setOpenSettingsModal}
+          />
           {/* <div className="text-white">{studio.contactEmail}</div> */}
           {/* <div className="flex items-center gap-2">
             <Icon name="Basket" color="white" className="opacity-50" />

@@ -39,7 +39,7 @@ export default function CurrencyModal() {
   return (
     <Modal title="Local currency" open={open} setOpen={setOpen}>
       {geoQuery.isSuccess && (
-        <div>
+        <div className="flex flex-col gap-6">
           <p className="leading-relaxed">
             We&apos;ve detected that you&apos;re currently in{" "}
             <span className="font-bold">{geo.country}</span>{" "}

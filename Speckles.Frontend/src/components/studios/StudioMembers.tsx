@@ -5,10 +5,11 @@ import NoItemsYet from "../shared/NoItemsYet";
 import { gridCardDelay } from "../shared/GridCard";
 
 interface Props {
+  slug: string;
   members: IUserShort[];
 }
 
-export default function StudioMembers({ members }: Props) {
+export default function StudioMembers({ slug, members }: Props) {
   return (
     <FadeIn delay={0}>
       {/* <Section title="Studio's members" /> */}
@@ -19,7 +20,7 @@ export default function StudioMembers({ members }: Props) {
               key={`member_${member.userId}`}
               delay={gridCardDelay(0, index)}
             >
-              <StudioMember member={member} />
+              <StudioMember slug={slug} member={member} />
             </FadeIn>
           ))}
 

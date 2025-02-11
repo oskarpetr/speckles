@@ -73,7 +73,7 @@ public class DatabaseService
     public StudioDto GetStudio(string slug)
     {
         return _database.Studios
-            .Include(x => x.Portfolio).ThenInclude(x => x.Projects)
+            .Include(x => x.Projects)
             .Include(x => x.Address)
             .Include(x => x.Assets).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Assets).ThenInclude(x => x.Images)
@@ -86,6 +86,66 @@ public class DatabaseService
             
             // Studio -> StudioDto
             .Adapt<StudioDto>();
+    }
+
+    public void CreateStudioMember(string slug, PostStudioMemberBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+
+        var studioMember = new StudioUser()
+        {
+            StudioId = studio!.StudioId,
+            UserId = body.userId
+        };
+        
+        _database.StudioUsers.Add(studioMember);
+        _database.SaveChanges();
+    }
+
+    public void DeleteStudioMember(string slug, DeleteStudioMemberBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        var studioMember = _database.StudioUsers
+            .FirstOrDefault(x => x.UserId == body.userId && x.StudioId == studio!.StudioId);
+
+        _database.StudioUsers.Remove(studioMember!);
+    }
+
+    public void UpdateStudio(string slug, PutStudioBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+
+        if (body.Name != null)
+        {
+            studio!.Name = body.Name;
+        }
+        
+        if (body.ContactEmail != null)
+        {
+            studio!.ContactEmail = body.ContactEmail;
+        }
+        
+        if (body.Slug != null)
+        {
+            studio!.Slug = body.Slug;
+        }
+        
+        if (body.About != null)
+        {
+            studio!.About = body.About;
+        }
+        
+        if (body.Address != null)
+        {
+            studio!.Address = body.Address;
+        }
+        
+        if (body.Projects != null)
+        {
+            studio!.Projects = body.Projects;
+        }
+
+        _database.SaveChanges();
     }
     
     public void CreateAsset(PostAssetBody body)
@@ -206,7 +266,7 @@ public class DatabaseService
             .Include(x => x.License)
             .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.User)
             .Include(x => x.Studio).ThenInclude(x => x.Address)
-            .Include(x => x.Studio).ThenInclude(x => x.Portfolio).ThenInclude(x => x.Projects)
+            .Include(x => x.Studio).ThenInclude(x => x.Projects)
             .Include(x => x.Comments).ThenInclude(x => x.Author)
             .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.User)
             .Include(x => x.Files)

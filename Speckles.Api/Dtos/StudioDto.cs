@@ -8,8 +8,11 @@ public class StudioDto
     public string Name { get; set; }
     public string ContactEmail { get; set; }
     public string Slug { get; set; }
+    public string About { get; set; }
     public Address Address { get; set; }
-    public Portfolio Portfolio { get; set; }
+    public List<Project> Projects { get; set; }
     public List<UserShortDto> Members { get; set; }
     public List<AssetShortDto> Assets { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+
 }

@@ -15,11 +15,17 @@ import { ILicense } from "@/types/dtos/License.types";
 import { IOrder, IOrderShort } from "@/types/dtos/Order.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
-import { IStudio, IStudioShort } from "@/types/dtos/Studio.types";
+import {
+  IStudio,
+  IStudioMemberPostBody,
+  IStudioPutBody,
+  IStudioShort,
+} from "@/types/dtos/Studio.types";
 import { ITag } from "@/types/dtos/Tag.types";
 import { IUser } from "@/types/dtos/User.types";
 import {
   deleteAsset,
+  deleteStudioMember,
   fetchAsset,
   fetchAssets,
   fetchBasket,
@@ -46,6 +52,8 @@ import {
   postCommentLike,
   postRegister,
   postSaved,
+  postStudioMember,
+  putStudio,
 } from "@/utils/fetchers";
 import {
   ASSET_DELETE_KEY,
@@ -70,7 +78,10 @@ import {
   SEARCH_PROMPTS_QUERY_KEY,
   SEARCH_QUERY_KEY,
   STUDIO_EARNINGS_QUERY_KEY,
+  STUDIO_MEMBER_DELETE_KEY,
+  STUDIO_MEMBER_MUTATION_KEY,
   STUDIO_QUERY_KEY,
+  STUDIO_UPDATE_KEY,
   STUDIOS_QUERY_KEY,
   TAG_QUERY_KEY,
   USER_QUERY_KEY,
@@ -248,6 +259,45 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   });
 
   return studioEarningsQuery;
+}
+
+export function useStudioMemberMutation(slug: string, userId: string) {
+  // mutation
+  const studioMemberMutation = useMutation({
+    mutationKey: STUDIO_MEMBER_MUTATION_KEY(slug, userId),
+    mutationFn: () => postStudioMember(slug, { userId }),
+    onSuccess: () => {
+      toastSuccess(toastMessages.studio.addedMember);
+    },
+  });
+
+  return studioMemberMutation;
+}
+
+export function useStudioMemberDelete(slug: string, userId: string) {
+  // mutation
+  const studioMemberDelete = useMutation({
+    mutationKey: STUDIO_MEMBER_DELETE_KEY(slug, userId),
+    mutationFn: () => deleteStudioMember(slug, { userId }),
+    onSuccess: () => {
+      toastSuccess(toastMessages.studio.removedMember);
+    },
+  });
+
+  return studioMemberDelete;
+}
+
+export function useStudioUpdate(slug: string) {
+  // mutation
+  const updateStudioUpdate = useMutation({
+    mutationKey: STUDIO_UPDATE_KEY(slug),
+    mutationFn: (body: IStudioPutBody) => putStudio(slug, body),
+    onSuccess: () => {
+      toastSuccess(toastMessages.studio.updatedStudio);
+    },
+  });
+
+  return updateStudioUpdate;
 }
 
 export function useAssetMutation() {

@@ -30,6 +30,11 @@ const userMessages = {
 };
 
 const studioMessages = {
+  // studios
+  createdStudio: "Studio created",
+  updatedStudio: "Studio updated",
+  removedStudio: "Studio removed",
+
   // assets
   addedAsset: "Asset added",
   updatedAsset: "Asset updated",

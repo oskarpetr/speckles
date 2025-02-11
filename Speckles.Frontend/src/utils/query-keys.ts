@@ -1,73 +1,98 @@
-import { IAssetDeleteBody, IAssetPostBody } from "@/types/dtos/Asset.types";
-
 // assets
-export const ASSETS_QUERY_KEY = ["assets"];
-export const ASSET_QUERY_KEY = (assetId: string) => ["assets", assetId];
+export const ASSETS_QUERY_KEY = ["GET", "assets"];
+export const ASSET_QUERY_KEY = (assetId: string) => ["GET", "assets", assetId];
+export const ASSET_MUTATION_KEY = ["POST", "assets"];
+export const ASSET_DELETE_KEY = (assetId: string) => [
+  "DELETE",
+  "assets",
+  assetId,
+];
 
 // basket
-export const BASKET_QUERY_KEY = (userId: string) => ["basket", userId];
+export const BASKET_QUERY_KEY = (userId: string) => ["GET", "basket", userId];
 export const BASKET_COUNT_QUERY_KEY = (userId: string) => [
+  "GET",
   "basket",
   userId,
   "count",
 ];
 export const BASKET_MUTATION_KEY = (userId: string, assetId: string) => [
+  "POST",
   "basket",
   userId,
   assetId,
 ];
 
 // orders
-export const ORDERS_QUERY_KEY = (userId: string) => ["orders", userId];
-export const ORDER_QUERY_KEY = (orderId: string) => ["orders", orderId];
+export const ORDERS_QUERY_KEY = (userId: string) => ["GET", "orders", userId];
+export const ORDER_QUERY_KEY = (orderId: string) => ["GET", "orders", orderId];
 
 // user
-export const USER_QUERY_KEY = (username: string) => ["users", username];
+export const USER_QUERY_KEY = (username: string) => ["GET", "users", username];
 
 // studios
-export const STUDIOS_QUERY_KEY = ["studios"];
+export const STUDIOS_QUERY_KEY = ["GET", "studios"];
 export const MY_STUDIOS_QUERY_KEY = (userId: string) => [
+  "GET",
   "studios",
   "userId",
   userId,
 ];
-export const STUDIO_QUERY_KEY = (slug: string) => ["studios", slug];
+export const STUDIO_QUERY_KEY = (slug: string) => ["GET", "studios", slug];
+export const STUDIO_UPDATE_KEY = (slug: string) => ["PUT", "studios", slug];
+export const STUDIO_DELETE_KEY = (slug: string) => ["DELETE", "studios", slug];
 export const STUDIO_EARNINGS_QUERY_KEY = (
   slug: string,
   timeInterval: string
-) => ["studios", slug, "earnings", timeInterval];
-export const ASSET_MUTATION_KEY = ["assets"];
-export const ASSET_DELETE_KEY = (assetId: string) => ["assets", assetId];
+) => ["GET", "studios", slug, "earnings", timeInterval];
+export const STUDIO_MEMBER_MUTATION_KEY = (slug: string, userId: string) => [
+  "POST",
+  "studios",
+  slug,
+  "members",
+  userId,
+];
+export const STUDIO_MEMBER_DELETE_KEY = (slug: string, userId: string) => [
+  "DELETE",
+  "studios",
+  slug,
+  "members",
+  userId,
+];
 
 // tags
-export const TAG_QUERY_KEY = (tagId: string) => ["tags", tagId];
+export const TAG_QUERY_KEY = (tagId: string) => ["GET", "tags", tagId];
 
 // currency
 export const RATES_QUERY_KEY = (currencyName: string) => [
+  "GET",
   "rates",
   currencyName,
 ];
-export const CURRENCIES_QUERY_KEY = ["currencies"];
+export const CURRENCIES_QUERY_KEY = ["GET", "currencies"];
 
 // promotion
-export const PROMOTION_QUERY_KEY = ["promotion"];
+export const PROMOTION_QUERY_KEY = ["GET", "promotion"];
 
 // saved
-export const SAVED_QUERY_KEY = (userId: string) => ["saved", userId];
+export const SAVED_QUERY_KEY = (userId: string) => ["GET", "saved", userId];
 export const SAVED_COUNT_QUERY_KEY = (userId: string) => [
+  "GET",
   "saved",
   userId,
   "count",
 ];
 export const SAVED_MUTATION_KEY = (userId: string, assetId: string) => [
+  "POST",
   "saved",
   userId,
   assetId,
 ];
 
 // search
-export const SEARCH_QUERY_KEY = (query: string) => ["search", query];
+export const SEARCH_QUERY_KEY = (query: string) => ["GET", "search", query];
 export const SEARCH_PROMPTS_QUERY_KEY = (query: string) => [
+  "GET",
   "search-prompts",
   query,
 ];
@@ -76,10 +101,10 @@ export const SEARCH_PROMPTS_QUERY_KEY = (query: string) => [
 export const COMMENT_LIKE_MUTATION_KEY = (
   userId: string,
   commentId: string
-) => ["comments", commentId, "like", userId];
+) => ["POST", "comments", commentId, "like", userId];
 
 // register
-export const REGISTER_MUTATION_KEY = ["register"];
+export const REGISTER_MUTATION_KEY = ["POST", "register"];
 
 // licenses
-export const LICENSES_QUERY_KEY = ["licenses"];
+export const LICENSES_QUERY_KEY = ["GET", "licenses"];

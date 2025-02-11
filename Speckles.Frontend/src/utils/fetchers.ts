@@ -3,6 +3,11 @@ import { ILoginPostBody, IRegisterPostBody } from "@/types/dtos/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { ApiOffsetLimit } from "@/types/ApiResponse.types";
 import { IAssetPostBody, IAssetDeleteBody } from "@/types/dtos/Asset.types";
+import {
+  IStudioMemberDeleteBody,
+  IStudioMemberPostBody,
+  IStudioPutBody,
+} from "@/types/dtos/Studio.types";
 
 // studios
 export async function fetchStudios() {
@@ -20,6 +25,36 @@ export async function fetchStudio(studioId: string) {
 export async function fetchStudioEarnings(slug: string, timeInterval: string) {
   return fetcher({
     url: `studios/${slug}/earnings?timeInterval=${timeInterval}`,
+  });
+}
+
+export async function postStudioMember(
+  slug: string,
+  body: IStudioMemberPostBody
+) {
+  return fetcher({
+    url: `studios/${slug}/members`,
+    method: "POST",
+    body,
+  });
+}
+
+export async function deleteStudioMember(
+  slug: string,
+  body: IStudioMemberDeleteBody
+) {
+  return fetcher({
+    url: `studios/${slug}/members`,
+    method: "DELETE",
+    body,
+  });
+}
+
+export async function putStudio(slug: string, body: IStudioPutBody) {
+  return fetcher({
+    url: `studios/${slug}`,
+    method: "PUT",
+    body,
   });
 }
 

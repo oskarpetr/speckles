@@ -9,6 +9,9 @@ import Button from "../shared/Button";
 import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import AddAssetModal from "../modals/AddAssetModal";
+import { useState } from "react";
+import EditAboutStudioModal from "../modals/EditAboutStudioModal";
 
 interface Props {
   studio: IStudio;
@@ -20,6 +23,12 @@ export default function StudioTabs({ studio }: Props) {
 
   // permission
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
+
+  // add asset modal
+  const [openAddModal, setOpenAddModal] = useState(false);
+
+  // edit about modal
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   return (
     <Tabs>
@@ -33,13 +42,17 @@ export default function StudioTabs({ studio }: Props) {
         title="Assets"
         button={
           canEdit ? (
-            <Link href={`/studios/${studio.slug}/assets`}>
-              <Button icon={{ name: "Plus" }} text="Add asset" size="small" />
-            </Link>
+            <Button
+              icon={{ name: "Plus" }}
+              text="Add asset"
+              size="small"
+              onClick={() => setOpenAddModal(true)}
+            />
           ) : null
         }
       >
         <StudioAssets assets={studio?.assets} />
+        <AddAssetModal open={openAddModal} setOpen={setOpenAddModal} />
       </TabItem>
 
       <TabItem
@@ -55,7 +68,7 @@ export default function StudioTabs({ studio }: Props) {
           ) : null
         }
       >
-        <StudioMembers members={studio?.members} />
+        <StudioMembers slug={studio?.slug} members={studio?.members} />
       </TabItem>
 
       <TabItem
@@ -66,12 +79,13 @@ export default function StudioTabs({ studio }: Props) {
               icon={{ name: "Pencil" }}
               text="Edit about"
               size="small"
-              onClick={() => console.log("Edit about clicked")}
+              onClick={() => setOpenEditModal(true)}
             />
           ) : null
         }
       >
         <StudioAbout studio={studio} />
+        <EditAboutStudioModal open={openEditModal} setOpen={setOpenEditModal} />
       </TabItem>
     </Tabs>
   );

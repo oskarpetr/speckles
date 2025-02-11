@@ -36,6 +36,7 @@ export interface IAssetShort {
 }
 
 export interface IAssetPostBody {
+  slug?: string;
   name: string;
   price: number;
   description: string;

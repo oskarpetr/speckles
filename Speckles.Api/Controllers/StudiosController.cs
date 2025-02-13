@@ -213,7 +213,7 @@ public class StudiosController : Controller
     /// <response code="404">Studio was not found.</response>
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ApiError), 404)]
-    [HttpDelete(ApiEndpoints.Studios.POST_STUDIO_MEMBER)]
+    [HttpPost(ApiEndpoints.Studios.POST_STUDIO_MEMBER)]
     public IActionResult CreateStudioMember(string slug, [FromBody, Required] PostStudioMemberBody body)
     {
         var studioExists = _database.StudioExists(slug);

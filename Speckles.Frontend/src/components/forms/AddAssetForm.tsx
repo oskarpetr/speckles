@@ -16,7 +16,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   const { slug } = useParams();
 
   // asset mutation
-  const postAssetMutation = useAssetMutation();
+  const assetMutation = useAssetMutation();
 
   // validation schema for fields
   const validationSchema = object({
@@ -74,7 +74,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
   // on submit handler
   const onSubmit = async (values: IAssetPostBody) => {
     console.log(values);
-    postAssetMutation.mutate({ slug: slug as string, ...values });
+    assetMutation.mutate({ slug: slug as string, ...values });
   };
 
   return (
@@ -159,7 +159,7 @@ export default function AddAssetForm({ currencies, licenses }: Props) {
             <Button
               icon={{ name: "ArrowRight", iconDirection: "right" }}
               text="Create asset"
-              loading={postAssetMutation.isPending}
+              loading={assetMutation.isPending}
             />
           </div>
         </form>

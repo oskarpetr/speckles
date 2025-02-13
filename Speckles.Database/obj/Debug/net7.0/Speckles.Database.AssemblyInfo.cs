@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Speckles.Database")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+103a8f38f0769816356449add3c4f346e8970cdb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ca702c005f5b6803af127ba3d46d096e7d061ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("Speckles.Database")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Speckles.Database")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

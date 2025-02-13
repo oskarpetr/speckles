@@ -14,7 +14,7 @@ public class User
     public ICollection<Recommendation> Recommendations { get; set; }
     public ICollection<BasketAsset> BasketAssets { get; set; }
     public ICollection<SavedAsset> SavedAssets { get; set; }
-    public ICollection<StudioUser> Studios { get; set; }
+    public ICollection<StudioMember> Studios { get; set; }
     public ICollection<UserFollow> Following { get; set; }
 
     public string AddressId { get; set; }

@@ -91,24 +91,28 @@ public class DatabaseService
     public void CreateStudioMember(string slug, PostStudioMemberBody body)
     {
         var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        var user = _database.Users.FirstOrDefault(x => x.Email == body.email);
 
-        var studioMember = new StudioUser()
+        var studioMember = new StudioMember()
         {
             StudioId = studio!.StudioId,
-            UserId = body.userId
+            UserId = user!.UserId
         };
         
-        _database.StudioUsers.Add(studioMember);
+        _database.StudioMembers.Add(studioMember);
         _database.SaveChanges();
     }
 
     public void DeleteStudioMember(string slug, DeleteStudioMemberBody body)
     {
         var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
-        var studioMember = _database.StudioUsers
-            .FirstOrDefault(x => x.UserId == body.userId && x.StudioId == studio!.StudioId);
+        var user = _database.Users.FirstOrDefault(x => x.Email == body.email);
 
-        _database.StudioUsers.Remove(studioMember!);
+        var studioMember = _database.StudioMembers
+            .FirstOrDefault(x => x.UserId == user!.UserId && x.StudioId == studio!.StudioId);
+
+        _database.StudioMembers.Remove(studioMember!);
+        _database.SaveChanges();
     }
 
     public void UpdateStudio(string slug, PutStudioBody body)

@@ -11,6 +11,6 @@ public class Studio
     public Address Address { get; set; }
     
     public ICollection<Project> Projects { get; set; }
-    public ICollection<StudioUser> Members { get; set; } = new List<StudioUser>();
+    public ICollection<StudioMember> Members { get; set; } = new List<StudioMember>();
     public ICollection<Asset> Assets { get; set; } = new List<Asset>();
 }

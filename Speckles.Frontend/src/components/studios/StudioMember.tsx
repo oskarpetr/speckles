@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IMenuItem } from "@/types/MenuItem.types";
 import { cn } from "@/utils/cn";
 import { useStudioMemberDelete } from "@/hooks/useApi";
+import DeleteStudioMemberModal from "../modals/DeleteStudioMemberModal";
 
 interface Props {
   slug: string;
@@ -15,14 +16,18 @@ export default function StudioMember({ slug, member }: Props) {
   // hovered state
   const [hovered, setHovered] = useState(false);
 
-  // delete member
-  const studioMemberDelete = useStudioMemberDelete(slug, member.userId);
+  // delete modal
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   // studio menu items
   const studioMenuItems: IMenuItem[] = [
     {
+      text: "View profile",
+      link: `/profiles/${member.username}`,
+    },
+    {
       text: "Remove member",
-      onClick: studioMemberDelete.mutate,
+      onClick: () => setOpenDeleteModal(true),
     },
   ];
 
@@ -48,6 +53,13 @@ export default function StudioMember({ slug, member }: Props) {
         <div className="text-lg font-bold">{member.fullName}</div>
         <div className="opacity-80">Graphic designer</div>
       </div>
+
+      <DeleteStudioMemberModal
+        user={member}
+        slug={slug}
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+      />
     </div>
   );
 }

@@ -12,6 +12,8 @@ import Link from "next/link";
 import AddAssetModal from "../modals/AddAssetModal";
 import { useState } from "react";
 import EditAboutStudioModal from "../modals/EditAboutStudioModal";
+import AddMemberModal from "../modals/AddMemberModal";
+import StudioProjects from "./StudioProjects";
 
 interface Props {
   studio: IStudio;
@@ -25,10 +27,16 @@ export default function StudioTabs({ studio }: Props) {
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
 
   // add asset modal
-  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openAddAssetModal, setOpenAddAssetModal] = useState(false);
+
+  // add project modal
+  const [openAddProjectModal, setOpenAddProjectModal] = useState(false);
+
+  // add member modal
+  const [openAddMemberModal, setOpenAddMemberModal] = useState(false);
 
   // edit about modal
-  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openEditStudioModal, setOpenEditStudioModal] = useState(false);
 
   return (
     <Tabs>
@@ -46,13 +54,38 @@ export default function StudioTabs({ studio }: Props) {
               icon={{ name: "Plus" }}
               text="Add asset"
               size="small"
-              onClick={() => setOpenAddModal(true)}
+              onClick={() => setOpenAddAssetModal(true)}
             />
           ) : null
         }
       >
         <StudioAssets assets={studio?.assets} />
-        <AddAssetModal open={openAddModal} setOpen={setOpenAddModal} />
+        <AddAssetModal
+          open={openAddAssetModal}
+          setOpen={setOpenAddAssetModal}
+        />
+      </TabItem>
+
+      <TabItem
+        title="Projects"
+        button={
+          canEdit ? (
+            <Button
+              icon={{ name: "Plus" }}
+              text="Add project"
+              size="small"
+              onClick={() => setOpenAddProjectModal(true)}
+            />
+          ) : null
+        }
+      >
+        <StudioProjects projects={studio?.projects} />
+        {/* <EditAboutStudioModal
+          about={studio.about}
+          contactEmail={studio.contactEmail}
+          open={openEditStudioModal}
+          setOpen={setOpenEditStudioModal}
+        /> */}
       </TabItem>
 
       <TabItem
@@ -60,15 +93,19 @@ export default function StudioTabs({ studio }: Props) {
         button={
           canEdit ? (
             <Button
-              icon={{ name: "Users" }}
-              text="Manage members"
+              icon={{ name: "Plus" }}
+              text="Add member"
               size="small"
-              onClick={() => console.log("Manage members clicked")}
+              onClick={() => setOpenAddMemberModal(true)}
             />
           ) : null
         }
       >
         <StudioMembers slug={studio?.slug} members={studio?.members} />
+        <AddMemberModal
+          open={openAddMemberModal}
+          setOpen={setOpenAddMemberModal}
+        />
       </TabItem>
 
       <TabItem
@@ -79,13 +116,18 @@ export default function StudioTabs({ studio }: Props) {
               icon={{ name: "Pencil" }}
               text="Edit about"
               size="small"
-              onClick={() => setOpenEditModal(true)}
+              onClick={() => setOpenEditStudioModal(true)}
             />
           ) : null
         }
       >
         <StudioAbout studio={studio} />
-        <EditAboutStudioModal open={openEditModal} setOpen={setOpenEditModal} />
+        <EditAboutStudioModal
+          about={studio.about}
+          contactEmail={studio.contactEmail}
+          open={openEditStudioModal}
+          setOpen={setOpenEditStudioModal}
+        />
       </TabItem>
     </Tabs>
   );

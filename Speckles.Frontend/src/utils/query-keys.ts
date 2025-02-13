@@ -45,19 +45,17 @@ export const STUDIO_EARNINGS_QUERY_KEY = (
   slug: string,
   timeInterval: string
 ) => ["GET", "studios", slug, "earnings", timeInterval];
-export const STUDIO_MEMBER_MUTATION_KEY = (slug: string, userId: string) => [
+export const STUDIO_MEMBER_MUTATION_KEY = (slug: string) => [
   "POST",
   "studios",
   slug,
   "members",
-  userId,
 ];
-export const STUDIO_MEMBER_DELETE_KEY = (slug: string, userId: string) => [
+export const STUDIO_MEMBER_DELETE_KEY = (slug: string) => [
   "DELETE",
   "studios",
   slug,
   "members",
-  userId,
 ];
 
 // tags

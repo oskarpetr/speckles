@@ -261,12 +261,18 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   return studioEarningsQuery;
 }
 
-export function useStudioMemberMutation(slug: string, userId: string) {
+export function useStudioMemberMutation(slug: string) {
+  // query client
+  const queryClient = useQueryClient();
+
   // mutation
   const studioMemberMutation = useMutation({
-    mutationKey: STUDIO_MEMBER_MUTATION_KEY(slug, userId),
-    mutationFn: () => postStudioMember(slug, { userId }),
+    mutationKey: STUDIO_MEMBER_MUTATION_KEY(slug),
+    mutationFn: (email: string) => postStudioMember(slug, { email }),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
       toastSuccess(toastMessages.studio.addedMember);
     },
   });
@@ -274,12 +280,18 @@ export function useStudioMemberMutation(slug: string, userId: string) {
   return studioMemberMutation;
 }
 
-export function useStudioMemberDelete(slug: string, userId: string) {
+export function useStudioMemberDelete(slug: string) {
+  // query client
+  const queryClient = useQueryClient();
+
   // mutation
   const studioMemberDelete = useMutation({
-    mutationKey: STUDIO_MEMBER_DELETE_KEY(slug, userId),
-    mutationFn: () => deleteStudioMember(slug, { userId }),
+    mutationKey: STUDIO_MEMBER_DELETE_KEY(slug),
+    mutationFn: (email: string) => deleteStudioMember(slug, { email }),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
       toastSuccess(toastMessages.studio.removedMember);
     },
   });
@@ -288,11 +300,17 @@ export function useStudioMemberDelete(slug: string, userId: string) {
 }
 
 export function useStudioUpdate(slug: string) {
+  // query client
+  const queryClient = useQueryClient();
+
   // mutation
   const updateStudioUpdate = useMutation({
     mutationKey: STUDIO_UPDATE_KEY(slug),
     mutationFn: (body: IStudioPutBody) => putStudio(slug, body),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
       toastSuccess(toastMessages.studio.updatedStudio);
     },
   });

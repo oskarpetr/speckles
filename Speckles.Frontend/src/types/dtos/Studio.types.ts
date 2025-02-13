@@ -23,11 +23,11 @@ export interface IStudioShort {
 }
 
 export interface IStudioMemberPostBody {
-  userId: string;
+  email: string;
 }
 
 export interface IStudioMemberDeleteBody {
-  userId: string;
+  email: string;
 }
 
 export interface IStudioPutBody {

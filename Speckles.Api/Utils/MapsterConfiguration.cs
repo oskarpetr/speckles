@@ -15,7 +15,7 @@ public class MapsterConfiguration
             .Map(dest => dest.Following, src => src.Following.Adapt<List<StudioShortDto>>());
 
         // StudioMember -> ShortStudioDto
-        TypeAdapterConfig<StudioUser, StudioShortDto>.NewConfig()
+        TypeAdapterConfig<StudioMember, StudioShortDto>.NewConfig()
             .Map(dest => dest, src => src.Studio);
         
         // Following -> ShortStudioDto
@@ -23,7 +23,7 @@ public class MapsterConfiguration
             .Map(dest => dest, src => src.Studio);
         
         // StudioMember -> ShortMemberDto
-        TypeAdapterConfig<StudioUser, UserShortDto>.NewConfig()
+        TypeAdapterConfig<StudioMember, UserShortDto>.NewConfig()
             .Map(dest => dest.UserId, src => src.User.UserId)
             .Map(dest => dest.Username, src => src.User.Username)
             .Map(dest => dest.FullName, src => src.User.FullName)

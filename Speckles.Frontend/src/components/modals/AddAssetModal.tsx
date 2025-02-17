@@ -21,8 +21,6 @@ export default function AddAssetModal({ open, setOpen }: Props) {
 
   return (
     <Modal title="Add asset" open={open} setOpen={setOpen}>
-      <p className="leading-relaxed"></p>
-
       <AddAssetForm
         currencies={formattedCurrencies}
         licenses={formattedLicenses}

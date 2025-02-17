@@ -25,7 +25,7 @@ export default function PopupTooltip({
 }: Props) {
   return (
     <Menu>
-      <MenuButton>{button}</MenuButton>
+      <MenuButton as="div">{button}</MenuButton>
 
       <Transition
         as={Fragment}

@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 interface Props {
   onClick?: () => void;
   type?: "primary" | "secondary" | "cancel" | "white" | "black";
+  submitType?: "submit" | "button";
   size?: "small" | "normal";
 
   icon?: {
@@ -30,6 +31,7 @@ interface Props {
 export default function Button({
   onClick,
   type = "primary",
+  submitType = "submit",
   size = "normal",
   icon = {},
   text,
@@ -48,7 +50,7 @@ export default function Button({
   return (
     <button
       onClick={onClick}
-      type={type === "primary" ? "submit" : "button"}
+      type={submitType}
       disabled={disabled}
       className={cn(
         "disabled:opacity-80 focus:ring-4 ring-0 ring-opacity-30 min-w-fit flex items-center gap-2 text-white transition-all",

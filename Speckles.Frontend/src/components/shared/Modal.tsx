@@ -39,15 +39,18 @@ export default function Modal({ title, open, setOpen, children }: Props) {
           <DialogPanel
             transition
             className={cn(
-              "w-full max-w-xl rounded-xl bg-neutral-100 p-8 duration-500 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              "flex flex-col gap-6 w-full max-w-xl rounded-xl bg-neutral-100 p-8 duration-500 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             )}
           >
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between">
               {title && <Heading title={title} heading="h4" animate={false} />}
+
               <button onClick={() => setOpen(false)}>
                 <Icon name="X" />
               </button>
             </div>
+
+            <div className="w-full border-b border-black border-opacity-10" />
 
             <div className="flex flex-col gap-6">{children}</div>
           </DialogPanel>

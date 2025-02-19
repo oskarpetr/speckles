@@ -81,9 +81,9 @@ public class BasketController : Controller
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Basket.POST_BASKET)]
-    public IActionResult PostBasket([FromQuery, Required] string userId, [FromBody] SavedBody savedBody)
+    public IActionResult PostBasket([FromQuery, Required] string userId, [FromBody] PostAssetBody body)
     {
-        var assetId = savedBody.assetId;
+        var assetId = body.assetId;
         
         var userExists = _database.Users.Any(x => x.UserId == userId);
         var assetExists = _database.Assets.Any(x => x.AssetId == assetId);

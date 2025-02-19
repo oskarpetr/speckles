@@ -37,8 +37,13 @@ export default function OrderSummary({ order }: Props) {
           text="View Invoice"
           icon={{ name: "FileText" }}
           type="secondary"
+          fullWidth
         />
-        <Button text="Download All" icon={{ name: "DownloadSimple" }} />
+        <Button
+          text="Download All"
+          icon={{ name: "DownloadSimple" }}
+          fullWidth
+        />
       </div>
     </div>
   );

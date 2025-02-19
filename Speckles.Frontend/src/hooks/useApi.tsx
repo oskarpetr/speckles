@@ -195,6 +195,9 @@ export function useBasketMutation(assetId: string, inBasket: boolean) {
       queryClient.invalidateQueries({
         queryKey: BASKET_COUNT_QUERY_KEY(userId),
       });
+      queryClient.invalidateQueries({
+        queryKey: BASKET_QUERY_KEY(userId),
+      });
       toastSuccess(
         inBasket
           ? toastMessages.user.addedToBasket

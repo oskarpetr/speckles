@@ -44,11 +44,19 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(a => a.ThumbnailId)
             .OnDelete(DeleteBehavior.SetNull);
-        
+
         // One asset has many images
         modelBuilder.Entity<Asset>()
             .HasMany(a => a.Images)
             .WithOne(i => i.Asset)
-            .HasForeignKey(i => i.AssetId);
+            .HasForeignKey(i => i.AssetId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // One asset has many files
+        modelBuilder.Entity<Asset>()
+            .HasMany(a => a.Files)
+            .WithOne(f => f.Asset)
+            .HasForeignKey(f => f.AssetId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

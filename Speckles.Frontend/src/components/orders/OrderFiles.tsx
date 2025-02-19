@@ -37,7 +37,7 @@ export default function OrderFiles({ order }: Props) {
             </div>
 
             <Link
-              href={`/api/download?assetId=${order.asset.assetId}&fileName=${file.fileName}`}
+              href={`/api/download?assetId=${order.asset.assetId}&fileName=${file.fileId}`}
             >
               <RoundedButton icon="DownloadSimple" colorType="secondary" />
             </Link>

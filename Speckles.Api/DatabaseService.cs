@@ -158,6 +158,7 @@ public class DatabaseService
         
         var asset = new Asset()
         {
+            AssetId = body.assetId,
             Name = body.name,
             Price = body.price,
             Description = body.description,
@@ -167,39 +168,48 @@ public class DatabaseService
         };
         
         _database.Assets.Add(asset);
-        _database.SaveChanges();
-        
+
         // Add tags
         foreach (var tag in body.tags)
         {
-            _database.AssetsTags.Add(new AssetTag()
+            var tagDb = _database.Tags.FirstOrDefault(x => x.Name.ToLower() == tag.name.ToLower());
+
+            if (tagDb != null)
             {
-                AssetId = asset.AssetId,
-                TagId = tag,
-            });
+                _database.AssetsTags.Add(new AssetTag()
+                {
+                    AssetId = asset.AssetId,
+                    TagId = tagDb.TagId,
+                });           
+            }
+            else
+            {
+                _database.Tags.Add(new Tag()
+                {
+                    TagId = tag.tagId,
+                    Name = tag.name
+                });
+
+                _database.SaveChanges();
+                
+                _database.AssetsTags.Add(new AssetTag()
+                {
+                    AssetId = asset.AssetId,
+                    TagId = tag.tagId,
+                });    
+            }
         }
         
-        // Add custom tags
-        foreach (var tag in body.customTags)
-        {
-            var customTag = new Tag() { Name = tag };
-            _database.Tags.Add(customTag);
-            _database.AssetsTags.Add(new AssetTag()
-            {
-                AssetId = asset.AssetId,
-                TagId = customTag.TagId,
-            });
-        }
-
         // Add files
         foreach (var file in body.files)
         {
             _database.Files.Add(new File()
             {
                 AssetId = asset.AssetId,
-                Name = file.Name,
-                FileName = file.FileName,
-                Size = file.Size,
+                FileId = file.fileId,
+                Name = file.name,
+                FileName = file.fileName,
+                Size = file.size,
             });
         }
         
@@ -209,20 +219,16 @@ public class DatabaseService
             _database.Images.Add(new Image()
             {
                 AssetId = asset.AssetId,
-                Alt = image.Alt,
+                ImageId = image.imageId,
+                Alt = image.alt,
             });
         }
+
+        _database.SaveChanges();
         
-        // Add thumbnail
-        var thumbnail = new Image()
-        {
-            AssetId = asset.AssetId,
-            Alt = body.thumbnail.Alt,
-        };
-        
-        _database.Images.Add(thumbnail);
-        asset.ThumbnailId = thumbnail.ImageId;
-        
+        // Thumbnail
+        asset.ThumbnailId = body.thumbnailId;
+    
         _database.SaveChanges();
     }
     

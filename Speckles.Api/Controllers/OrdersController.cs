@@ -13,10 +13,12 @@ namespace Speckles.Api.Controllers;
 public class OrdersController : Controller
 {
     private readonly ApplicationDbContext _database;
+    private readonly DatabaseService _databaseService;
     
-    public OrdersController(ApplicationDbContext database)
+    public OrdersController(ApplicationDbContext database, DatabaseService databaseService)
     {
         _database = database;
+        _databaseService = databaseService;
     }
     
     /// <summary>

@@ -203,13 +203,13 @@ export async function fetchTag(
 }
 
 // currency
-export async function fetchCurrencyRates(currency: string) {
+export async function fetchCurrencyRates(currencyName: string) {
   // return fetcher({
   //   url: `v1/latest?base=${currency}`,
   //   origin: "https://api.frankfurter.dev/",
   // });
   return fetcher({
-    url: `v6/latest/${currency}`,
+    url: `v6/latest/${currencyName}`,
     origin: "https://open.er-api.com/",
   });
 }

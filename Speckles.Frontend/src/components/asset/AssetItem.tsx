@@ -60,7 +60,7 @@ export default function AssetItem({
         secondaryElement={
           <AssetPrice
             price={asset.price}
-            currency={asset.currency}
+            currencyName={asset.currency.name}
             color="white"
           />
         }

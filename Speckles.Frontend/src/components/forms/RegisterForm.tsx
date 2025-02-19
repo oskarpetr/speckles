@@ -8,7 +8,7 @@ import {
 } from "@/utils/forms/validationSchemas";
 import { useRegisterMutation } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
-import FormButtons from "./FormButtons";
+import FormButtons, { goForward } from "./FormButtons";
 import {
   initialValuesRegisterStep1,
   initialValuesRegisterStep2,
@@ -28,9 +28,9 @@ export default function RegisterForm({ step, setStep }: Props) {
   const maxSteps = 3;
 
   // register mutation
-  const postRegisterMutation = useRegisterMutation();
+  const registerMutation = useRegisterMutation();
 
-  // validation schema
+  // validation schemas
   const validationSchemas = [
     registerSchemaStep1,
     registerSchemaStep2,
@@ -44,13 +44,15 @@ export default function RegisterForm({ step, setStep }: Props) {
     initialValuesRegisterStep3,
   ];
 
-  // on submit
+  // on submit handler
   const onSubmit = (values: any) => {
-    if (step === maxSteps) {
+    if (step < maxSteps) {
+      goForward(step, setStep, maxSteps);
+    } else {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...data } = values;
 
-      postRegisterMutation.mutate(data);
+      registerMutation.mutate(data);
       router.push("/login");
     }
   };
@@ -198,11 +200,11 @@ export default function RegisterForm({ step, setStep }: Props) {
           )}
 
           <FormButtons
-            loading={postRegisterMutation.isPending}
+            loading={registerMutation.isPending}
             buttonText="Register"
             step={step}
             setStep={setStep}
-            maxSteps={3}
+            maxSteps={maxSteps}
           />
         </form>
       )}

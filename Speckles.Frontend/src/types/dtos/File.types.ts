@@ -3,4 +3,5 @@ export interface IFile {
   name: string;
   fileName: string;
   size: number;
+  base64?: string;
 }

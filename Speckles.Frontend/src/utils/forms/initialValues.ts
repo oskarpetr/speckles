@@ -5,14 +5,16 @@ export const initialValuesAssetStep1 = {
   price: 0,
   currencyId: "",
   licenseId: "",
-  tags: [],
-  customTags: [],
 };
 
 export const initialValuesAssetStep2 = {
   images: [],
   files: [],
   thumbnail: {},
+};
+
+export const initialValuesAssetStep3 = {
+  tags: [],
 };
 
 // register
@@ -39,5 +41,15 @@ export const initialValuesRegisterStep3 = {
 export const initialValuesFile = {
   file: {},
   name: "",
-  description: "",
+};
+
+// images
+export const initialValuesImage = {
+  image: {},
+  alt: "",
+};
+
+// tags
+export const initialValuesTag = {
+  name: "",
 };

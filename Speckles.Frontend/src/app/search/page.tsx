@@ -1,6 +1,5 @@
 "use client";
 
-import AssetList from "@/components/asset/AssetList";
 import Layout from "@/components/layout/Layout";
 import LayoutSection from "@/components/layout/LayoutSection";
 import SearchAssets from "@/components/search/SearchAssets";

@@ -17,12 +17,18 @@ export default function DeleteModal({
   phrase,
   name,
 }: Props) {
+  // on success
+  const onSuccess = () => {
+    onDelete();
+    setOpen(false);
+  };
+
   return (
     <Modal title={`${phrase}?`} open={open} setOpen={setOpen}>
       <p className="leading-relaxed">
         Are you sure you want to remove "{name}"? This action cannot be undone.
       </p>
-      <Button text={phrase} onClick={onDelete} />
+      <Button text={phrase} onClick={onSuccess} />
     </Modal>
   );
 }

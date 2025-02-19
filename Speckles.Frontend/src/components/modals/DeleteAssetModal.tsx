@@ -4,14 +4,20 @@ import { IAssetShort } from "@/types/dtos/Asset.types";
 import DeleteModal from "./DeleteModal";
 
 interface Props {
+  slug: string;
   asset: IAssetShort;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function DeleteAssetModal({ asset, open, setOpen }: Props) {
+export default function DeleteAssetModal({
+  slug,
+  asset,
+  open,
+  setOpen,
+}: Props) {
   // delete asset
-  const assetDelete = useAssetDelete(asset.assetId);
+  const assetDelete = useAssetDelete(slug, asset.assetId);
 
   return (
     <DeleteModal

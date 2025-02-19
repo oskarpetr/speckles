@@ -11,6 +11,7 @@ import { IMenuItem } from "@/types/MenuItem.types";
 import { Fragment, useState } from "react";
 import DeleteAssetModal from "../modals/DeleteAssetModal";
 import EditAssetModal from "../modals/EditAssetModal";
+import { useParams } from "next/navigation";
 
 interface Props {
   asset: IAssetShort;
@@ -25,6 +26,10 @@ export default function AssetItem({
   orderId,
   menu = false,
 }: Props) {
+  // slug param
+  const { slug } = useParams();
+
+  // image src
   const src = getAssetImage(asset.assetId, asset.thumbnail.imageId);
 
   // const buffer = await fetch(src).then((res) => res.arrayBuffer());
@@ -68,6 +73,7 @@ export default function AssetItem({
       />
 
       <DeleteAssetModal
+        slug={slug as string}
         asset={asset}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}

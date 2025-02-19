@@ -318,12 +318,18 @@ export function useStudioUpdate(slug: string) {
   return updateStudioUpdate;
 }
 
-export function useAssetMutation() {
+export function useAssetMutation(slug: string) {
+  // query client
+  const queryClient = useQueryClient();
+
   // mutation
   const postAssetMutation = useMutation({
     mutationKey: ASSET_MUTATION_KEY,
     mutationFn: (body: IAssetPostBody) => postAsset(body),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
       toastSuccess(toastMessages.studio.createdAsset);
     },
   });
@@ -331,12 +337,18 @@ export function useAssetMutation() {
   return postAssetMutation;
 }
 
-export function useAssetDelete(assetId: string) {
+export function useAssetDelete(slug: string, assetId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
   // delete
   const deleteAssetMutation = useMutation({
     mutationKey: ASSET_DELETE_KEY(assetId),
     mutationFn: () => deleteAsset(assetId),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
       toastSuccess(toastMessages.studio.deletedAsset);
     },
   });

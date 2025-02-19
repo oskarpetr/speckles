@@ -19,10 +19,9 @@ export const passwordSchema = string()
   .notOneOf(commonPasswords, "This password is too common");
 
 // assets
-const imageSchema = object().shape({
+const assetImageSchema = object().shape({
   imageId: string(),
   alt: string(),
-  base64: string(),
 });
 
 const assetFileSchema = object().shape({
@@ -30,7 +29,6 @@ const assetFileSchema = object().shape({
   name: string(),
   fileName: string(),
   size: number(),
-  base64: string(),
 });
 
 export const assetSchemaStep1 = object({
@@ -39,14 +37,22 @@ export const assetSchemaStep1 = object({
   price: number().required("Asset price is required"),
   currencyId: string().required("Asset currency is required"),
   licenseId: string().required("Asset license are required"),
-  tags: array().of(string()),
-  customTags: array().of(string()),
 });
 
 export const assetSchemaStep2 = object({
-  images: array().of(imageSchema).required("Asset images are required"),
-  files: array().of(assetFileSchema).required("Asset files are required"),
-  thumbnail: imageSchema.required("Asset thumbnail is required"),
+  images: array()
+    .of(assetImageSchema)
+    .min(1, "At least one image is required")
+    .required("Asset images are required"),
+  files: array()
+    .of(assetFileSchema)
+    .min(1, "At least one file is required")
+    .required("Asset files are required"),
+  thumbnailId: string().required("Asset thumbnail is required"),
+});
+
+export const assetSchemaStep3 = object({
+  tags: array().of(object({ tagId: string(), name: string() })),
 });
 
 // register
@@ -77,5 +83,15 @@ export const registerSchemaStep3 = object({
 export const fileSchema = object().shape({
   file: mixed().required("File is required"),
   name: string().required("File name is required"),
-  description: string().required("File description is required"),
+});
+
+// images
+export const imageSchema = object().shape({
+  image: mixed().required("Image is required"),
+  alt: string(),
+});
+
+// tags
+export const tagSchema = object().shape({
+  name: string().required("Tag name is required"),
 });

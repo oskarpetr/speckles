@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import Section from "../shared/Section";
 
 type Props = {
-  title: string;
+  title?: string;
   name: string;
   onBlur?: (event: FocusEvent) => void;
   placeholder?: string;
@@ -31,6 +31,10 @@ type Props = {
       type: "file";
       onChange: (event: ChangeEvent<HTMLInputElement>) => void;
       value: File;
+      accept: string;
+      acceptText: string;
+      chooseText: string;
+      uploadedText: string;
       error?: string | undefined;
     }
 );
@@ -42,7 +46,6 @@ export interface SelectOption {
 
 export default function Input(p: Props) {
   let inputElement: JSX.Element | null = null;
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   if (p.type !== "select" && p.type !== "file") {
@@ -56,12 +59,13 @@ export default function Input(p: Props) {
             weight="bold"
           />
         )}
+
         <input
           key={p.name}
           type={p.type}
           name={p.name}
           className={cn(
-            "focus:ring-4 ring-opacity-30 ring-green-primary transition-all outline-none w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10",
+            "focus:ring-4 ring-opacity-30 ring-green-primary transition-all outline-none min-w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10",
             p.icon ? "pl-[3.25rem]" : "pl-6"
           )}
           placeholder={p.placeholder}
@@ -109,7 +113,7 @@ export default function Input(p: Props) {
           <div className="flex flex-col gap-2 justify-center items-center">
             <Icon name="Check" size={28} />
             <div className="flex flex-col items-center">
-              <div className="font-semibold">File uploaded</div>
+              <div className="font-semibold">{p.uploadedText}</div>
               <div className="text-sm opacity-50">{p.value.name}</div>
             </div>
           </div>
@@ -117,8 +121,8 @@ export default function Input(p: Props) {
           <div className="flex flex-col gap-2 justify-center items-center">
             <Icon name="Upload" size={28} />
             <div className="flex flex-col items-center">
-              <div className="font-semibold">Choose a file</div>
-              <div className="text-sm opacity-50">.jpg, .jpeg, .png, .webp</div>
+              <div className="font-semibold">{p.chooseText}</div>
+              <div className="text-sm opacity-50">{p.acceptText}</div>
             </div>
           </div>
         )}
@@ -128,7 +132,7 @@ export default function Input(p: Props) {
           type="file"
           name={p.name}
           className="hidden"
-          accept=".png,.jpg,.jpeg,.webp"
+          accept={p.accept}
           ref={inputRef}
           onChange={p.onChange}
         />
@@ -136,11 +140,21 @@ export default function Input(p: Props) {
     );
   }
 
+  if (p.title) {
+    return (
+      <Section title={p.title} chevron={false}>
+        {inputElement}
+
+        <FormError error={p.error} touched={p.touched} />
+      </Section>
+    );
+  }
+
   return (
-    <Section title={p.title} chevron={false}>
+    <div>
       {inputElement}
 
       <FormError error={p.error} touched={p.touched} />
-    </Section>
+    </div>
   );
 }

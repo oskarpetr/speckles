@@ -3,6 +3,7 @@ import FadeIn from "../animation/FadeIn";
 import AssetItem, { SkeletonAssetItem } from "./AssetItem";
 import Grid from "../shared/Grid";
 import { gridCardDelay } from "../shared/GridCard";
+import NoItemsYet from "../shared/NoItemsYet";
 
 interface Props {
   assets?: IAssetShort[];
@@ -21,13 +22,17 @@ export default function AssetList({
     <Grid>
       {!skeleton &&
         assets &&
-        assets.map((asset, index) => (
-          <FadeIn
-            key={`asset_${asset.assetId}`}
-            delay={gridCardDelay(delay, index)}
-          >
-            <AssetItem asset={asset} menu={menu} />
-          </FadeIn>
+        (assets.length > 0 ? (
+          assets.map((asset, index) => (
+            <FadeIn
+              key={`asset_${asset.assetId}`}
+              delay={gridCardDelay(delay, index)}
+            >
+              <AssetItem asset={asset} menu={menu} />
+            </FadeIn>
+          ))
+        ) : (
+          <NoItemsYet items="assets" />
         ))}
 
       {skeleton &&

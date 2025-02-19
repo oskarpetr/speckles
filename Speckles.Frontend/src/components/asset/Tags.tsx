@@ -1,4 +1,4 @@
-import { ITagShort } from "@/types/Tag.types";
+import { ITagShort } from "@/types/dtos/Tag.types";
 import TagItem from "./TagItem";
 
 interface Props {

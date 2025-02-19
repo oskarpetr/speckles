@@ -19,11 +19,16 @@ export default function AddAssetModal({ open, setOpen }: Props) {
   const formattedCurrencies = formatCurrencies(currencies);
   const formattedLicenses = formatLicenses(licenses);
 
+  const onSuccess = () => {
+    setOpen(false);
+  };
+
   return (
     <Modal title="Add asset" open={open} setOpen={setOpen}>
       <AddAssetForm
         currencies={formattedCurrencies}
         licenses={formattedLicenses}
+        onSuccess={onSuccess}
       />
     </Modal>
   );

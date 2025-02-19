@@ -29,7 +29,7 @@ export default function Modal({ title, open, setOpen, children }: Props) {
         transition
         className="fixed inset-0 bg-black bg-opacity-50"
       />
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div className="fixed inset-0 z-10 w-screen">
         <div
           className={cn(
             "flex min-h-full items-center justify-center",

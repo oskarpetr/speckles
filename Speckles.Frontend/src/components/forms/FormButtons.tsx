@@ -16,12 +16,6 @@ export default function FormButtons({
   setStep,
   maxSteps,
 }: Props) {
-  const goForward = () => {
-    if (step !== maxSteps) {
-      setStep((prev) => prev + 1);
-    }
-  };
-
   const goBack = () => {
     setStep((prev) => Math.max(prev - 1, 1));
   };
@@ -31,7 +25,7 @@ export default function FormButtons({
       {step !== 1 && (
         <Button
           icon={{ name: "ArrowLeft" }}
-          text="Go back"
+          text="Back"
           type="cancel"
           onClick={goBack}
         />
@@ -40,11 +34,19 @@ export default function FormButtons({
       <Button
         icon={{ name: "ArrowRight", iconDirection: "right" }}
         text={step === maxSteps ? buttonText : "Continue"}
-        submitType={step === maxSteps ? "submit" : "button"}
-        onClick={goForward}
         loading={loading}
         fullWidth
       />
     </div>
   );
 }
+
+export const goForward = (
+  step: number,
+  setStep: Dispatch<SetStateAction<number>>,
+  maxSteps: number
+) => {
+  if (step !== maxSteps) {
+    setStep((prev) => prev + 1);
+  }
+};

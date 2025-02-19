@@ -31,7 +31,7 @@ interface Props {
 export default function Button({
   onClick,
   type = "primary",
-  submitType = "submit",
+  submitType,
   size = "normal",
   icon = {},
   text,
@@ -50,7 +50,7 @@ export default function Button({
   return (
     <button
       onClick={onClick}
-      type={submitType}
+      type={submitType ? submitType : type === "primary" ? "submit" : "button"}
       disabled={disabled}
       className={cn(
         "disabled:opacity-80 focus:ring-4 ring-0 ring-opacity-30 min-w-fit flex items-center gap-2 text-white transition-all",
@@ -67,7 +67,7 @@ export default function Button({
           : "",
         fullWidth ? "w-full" : "w-fit",
         icon.iconDirection === "left" ? "flex-row" : "flex-row-reverse",
-        size === "normal" && !circle ? "py-4 px-8" : "px-6 py-2",
+        size === "normal" && !circle ? "py-4 px-8" : "px-6 py-3 h-fit",
         circle ? "p-3" : "",
         marginTop ? "mt-8" : "",
         text && secondaryText ? "justify-between" : "justify-center",

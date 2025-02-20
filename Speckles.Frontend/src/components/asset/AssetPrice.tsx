@@ -23,7 +23,6 @@ export default function AssetPrice({
   const currencyRatesQuery = useRatesQuery(currencyName);
   const rates = currencyRatesQuery?.data as IRates;
 
-  console.log(rates);
   // prices
   const convertedPrice = formatPriceToLocal(price, rates?.rates ?? {});
 

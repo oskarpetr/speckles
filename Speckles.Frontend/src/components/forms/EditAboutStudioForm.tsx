@@ -1,10 +1,10 @@
 import { Formik } from "formik";
 import Button from "../shared/Button";
-import { object, string } from "yup";
 import Input from "./Input";
 import { useParams } from "next/navigation";
 import { IStudioPutBody } from "@/types/dtos/Studio.types";
 import { useStudioUpdate } from "@/hooks/useApi";
+import { studioAboutSchema } from "@/utils/forms/validationSchemas";
 
 interface Props {
   about?: string;
@@ -24,10 +24,7 @@ export default function EditAboutStudioForm({
   const studioUpdate = useStudioUpdate(slug as string);
 
   // validation schema for fields
-  const validationSchema = object({
-    about: string().required("Studio about is required"),
-    contactEmail: string().email().required("Studio contact email is required"),
-  });
+  const validationSchema = studioAboutSchema;
 
   // initial values for fields
   const initialValues: IStudioPutBody = {

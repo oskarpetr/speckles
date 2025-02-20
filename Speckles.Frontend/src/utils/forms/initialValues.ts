@@ -41,6 +41,7 @@ export const initialValuesRegisterStep3 = {
 export const initialValuesFile = {
   file: {},
   name: "",
+  fileName: "",
 };
 
 // images

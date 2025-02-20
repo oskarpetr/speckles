@@ -20,8 +20,8 @@ import RoundedButton from "@/components/shared/RoundedButton";
 import Button from "@/components/shared/Button";
 import { getLocalCurrency } from "@/utils/local";
 import { formatPrice } from "@/utils/formatters";
-import { BASE_CURRENCY } from "@/utils/price";
-import { getTotalPrice } from "@/utils/currency";
+import { getTotalPrice } from "@/utils/price";
+import NoItemsYet from "@/components/shared/NoItemsYet";
 
 export default function BasketPage() {
   // fetch basket
@@ -49,10 +49,6 @@ export default function BasketPage() {
     fetctTotalPrice();
   }, [basket]);
 
-  useEffect(() => {
-    setItems(basket);
-  }, [basket]);
-
   return (
     <Layout>
       <LayoutSection>
@@ -61,48 +57,60 @@ export default function BasketPage() {
         {basketQuery.isSuccess && (
           <div className="flex gap-16">
             <Section title="Assets in basket" delay={0.1} className="w-2/3">
-              <div className="border border-black-primary border-opacity-10 rounded-lg overflow-hidden">
-                <table className="h-fit w-full bg-neutral-100 border-spacing-y-8 border-separate">
-                  <tbody>
-                    {basket.map((asset, index) => (
-                      <Fragment key={`asset_${asset.assetId}`}>
-                        <BasketItem asset={asset} setBasket={setItems} />
+              <div className="bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg overflow-hidden">
+                {basket.length > 0 ? (
+                  <table className="h-fit w-full border-spacing-y-8 border-separate">
+                    <tbody>
+                      {basket.map((asset, index) => (
+                        <Fragment key={`asset_${asset.assetId}`}>
+                          <BasketItem asset={asset} setBasket={setItems} />
 
-                        {index !== basket.length - 1 && (
-                          <tr>
-                            <td colSpan={4}>
-                              <div className="border-b border-black-primary border-opacity-10 mx-8"></div>
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    ))}
-                  </tbody>
-                </table>
+                          {index !== basket.length - 1 && (
+                            <tr>
+                              <td colSpan={4}>
+                                <div className="border-b border-black-primary border-opacity-10 mx-8"></div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="p-8">
+                    <NoItemsYet items="items" />
+                  </div>
+                )}
               </div>
             </Section>
 
             <Section title="Order summary" delay={0.2} className="w-1/3">
-              <div className="flex flex-col gap-6 bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <div>Total price</div>
-                    {formatPrice(locale, localCurrency, totalPrice)}
-                  </div>
+              <div className="bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
+                {basket.length > 0 ? (
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between">
+                        <div>Total price</div>
+                        {formatPrice(locale, localCurrency, totalPrice)}
+                      </div>
 
-                  <div className="flex justify-between">
-                    <div>Payment method</div>
-                    <div>PayPal</div>
-                  </div>
-                </div>
+                      <div className="flex justify-between">
+                        <div>Payment method</div>
+                        <div>PayPal</div>
+                      </div>
+                    </div>
 
-                <div className="flex flex-col gap-3 mt-8">
-                  <Button
-                    text="Continue to payment"
-                    icon={{ name: "ArrowRight" }}
-                    fullWidth
-                  />
-                </div>
+                    <div className="flex flex-col gap-3 mt-8">
+                      <Button
+                        text="Continue to payment"
+                        icon={{ name: "ArrowRight" }}
+                        fullWidth
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <NoItemsYet items="order" />
+                )}
               </div>
             </Section>
           </div>

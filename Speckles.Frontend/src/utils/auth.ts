@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
             password: credentials.password,
           });
-          console.log(res);
 
           const user = res.data;
 
@@ -38,7 +37,7 @@ export const authOptions: NextAuthOptions = {
           //   user.password
           // );
           // await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-          console.log(user);
+
           return {
             id: user.userId,
             userId: user.userId,
@@ -48,7 +47,6 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error) {
           if (axios.isAxiosError(error)) {
-            console.log(error.message);
             return null;
           }
 

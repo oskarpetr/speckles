@@ -46,7 +46,8 @@ export default function AssetInfo({ asset }: Props) {
         <FadeIn delay={0.3}>
           <AssetPrice
             price={asset.price}
-            currency={asset.currency}
+            currencyName={asset.currency.name}
+            currencyLocale={asset.currency.locale}
             color="black"
             showOriginal
           />

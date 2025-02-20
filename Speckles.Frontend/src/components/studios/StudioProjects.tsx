@@ -12,12 +12,8 @@ export default function StudioProjects({ projects }: Props) {
   return (
     <div className="flex flex-col gap-8">
       {projects.map((project, index) => (
-        <Fragment>
-          <StudioProject
-            key={project.projectId}
-            project={project}
-            delay={gridCardDelay(0.2, index)}
-          />
+        <Fragment key={project.projectId}>
+          <StudioProject project={project} delay={gridCardDelay(0.2, index)} />
 
           {index !== projects.length - 1 && (
             <FadeIn delay={gridCardDelay(0.2, index)}>

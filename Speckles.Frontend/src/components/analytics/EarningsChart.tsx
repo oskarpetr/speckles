@@ -22,7 +22,6 @@ interface Props {
 }
 
 export default function EarningsChart({ data }: Props) {
-  // console.log(data);
   if (data.length === 0) {
     data = [
       {
@@ -88,7 +87,7 @@ function CustomTooltip({
 }) {
   const newPayload = payload![0].payload.payload;
   const isEmpty = payload![0].name === "No earnings";
-  console.log(newPayload);
+
   return (
     <AnimatePresence>
       {active && payload && payload.length && (

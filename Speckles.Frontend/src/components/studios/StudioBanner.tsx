@@ -5,7 +5,7 @@ import Heading from "../shared/Heading";
 import { IStudio } from "@/types/dtos/Studio.types";
 import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toastSuccess } from "../shared/Toast";
 import Like from "../shared/Like";
 import { canEditStudio } from "@/utils/permissions";
@@ -28,16 +28,18 @@ export default function StudioBanner({ studio }: Props) {
   // settings modal
   const [openSettingsModal, setOpenSettingsModal] = useState(false);
 
+  // avatar change date
+  const [avatarChangeDate, setAvatarChangeDate] = useState(new Date());
+
   // permission
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
 
+  // toggle follow
   function toggleFollow() {
     setFollowed(!followed);
 
     toastSuccess(
-      followed
-        ? `You unfollowed ${studio.name}.`
-        : `You followed ${studio.name}.`
+      followed ? `You unfollowed ${studio.name}` : `You followed ${studio.name}`
     );
   }
 
@@ -45,7 +47,7 @@ export default function StudioBanner({ studio }: Props) {
     <div className="relative">
       <div className="h-64 overflow-hidden relative">
         <Image
-          src={getStudioLogo(studio.studioId)}
+          src={getStudioLogo(studio.studioId, avatarChangeDate)}
           alt={getStudioLogoAlt(studio.name)}
           width={300}
           height={300}
@@ -64,7 +66,7 @@ export default function StudioBanner({ studio }: Props) {
         <div className="flex items-center gap-8">
           <FadeIn className="relative">
             <Image
-              src={getStudioLogo(studio.studioId)}
+              src={getStudioLogo(studio.studioId, avatarChangeDate)}
               alt={getStudioLogoAlt(studio.name)}
               width={150}
               height={150}
@@ -108,8 +110,10 @@ export default function StudioBanner({ studio }: Props) {
           )}
 
           <StudioSettingsModal
+            studio={studio}
             open={openSettingsModal}
             setOpen={setOpenSettingsModal}
+            setAvatarChangeDate={setAvatarChangeDate}
           />
           {/* <div className="text-white">{studio.contactEmail}</div> */}
           {/* <div className="flex items-center gap-2">

@@ -27,7 +27,7 @@ export default function AddFileForm({ setFiles, onSuccess }: Props) {
     reader.onload = () => {
       const file: IFile = {
         fileId: uuidv4(),
-        fileName: values.file.name,
+        fileName: values.fileName,
         name: values.name,
         size: values.file.size,
         base64: reader.result as string,
@@ -62,7 +62,10 @@ export default function AddFileForm({ setFiles, onSuccess }: Props) {
               name="file"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 const file = e.target.files?.[0];
-                if (file) setFieldValue("file", file);
+                if (file) {
+                  setFieldValue("file", file);
+                  setFieldValue("fileName", file.name);
+                }
               }}
               onBlur={handleBlur}
               value={values.file}
@@ -84,6 +87,17 @@ export default function AddFileForm({ setFiles, onSuccess }: Props) {
               placeholder="Enter name"
               error={errors.name}
               touched={touched.name}
+            />
+
+            <Input
+              title="File name"
+              name="fileName"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.fileName}
+              placeholder="Enter file name"
+              error={errors.fileName}
+              touched={touched.fileName}
             />
 
             <Button

@@ -83,6 +83,7 @@ export const registerSchemaStep3 = object({
 export const fileSchema = object().shape({
   file: mixed().required("File is required"),
   name: string().required("File name is required"),
+  fileName: string().required("File name is required"),
 });
 
 // images
@@ -94,4 +95,17 @@ export const imageSchema = object().shape({
 // tags
 export const tagSchema = object().shape({
   name: string().required("Tag name is required"),
+});
+
+// studio
+export const studioSchema = object({
+  logo: mixed().required("Studio logo is required"),
+  name: string().required("Studio name is required"),
+  slug: string().required("Studio slug is required"),
+});
+
+// studio about
+export const studioAboutSchema = object({
+  about: string().required("Studio about is required"),
+  contactEmail: string().email().required("Studio contact email is required"),
 });

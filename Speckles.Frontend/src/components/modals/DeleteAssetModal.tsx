@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useAssetDelete } from "@/hooks/useApi";
 import { IAssetShort } from "@/types/dtos/Asset.types";
 import DeleteModal from "./DeleteModal";
+import { deleteAsset } from "@/utils/firebase/firebase-fns";
 
 interface Props {
   slug: string;
@@ -19,13 +20,19 @@ export default function DeleteAssetModal({
   // delete asset
   const assetDelete = useAssetDelete(slug, asset.assetId);
 
+  // on delete
+  const onDelete = async () => {
+    await assetDelete.mutateAsync();
+    deleteAsset(asset.assetId);
+  };
+
   return (
     <DeleteModal
       open={open}
       setOpen={setOpen}
       phrase="Delete asset"
       name={asset.name}
-      onDelete={assetDelete.mutate}
+      onDelete={onDelete}
     />
   );
 }

@@ -1,5 +1,5 @@
-import { IAssetShort } from "@/types/Asset.types";
-import { ITag } from "@/types/Tag.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
+import { ITag } from "@/types/dtos/Tag.types";
 
 export function sortAssetsByTag(assets: IAssetShort[]) {
   const tags: ITag[] = [{ tagId: "all", name: "All", assets: assets }];

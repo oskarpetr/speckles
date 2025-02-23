@@ -7,6 +7,7 @@ export interface IStudio {
   studioId: string;
   name: string;
   contactEmail: string;
+  paymentEmail: string;
   slug: string;
   about: string;
   address: IAddress;
@@ -19,6 +20,8 @@ export interface IStudio {
 export interface IStudioShort {
   studioId: string;
   name: string;
+  contactEmail: string;
+  paymentEmail: string;
   slug: string;
 }
 

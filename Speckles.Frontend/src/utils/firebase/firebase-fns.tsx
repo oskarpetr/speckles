@@ -5,9 +5,11 @@ import {
   listAll,
   ref,
   uploadBytes,
+  uploadBytesResumable,
   uploadString,
 } from "firebase/storage";
 import { storage } from "./firebase";
+import { Dispatch, SetStateAction } from "react";
 
 // upload studio logo
 export async function uploadStudioLogo(studioId: string, base64: string) {
@@ -18,7 +20,11 @@ export async function uploadStudioLogo(studioId: string, base64: string) {
 }
 
 // upload asset images
-export async function uploadAssetImages(assetId: string, images: IImage[]) {
+export async function uploadAssetImages(
+  assetId: string,
+  images: IImage[],
+  setPercetange: Dispatch<SetStateAction<number>>
+) {
   const uploadPromises = images.map(async (image) => {
     const imageRef = ref(
       storage,
@@ -26,17 +32,41 @@ export async function uploadAssetImages(assetId: string, images: IImage[]) {
     );
     const blob = base64ToBlob(image.base64!, "image/webp");
 
-    await uploadBytes(imageRef, blob, { contentType: "image/webp" });
+    const uploadTask = uploadBytesResumable(imageRef, blob, {
+      contentType: "image/webp",
+    });
+
+    uploadTask.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setPercetange(progress);
+    });
+
+    await uploadTask;
   });
 
   await Promise.all(uploadPromises);
 }
 
 // upload asset files
-export async function uploadAssetFiles(assetId: string, files: IFile[]) {
+export async function uploadAssetFiles(
+  assetId: string,
+  files: IFile[],
+  setPercetange: Dispatch<SetStateAction<number>>
+) {
   const uploadPromises = files.map(async (file) => {
     const fileRef = ref(storage, `assets/${assetId}/files/${file.fileId}`);
-    await uploadString(fileRef, file.base64!, "data_url");
+    const blob = base64ToBlob(file.base64!, "application/octet-stream");
+
+    const uploadTask = uploadBytesResumable(fileRef, blob, {
+      contentType: "application/octet-stream",
+    });
+
+    uploadTask.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setPercetange(progress);
+    });
+
+    await uploadTask;
   });
 
   await Promise.all(uploadPromises);
@@ -44,14 +74,11 @@ export async function uploadAssetFiles(assetId: string, files: IFile[]) {
 
 // delete asset
 export async function deleteAsset(assetId: string) {
-  console.log("here");
   const folderRef = ref(storage, `assets/${assetId}`);
 
   const result = await listAll(folderRef);
-  console.log(result);
   const deletePromises = result.items.map((fileRef) => deleteObject(fileRef));
   await Promise.all(deletePromises);
-  console.log(deletePromises);
 
   const subfolderPromises = result.prefixes.map(async (subfolderRef) => {
     const subfolderResult = await listAll(subfolderRef);
@@ -60,7 +87,7 @@ export async function deleteAsset(assetId: string) {
     );
     await Promise.all(subfolderDeletePromises);
   });
-  console.log(subfolderPromises);
+
   await Promise.all(subfolderPromises);
 }
 
@@ -75,4 +102,15 @@ function base64ToBlob(base64: string, contentType: string): Blob {
 
   const byteArray = new Uint8Array(byteNumbers);
   return new Blob([byteArray], { type: contentType });
+}
+
+// get base64 file size
+export function getBase64FileSize(base64: string) {
+  const base64Data = base64.split(",")[1];
+
+  const byteLength =
+    (base64Data.length * 3) / 4 -
+    (base64Data.endsWith("==") ? 2 : base64Data.endsWith("=") ? 1 : 0);
+
+  return byteLength;
 }

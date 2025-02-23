@@ -4,7 +4,6 @@ import { GridCardMenu } from "../shared/GridCard";
 import { useState } from "react";
 import { IMenuItem } from "@/types/MenuItem.types";
 import { cn } from "@/utils/cn";
-import { useStudioMemberDelete } from "@/hooks/useApi";
 import DeleteStudioMemberModal from "../modals/DeleteStudioMemberModal";
 
 interface Props {

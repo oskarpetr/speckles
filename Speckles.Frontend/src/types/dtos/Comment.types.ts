@@ -8,3 +8,9 @@ export interface IComment {
   likes: number;
   liked: boolean;
 }
+
+export interface ICommentPostBody {
+  assetId: string;
+  userId: string;
+  text: string;
+}

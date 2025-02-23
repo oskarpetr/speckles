@@ -97,7 +97,7 @@ export const tagSchema = object().shape({
   name: string().required("Tag name is required"),
 });
 
-// studio
+// studios
 export const studioSchema = object({
   logo: mixed().required("Studio logo is required"),
   name: string().required("Studio name is required"),
@@ -108,4 +108,9 @@ export const studioSchema = object({
 export const studioAboutSchema = object({
   about: string().required("Studio about is required"),
   contactEmail: string().email().required("Studio contact email is required"),
+});
+
+// comments
+export const commentSchema = object({
+  text: string().required("Comment text is required"),
 });

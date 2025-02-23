@@ -9,4 +9,6 @@ public class Comment
     public string AuthorId { get; set; }
     public virtual User Author { get; set; }
     public ICollection<UserLike> LikedBy { get; set; }
+    public string AssetId { get; set; }
+    public virtual Asset Asset { get; set; }
 }

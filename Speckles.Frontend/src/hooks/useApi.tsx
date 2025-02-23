@@ -1,23 +1,19 @@
 import { PAGINATION_LIMIT } from "@/components/shared/LoadMore";
 import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
-import {
-  IAsset,
-  IAssetShort,
-  IAssetDeleteBody,
-  IAssetPostBody,
-} from "@/types/dtos/Asset.types";
+import { IAsset, IAssetShort, IAssetPostBody } from "@/types/dtos/Asset.types";
 import { IRegisterPostBody } from "@/types/dtos/Auth.types";
+import { ICommentPostBody } from "@/types/dtos/Comment.types";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
 import { ILicense } from "@/types/dtos/License.types";
-import { IOrder, IOrderShort } from "@/types/dtos/Order.types";
+import { IOrder, IOrderPostBody, IOrderShort } from "@/types/dtos/Order.types";
+import { IPayment } from "@/types/dtos/Payment.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
 import {
   IStudio,
-  IStudioMemberPostBody,
   IStudioPutBody,
   IStudioShort,
 } from "@/types/dtos/Studio.types";
@@ -49,12 +45,16 @@ import {
   fetchUser,
   postAsset,
   postBasket,
+  postComment,
   postCommentLike,
+  postOrder,
+  postPayment,
   postRegister,
   postSaved,
   postStudioMember,
   putStudio,
 } from "@/utils/fetchers";
+import { getTotalPrice } from "@/utils/price";
 import {
   ASSET_DELETE_KEY,
   ASSET_MUTATION_KEY,
@@ -64,11 +64,14 @@ import {
   BASKET_MUTATION_KEY,
   BASKET_QUERY_KEY,
   COMMENT_LIKE_MUTATION_KEY,
+  COMMENT_MUTATION_KEY,
   CURRENCIES_QUERY_KEY,
   LICENSES_QUERY_KEY,
   MY_STUDIOS_QUERY_KEY,
+  ORDER_MUTATION_KEY,
   ORDER_QUERY_KEY,
   ORDERS_QUERY_KEY,
+  PAYMENT_MUTATION_KEY,
   PROMOTION_QUERY_KEY,
   RATES_QUERY_KEY,
   REGISTER_MUTATION_KEY,
@@ -84,10 +87,16 @@ import {
   STUDIO_UPDATE_KEY,
   STUDIOS_QUERY_KEY,
   TAG_QUERY_KEY,
+  TOTAL_PRICE_QUERY_KEY,
   USER_QUERY_KEY,
 } from "@/utils/query-keys";
 import toastMessages from "@/utils/toastMessages";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 export function useAssetsQuery() {
@@ -149,6 +158,27 @@ export function useOrderQuery(orderId: string) {
   return orderQuery;
 }
 
+export function useOrderMutation(userId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const orderMutation = useMutation({
+    mutationKey: ORDER_MUTATION_KEY,
+    mutationFn: (body: IOrderPostBody) => postOrder(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: BASKET_COUNT_QUERY_KEY(userId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: BASKET_QUERY_KEY(userId),
+      });
+    },
+  });
+
+  return orderMutation;
+}
+
 export function useBasketQuery() {
   // session
   const { data: session, status } = useSession();
@@ -162,6 +192,18 @@ export function useBasketQuery() {
   });
 
   return basketQuery;
+}
+
+export function useBasketTotalPriceQuery(
+  basket: IAssetShort[],
+  localCurrency: string
+) {
+  const basketTotalPriceQuery = useQuery<number>({
+    queryKey: TOTAL_PRICE_QUERY_KEY,
+    queryFn: () => getTotalPrice(basket, localCurrency),
+  });
+
+  return basketTotalPriceQuery;
 }
 
 export function useBasketCountQuery() {
@@ -488,6 +530,25 @@ export function useSearchPromptsQuery(query: string) {
   return searchPromptsQuery;
 }
 
+export function useCommentMutation(assetId: string) {
+  // query client
+  const queryClient = new QueryClient();
+
+  // mutation
+  const commentMutation = useMutation({
+    mutationKey: COMMENT_MUTATION_KEY,
+    mutationFn: (body: ICommentPostBody) => postComment(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ASSET_QUERY_KEY(assetId),
+      });
+      toastSuccess(toastMessages.user.addedComment);
+    },
+  });
+
+  return commentMutation;
+}
+
 export function useCommentLikeMutation(commentId: string, liked: boolean) {
   // session
   const { data: session } = useSession();
@@ -537,4 +598,14 @@ export function useLicensesQuery() {
   });
 
   return licensesQuery;
+}
+
+export function usePaymentMutation() {
+  // mutation
+  const paymentMutation = useMutation({
+    mutationKey: PAYMENT_MUTATION_KEY,
+    mutationFn: (body: IPayment[]) => postPayment(body),
+  });
+
+  return paymentMutation;
 }

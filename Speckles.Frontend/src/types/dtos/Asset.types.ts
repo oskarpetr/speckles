@@ -4,7 +4,7 @@ import { ICurrency } from "./Currency.types";
 import { ICustomLicense } from "./CustomLicense.types";
 import { IFile } from "./File.types";
 import { ILicense } from "./License.types";
-import { IStudio } from "./Studio.types";
+import { IStudio, IStudioShort } from "./Studio.types";
 import { ITagShort } from "./Tag.types";
 
 export interface IAsset {
@@ -15,7 +15,7 @@ export interface IAsset {
   currency: ICurrency;
   description: string;
   license: ILicense;
-  studio: IStudio;
+  studio: IStudioShort;
   customLicense?: ICustomLicense;
   thumbnail: IImage;
   images: IImage[];
@@ -32,6 +32,7 @@ export interface IAssetShort {
   price: number;
   currency: ICurrency;
   tags: ITagShort[];
+  studio: IStudioShort;
   thumbnail: IImage;
 }
 

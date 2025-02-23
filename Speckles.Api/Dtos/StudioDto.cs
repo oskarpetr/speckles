@@ -14,5 +14,4 @@ public class StudioDto
     public List<UserShortDto> Members { get; set; }
     public List<AssetShortDto> Assets { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-
 }

@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Speckles.Api.BodyModels;
 using Speckles.Api.Lib;
 using Speckles.Database;
 using Speckles.Database.Tables;
@@ -9,9 +11,9 @@ namespace Speckles.Api.Controllers;
 [Route(ApiEndpoints.API_BASE)]
 public class CommentsController : Controller
 {
-    private readonly ApplicationDbContext _database;
+    private readonly DatabaseService _database;
     
-    public CommentsController(ApplicationDbContext database)
+    public CommentsController(DatabaseService database)
     {
         _database = database;
     }
@@ -26,8 +28,20 @@ public class CommentsController : Controller
     /// <response code="201">Creates comment.</response>
     [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Comments.POST_COMMENT)]
-    public IActionResult CreateComment()
+    public IActionResult CreateComment([FromBody, Required] PostCommentBody body)
     {
+        var assetExists = _database.AssetExists(body.assetId);
+        
+        if(!assetExists)
+            return NotFound(new ApiError("Asset", body.assetId));
+
+        var userExists = _database.UserExists(body.userId);
+        
+        if(!userExists)
+            return NotFound(new ApiError("User", body.userId));
+
+        _database.CreateComment(body);
+        
         return Ok();
     }
     
@@ -45,7 +59,7 @@ public class CommentsController : Controller
     [HttpPut(ApiEndpoints.Comments.PUT_COMMENT)]
     public IActionResult UpdateComment(string commentId)
     {
-        var commentExists = _database.Comments.Any(x => x.CommentId == commentId);
+        var commentExists = _database.CommentExists(commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
@@ -67,7 +81,7 @@ public class CommentsController : Controller
     [HttpDelete(ApiEndpoints.Comments.DELETE_COMMENT)]
     public IActionResult DeleteComment(string commentId)
     {
-        var commentExists = _database.Comments.Any(x => x.CommentId == commentId);
+        var commentExists = _database.CommentExists(commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
@@ -89,32 +103,17 @@ public class CommentsController : Controller
     [HttpPost(ApiEndpoints.Comments.POST_LIKE)]
     public IActionResult CreateCommentLike([FromRoute] string commentId, [FromQuery] string userId)
     {
-        var commentExists = _database.Comments.Any(x => x.CommentId == commentId);
+        var commentExists = _database.CommentExists(commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
-        
-        var userExists = _database.Users.Any(x => x.UserId == userId);
+
+        var userExists = _database.UserExists(userId);
         
         if(!userExists)
             return NotFound(new ApiError("User", userId));
         
-        var commentLike = _database.UserLikes.FirstOrDefault(x => x.CommentId == commentId && x.UserId == userId);
-        
-        if (commentLike != null)
-        {
-            _database.UserLikes.Remove(commentLike);
-        }
-        else
-        {
-            _database.UserLikes.Add(new UserLike()
-            {
-                CommentId = commentId,
-                UserId = userId
-            });
-        }
-
-        _database.SaveChanges();
+        _database.CreateCommentLike(commentId, userId);
         
         return Ok();
     }

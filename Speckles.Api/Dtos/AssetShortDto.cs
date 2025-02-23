@@ -10,5 +10,6 @@ public class AssetShortDto
     public decimal Price { get; set; }
     public Currency Currency { get; set; }
     public ImageDto Thumbnail { get; set; }
+    public StudioShortDto Studio { get; set; }
     public List<TagShortDto> Tags { get; set; }
 }

@@ -4,6 +4,8 @@ import { convertPrice } from "./price";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { SelectOption } from "@/components/forms/Input";
 import { ILicense } from "@/types/dtos/License.types";
+import { IAssetShort } from "@/types/dtos/Asset.types";
+import { IPayment } from "@/types/dtos/Payment.types";
 
 export function formatPrice(locale: string, currency: string, price: number) {
   // currency formatter
@@ -80,4 +82,15 @@ export function formatLicenses(licenses: ILicense[]) {
   );
 
   return formattedLicenses;
+}
+
+export function formatPayments(basket: IAssetShort[]) {
+  const payments: IPayment[] = basket.map((asset) => ({
+    amount: asset.price,
+    currencyName: asset.currency.name,
+    assetName: asset.name,
+    paymentEmail: asset.studio.paymentEmail,
+  }));
+
+  return payments;
 }

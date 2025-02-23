@@ -22,10 +22,12 @@ export const BASKET_MUTATION_KEY = (userId: string, assetId: string) => [
   userId,
   assetId,
 ];
+export const TOTAL_PRICE_QUERY_KEY = ["GET", "basket", "total-price"];
 
 // orders
 export const ORDERS_QUERY_KEY = (userId: string) => ["GET", "orders", userId];
 export const ORDER_QUERY_KEY = (orderId: string) => ["GET", "orders", orderId];
+export const ORDER_MUTATION_KEY = ["POST", "orders"];
 
 // user
 export const USER_QUERY_KEY = (username: string) => ["GET", "users", username];
@@ -96,6 +98,7 @@ export const SEARCH_PROMPTS_QUERY_KEY = (query: string) => [
 ];
 
 // comments
+export const COMMENT_MUTATION_KEY = ["POST", "comments"];
 export const COMMENT_LIKE_MUTATION_KEY = (
   userId: string,
   commentId: string
@@ -106,3 +109,6 @@ export const REGISTER_MUTATION_KEY = ["POST", "register"];
 
 // licenses
 export const LICENSES_QUERY_KEY = ["GET", "licenses"];
+
+// payments
+export const PAYMENT_MUTATION_KEY = ["POST", "payments"];

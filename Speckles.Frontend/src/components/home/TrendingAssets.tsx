@@ -40,16 +40,17 @@ export default function TrendingAssets() {
           className="rounded-lg w-full"
           // pagination={{ clickable: true, dynamicBullets: true }}
         >
-          {assetsQuery.isSuccess &&
+          {assetsQuery.isSuccess ? (
             assets.map((asset, index) => (
               <SwiperSlide key={`asset_${asset.assetId}`}>
                 <FadeIn delay={gridCardDelay(0.2, index)}>
                   <AssetItem asset={asset} />
                 </FadeIn>
               </SwiperSlide>
-            ))}
-
-          {!assetsQuery.isSuccess && <AssetList delay={0.2} skeleton />}
+            ))
+          ) : (
+            <AssetList delay={0.2} skeleton />
+          )}
         </Swiper>
 
         <FadeIn delay={0.3} className="flex gap-4 justify-end">

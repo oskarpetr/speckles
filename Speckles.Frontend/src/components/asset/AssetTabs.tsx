@@ -1,4 +1,4 @@
-import { IAsset } from "@/types/Asset.types";
+import { IAsset } from "@/types/dtos/Asset.types";
 import Tabs from "../shared/Tabs";
 import Comments from "../asset/Comments";
 import AssetLicense from "../asset/AssetLicense";

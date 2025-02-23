@@ -21,12 +21,14 @@ import { IFile } from "@/types/dtos/File.types";
 import { IAssetPostBody } from "@/types/dtos/Asset.types";
 import { v4 as uuidv4 } from "uuid";
 import {
+  getBase64FileSize,
   uploadAssetFiles,
   uploadAssetImages,
 } from "@/utils/firebase/firebase-fns";
 import FormError from "./FormError";
 import TagSelector from "./TagSelector";
 import { ITagShort } from "@/types/dtos/Tag.types";
+import UploadProgress from "../asset/UploadProgress";
 
 interface Props {
   onSuccess: () => void;
@@ -44,7 +46,7 @@ export default function AddAssetForm({
 
   // step state
   const [step, setStep] = useState(1);
-  const maxSteps = 3;
+  const maxSteps = 4;
 
   // asset mutation
   const assetMutation = useAssetMutation(slug as string);
@@ -54,6 +56,7 @@ export default function AddAssetForm({
     assetSchemaStep1,
     assetSchemaStep2,
     assetSchemaStep3,
+    {},
   ];
 
   // initial values
@@ -61,6 +64,7 @@ export default function AddAssetForm({
     initialValuesAssetStep1,
     initialValuesAssetStep2,
     initialValuesAssetStep3,
+    {},
   ];
 
   // images, files & tags
@@ -69,12 +73,18 @@ export default function AddAssetForm({
   const [files, setFiles] = useState<IFile[]>([]);
   const [tags, setTags] = useState<ITagShort[]>([]);
 
+  // uploads
+  const [percentageImage, setPercentageImage] = useState(0);
+  const [percentageFiles, setPercentageFiles] = useState(0);
+
   // formik ref
   const formikRef = useRef<FormikProps<FormikValues>>(null);
 
   // on submit handler
-  const onSubmit = (values: any) => {
-    if (step === maxSteps) {
+  const onSubmit = async (values: any) => {
+    goForward(step, setStep, maxSteps);
+
+    if (step === maxSteps - 1) {
       const assetId = uuidv4();
 
       const imagesWithoutBsase64 = images.map((image) => ({
@@ -95,15 +105,32 @@ export default function AddAssetForm({
         tags,
       };
 
-      assetMutation.mutateAsync({ slug: slug as string, ...asset });
-      uploadAssetImages(assetId, images);
-      uploadAssetFiles(assetId, files);
+      await assetMutation.mutateAsync({ slug: slug as string, ...asset });
+      await uploadAssetImages(assetId, images, setPercentageImage);
+      await uploadAssetFiles(assetId, files, setPercentageFiles);
 
       onSuccess();
-    } else {
-      goForward(step, setStep, maxSteps);
     }
   };
+
+  const uploadPromises = [
+    {
+      name: "Images",
+      progress: percentageImage,
+      bytes: images.reduce(
+        (acc, curr) => acc + getBase64FileSize(curr.base64!),
+        0
+      ),
+    },
+    {
+      name: "Files",
+      progress: percentageFiles,
+      bytes: files.reduce(
+        (acc, curr) => acc + getBase64FileSize(curr.base64!),
+        0
+      ),
+    },
+  ];
 
   useEffect(() => {
     formikRef.current?.setFieldValue("images", images);
@@ -228,13 +255,17 @@ export default function AddAssetForm({
 
           {step === 3 && <TagSelector tags={tags} setTags={setTags} />}
 
-          <FormButtons
-            loading={assetMutation.isPending}
-            buttonText="Create asset"
-            maxSteps={maxSteps}
-            step={step}
-            setStep={setStep}
-          />
+          {step === 4 && <UploadProgress items={uploadPromises} />}
+
+          {step !== maxSteps && (
+            <FormButtons
+              loading={assetMutation.isPending}
+              buttonText="Create asset"
+              maxSteps={maxSteps - 1}
+              step={step}
+              setStep={setStep}
+            />
+          )}
         </form>
       )}
     </Formik>

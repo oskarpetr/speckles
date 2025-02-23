@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Speckles.Api.BodyModels;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 using Speckles.Database;
@@ -115,8 +116,24 @@ public class OrdersController : Controller
     /// <response code="201">Creates order.</response>
     [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Orders.POST_ORDER)]
-    public IActionResult PostOrder()
+    public IActionResult PostOrder([FromBody, Required] PostOrderBody body)
     {
+        foreach (var assetId in body.assetIds)
+        {
+            var assetExists = _databaseService.AssetExists(assetId);
+        
+            if(!assetExists)
+                return NotFound(new ApiError("Asset", assetId));
+        }
+
+        var userExists = _databaseService.UserExists(body.userId);
+        
+        if(!userExists)
+            return NotFound(new ApiError("User", body.userId));
+
+        _databaseService.CreateOrder(body);
+        _databaseService.DeleteAllBasketAssets(body.userId);
+        
         return Ok();
     }
 }

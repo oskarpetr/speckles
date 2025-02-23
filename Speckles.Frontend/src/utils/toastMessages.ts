@@ -27,6 +27,10 @@ const userMessages = {
 
   // register
   register: "You have been registered",
+
+  // payments
+  orderSuccess: "Order was successful",
+  orderFailed: "Order failed",
 };
 
 const studioMessages = {

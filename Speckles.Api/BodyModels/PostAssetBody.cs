@@ -1,6 +1,3 @@
-using Speckles.Api.Dto;
-using Speckles.Database.Tables;
-
 namespace Speckles.Api.BodyModels;
 
 public class PostAssetBody

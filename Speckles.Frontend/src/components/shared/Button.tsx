@@ -57,7 +57,7 @@ export default function Button({
         type === "primary"
           ? "bg-green-primary hover:bg-green-primary-hover ring-green-primary *:font-bold"
           : type === "secondary"
-          ? "bg-green-primary bg-opacity-10 hover:bg-opacity-20 ring-green-primary text-green-primary ring-opacity-30 border border-black-primary border-opacity-10"
+          ? "bg-green-primary bg-opacity-10 hover:bg-opacity-20 ring-green-primary text-green-primary ring-opacity-30 border border-black-primary border-opacity-10 h-[56px]"
           : type === "cancel"
           ? "bg-neutral-600 hover:bg-neutral-700 ring-neutral-600 *:font-bold"
           : type === "white"

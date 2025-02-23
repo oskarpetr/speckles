@@ -5,6 +5,7 @@ public class Studio
     public string StudioId { get; set; } = Guid.NewGuid().ToString();
     public string Name { get; set; }
     public string ContactEmail { get; set; }
+    public string PaymentEmail { get; set; }
     public string Slug { get; set; }
     public string About { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

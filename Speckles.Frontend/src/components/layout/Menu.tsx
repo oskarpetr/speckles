@@ -76,8 +76,6 @@ export default function Menu() {
     },
   ];
 
-  const search = () => {};
-
   return (
     <div
       className={cn(
@@ -92,7 +90,7 @@ export default function Menu() {
       <div className="flex gap-6 items-center">
         <div className="flex gap-2 items-center">
           <Tooltip text="Search">
-            <MenuItem icon="MagnifyingGlass" onClick={search} />
+            <MenuItem icon="MagnifyingGlass" link="/search" />
           </Tooltip>
 
           {status === "authenticated" && (
@@ -130,7 +128,7 @@ export default function Menu() {
 
         {status === "authenticated" ? (
           <div className="hidden md:block">
-            <div className="flex items-center">
+            <div className="flex items-center cursor-pointer">
               <PopupTooltip button={<Avatar user={session.user} size={48} />}>
                 <DropdownMenu items={userMenuItems} />
               </PopupTooltip>

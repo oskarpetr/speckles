@@ -54,3 +54,8 @@ export const initialValuesImage = {
 export const initialValuesTag = {
   name: "",
 };
+
+// commets
+export const initialValuesComment = {
+  text: "",
+};

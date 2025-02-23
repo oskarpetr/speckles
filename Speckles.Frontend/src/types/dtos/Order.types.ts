@@ -12,3 +12,9 @@ export interface IOrderShort {
   date: string;
   asset: IAssetShort;
 }
+
+export interface IOrderPostBody {
+  assetIds: string[];
+  userId: string;
+  paymentMethod: string;
+}

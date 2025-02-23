@@ -14,45 +14,21 @@ export default function AssetShowcase({ asset }: Props) {
   // active image state
   const [activeImage, setActiveImage] = useState(0);
 
-  // next image in slider
-  // const nextImage = () => {
-  //   if (activeImage !== asset.images.length - 1) {
-  //     setActiveImage((prev) => prev + 1);
-  //   } else {
-  //     setActiveImage(0);
-  //   }
-  // };
-
-  // previous image in slider
-  // const previousImage = () => {
-  //   if (activeImage !== 0) {
-  //     setActiveImage((prev) => prev - 1);
-  //   } else {
-  //     setActiveImage(asset.images.length - 1);
-  //   }
-  // };
-
   return (
     <FadeIn delay={0.1} className="flex flex-col gap-4">
-      <div className="relative w-full md:w-[600px] lg:w-[400px] xl:w-[600px]">
+      <div className="relative w-full md:w-[35rem] lg:w-[400px] xl:w-[35rem]">
         <Image
           key={asset.thumbnail.imageId}
           src={getAssetImage(asset.assetId, asset.images[activeImage].imageId)}
           alt={asset.thumbnail.alt}
           width={600}
           height={0}
-          className="w-full md:w-[600px] lg:w-[400px] xl:w-[600px] rounded-lg"
+          className="w-full md:w-[35rem] lg:w-[400px] xl:w-[35rem] rounded-lg"
         />
         <AddToSaved asset={asset} />
       </div>
 
-      <div className="flex items-center justify-between gap-8 w-full md:w-[600px] lg:w-[400px] xl:w-[600px]">
-        {/* <RoundedButton
-          icon="CaretLeft"
-          colorType="secondary"
-          onClick={previousImage}
-        /> */}
-
+      <div className="flex items-center justify-between gap-8 w-full md:w-[35rem] lg:w-[400px] xl:w-[35rem]">
         <div className="grid grid-flow-row grid-cols-4 md:grid-cols-6 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full">
           {asset.images.map((image, index) => (
             <Image
@@ -71,12 +47,6 @@ export default function AssetShowcase({ asset }: Props) {
             />
           ))}
         </div>
-
-        {/* <RoundedButton
-          icon="CaretRight"
-          colorType="secondary"
-          onClick={nextImage}
-        /> */}
       </div>
     </FadeIn>
   );

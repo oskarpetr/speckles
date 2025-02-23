@@ -7,6 +7,7 @@ import Link from "next/link";
 import RoundedButton from "../shared/RoundedButton";
 import { IOrder } from "@/types/dtos/Order.types";
 import { gridCardDelay } from "../shared/GridCard";
+import GrayCard from "../shared/GrayCard";
 
 interface Props {
   order: IOrder;
@@ -14,7 +15,7 @@ interface Props {
 
 export default function OrderFiles({ order }: Props) {
   return (
-    <div className="flex flex-col gap-6 h-fit bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
+    <GrayCard>
       {order.asset.files.map((file, index) => (
         <Fragment key={`file_${file.fileId}`}>
           <FadeIn
@@ -57,6 +58,6 @@ export default function OrderFiles({ order }: Props) {
           )}
         </Fragment>
       ))}
-    </div>
+    </GrayCard>
   );
 }

@@ -39,7 +39,7 @@ export default function PopupTooltip({
         <MenuItems
           anchor={anchor}
           className={cn(
-            "absolute flex flex-col items-center z-50 shadow-[0px_0px_15px_10px_rgba(0,_0,_0,_0.1)] rounded-lg bg-neutral-100 border border-black-primary border-opacity-10",
+            "absolute flex flex-col items-center z-50 shadow-[0px_0px_15px_10px_rgba(0,_0,_0,_0.05)] rounded-lg bg-neutral-100 border border-black-primary border-opacity-10",
             anchor === "bottom end"
               ? "mt-4 ml-8"
               : anchor === "top end"

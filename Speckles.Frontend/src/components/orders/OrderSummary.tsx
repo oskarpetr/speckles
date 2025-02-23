@@ -1,38 +1,30 @@
 import { formatDate, formatPrice } from "@/utils/formatters";
 import { IOrder } from "@/types/dtos/Order.types";
 import Button from "../shared/Button";
+import { GrayCardItem } from "../shared/GrayCardItem";
+import GrayCard from "../shared/GrayCard";
 
 interface Props {
   order: IOrder;
 }
 
 export default function OrderSummary({ order }: Props) {
+  const orderDate = formatDate(order.date);
+  const amountPaid = formatPrice(
+    order.asset.currency.locale,
+    order.asset.currency.name,
+    order.asset.price
+  );
+
   return (
-    <div className="flex flex-col gap-6 bg-neutral-100 p-8 rounded-lg border border-black-primary border-opacity-10">
+    <GrayCard>
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between">
-          <div>Order date</div>
-          <div>{formatDate(order.date)}</div>
-        </div>
-
-        <div className="flex justify-between">
-          <div>Amount paid</div>
-          <div>
-            {formatPrice(
-              order.asset.currency.locale,
-              order.asset.currency.name,
-              order.asset.price
-            )}
-          </div>
-        </div>
-
-        <div className="flex justify-between">
-          <div>Payment method</div>
-          <div>{order.paymentMethod}</div>
-        </div>
+        <GrayCardItem property="Order date" value={orderDate} />
+        <GrayCardItem property="Amount paid" value={amountPaid} />
+        <GrayCardItem property="Payment method" value={order.paymentMethod} />
       </div>
 
-      <div className="flex flex-col gap-3 mt-8">
+      <div className="flex flex-col gap-4">
         <Button
           text="View Invoice"
           icon={{ name: "FileText" }}
@@ -45,6 +37,6 @@ export default function OrderSummary({ order }: Props) {
           fullWidth
         />
       </div>
-    </div>
+    </GrayCard>
   );
 }

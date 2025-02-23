@@ -29,9 +29,9 @@ public class DatabaseService
         _database.SaveChanges();
     }
 
-    public bool UserExists(string memberId)
+    public bool UserExists(string userId)
     {
-        return _database.Users.Any(x => x.UserId == memberId);
+        return _database.Users.Any(x => x.UserId == userId);
     }
     
     public bool StudioExists(string slug)
@@ -255,6 +255,35 @@ public class DatabaseService
     {
         return _database.Orders.ToList();
     }
+
+    public void CreateOrder(PostOrderBody body)
+    {
+        var orders = new List<Order>();
+
+        foreach (var assetId in body.assetIds)
+        {
+            var order = new Order()
+            {
+                AssetId = assetId,
+                PaymentMethod = body.paymentMethod,
+                UserId = body.userId
+            };
+            orders.Add(order);
+        }
+
+        _database.Orders.AddRange(orders);
+        _database.SaveChanges();
+    }
+    
+    public void DeleteAllBasketAssets(string userId)
+    {
+        var basketAssets = _database.BasketAssets
+            .Where(x => x.UserId == userId)
+            .ToList();
+
+        _database.BasketAssets.RemoveRange(basketAssets);
+        _database.SaveChanges();
+    }
     
     public List<AssetShortDto> GetAssets(int limit)
     {
@@ -274,9 +303,7 @@ public class DatabaseService
             .Include(x => x.Images)
             .Include(x => x.Currency)
             .Include(x => x.License)
-            .Include(x => x.Studio).ThenInclude(x => x.Members).ThenInclude(x => x.User)
-            .Include(x => x.Studio).ThenInclude(x => x.Address)
-            .Include(x => x.Studio).ThenInclude(x => x.Projects)
+            .Include(x => x.Studio)
             .Include(x => x.Comments).ThenInclude(x => x.Author)
             .Include(x => x.Comments).ThenInclude(x => x.LikedBy).ThenInclude(x => x.User)
             .Include(x => x.Files)
@@ -287,7 +314,7 @@ public class DatabaseService
 
             // Asset -> AssetDto
             .Adapt<AssetDto>();
-        
+
         if (string.IsNullOrEmpty(memberId))
             return asset;
         
@@ -473,5 +500,43 @@ public class DatabaseService
     public List<Currency> GetCurrencies()
     {
         return _database.Currencies.ToList();
+    }
+    
+    public bool CommentExists(string commentId)
+    {
+        return _database.Comments.Any(x => x.CommentId == commentId);
+    }
+    
+    public void CreateCommentLike(string commentId, string userId)
+    {
+        var commentLike = _database.UserLikes.FirstOrDefault(x => x.CommentId == commentId && x.UserId == userId);
+        
+        if (commentLike != null)
+        {
+            _database.UserLikes.Remove(commentLike);
+        }
+        else
+        {
+            _database.UserLikes.Add(new UserLike()
+            {
+                CommentId = commentId,
+                UserId = userId
+            });
+        }
+
+        _database.SaveChanges();
+    }
+
+    public void CreateComment(PostCommentBody body)
+    {
+        var comment = new Comment()
+        {
+            AssetId = body.assetId,
+            AuthorId = body.userId,
+            Text = body.text,
+        };
+
+        _database.Comments.Add(comment);
+        _database.SaveChanges();
     }
 }

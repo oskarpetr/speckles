@@ -21,6 +21,11 @@ export default function Promotion() {
     setPromotionSeen(true);
   };
 
+  // loading skeleton
+  if (!promotionQuery.isSuccess) {
+    <SkeletonPromotion />;
+  }
+
   return (
     promotion &&
     !promotionSeen && (
@@ -42,4 +47,8 @@ export default function Promotion() {
       </div>
     )
   );
+}
+
+function SkeletonPromotion() {
+  return <div className="bg-black-primary h-[44px]"></div>;
 }

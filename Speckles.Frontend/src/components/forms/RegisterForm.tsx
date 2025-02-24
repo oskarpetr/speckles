@@ -14,6 +14,7 @@ import {
   initialValuesRegisterStep2,
   initialValuesRegisterStep3,
 } from "@/utils/forms/initialValues";
+import bcrypt from "bcryptjs-react";
 
 interface Props {
   step: number;
@@ -45,14 +46,22 @@ export default function RegisterForm({ step, setStep }: Props) {
   ];
 
   // on submit handler
-  const onSubmit = (values: any) => {
+  const onSubmit = async (values: any) => {
     if (step < maxSteps) {
       goForward(step, setStep, maxSteps);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { confirmPassword, ...data } = values;
+      const { confirmPassword, password, ...data } = values;
 
-      registerMutation.mutate(data);
+      const encryptedPassword = await bcrypt.hashSync(
+        password,
+        bcrypt.genSaltSync(10)
+      );
+
+      await registerMutation.mutateAsync({
+        ...data,
+        password: encryptedPassword,
+      });
       router.push("/login");
     }
   };

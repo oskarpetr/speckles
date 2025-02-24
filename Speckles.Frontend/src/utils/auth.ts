@@ -1,7 +1,7 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-// import bcrypt from "bcryptjs-react";
+import bcrypt from "bcryptjs-react";
 import { Account, NextAuthOptions } from "next-auth";
 // import { JWT } from "next-auth/jwt";
 import axios from "axios";
@@ -27,16 +27,18 @@ export const authOptions: NextAuthOptions = {
 
           const res = await postLogin({
             email: credentials.email,
-            password: credentials.password,
           });
 
           const user = res.data;
 
-          // const passwordMatch = bcrypt.compareSync(
-          //   credentials.password,
-          //   user.password
-          // );
-          // await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+          const passwordMatch = bcrypt.compareSync(
+            credentials.password,
+            user.password
+          );
+
+          if (!passwordMatch) {
+            return null;
+          }
 
           return {
             id: user.userId,

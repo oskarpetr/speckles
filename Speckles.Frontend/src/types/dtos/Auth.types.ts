@@ -12,5 +12,4 @@ export interface IRegisterPostBody {
 
 export interface ILoginPostBody {
   email: string;
-  password: string;
 }

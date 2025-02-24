@@ -67,11 +67,8 @@ public class AuthController : Controller
         if (user == null)
             return Unauthorized();
         
-        if(user.Password != body.password)
-            return Unauthorized();
-
-        var shortUserDto = user.Adapt<UserShortDto>();
-        var response = new ApiResponse(shortUserDto);
+        var shortUserPasswordDto = user.Adapt<UserShortPasswordDto>();
+        var response = new ApiResponse(shortUserPasswordDto);
         
         return Ok(response);
     }

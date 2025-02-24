@@ -11,7 +11,7 @@ public class AssetDto
     public Currency Currency { get; set; }
     public string Description { get; set; }
     public License License { get; set; }
-    public StudioShortDto Studio { get; set; }
+    public StudioDto Studio { get; set; }
     public CustomLicenseDto? CustomLicense { get; set; }
     public ImageDto Thumbnail { get; set; }
     public List<ImageDto> Images { get; set; }

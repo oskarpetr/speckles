@@ -8,5 +8,5 @@ public class OrderDto
     public DateTimeOffset Date { get; set; }
     public string PaymentMethod { get; set; }
     public AssetDto Asset { get; set; }
-    public UserShortDto User { get; set; }
+    public UserShortAddressDto User { get; set; }
 }

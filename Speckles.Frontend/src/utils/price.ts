@@ -24,3 +24,6 @@ export async function getTotalPrice(
     return acc + priceInEUR * targetRate;
   }, 0);
 }
+
+export const AMOUNT_TO_STUDIO = 0.95;
+export const AMOUNT_TO_SPECKLES = 0.05;

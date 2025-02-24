@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["http://localhost:3000", "http://speckles.store", "https://speckles.store", "http://www.speckles.store", "https://www.speckles.store"],
+    "method": ["GET"],
+    "responseHeader": ["Content-Type", "Authorization"],
+    "maxAgeSeconds": 3600
+  }
+]

@@ -17,8 +17,8 @@ export function getAvatar(userId: string) {
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 
-export function getAssetFile(assetId: string, fileName: string) {
-  const uri = encodeURIComponent(`assets/${assetId}/files/${fileName}`);
+export function getAssetFile(assetId: string, fileId: string) {
+  const uri = encodeURIComponent(`assets/${assetId}/files/${fileId}`);
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 

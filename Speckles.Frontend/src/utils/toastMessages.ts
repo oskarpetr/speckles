@@ -32,6 +32,10 @@ const userMessages = {
   // payments
   orderSuccess: "Order was successful",
   orderFailed: "Order failed",
+
+  // file downlpad
+  fileDownloaded: "File downloaded",
+  fileDownloadFailed: "File download failed",
 };
 
 const studioMessages = {

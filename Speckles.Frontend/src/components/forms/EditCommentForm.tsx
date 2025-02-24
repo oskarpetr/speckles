@@ -63,27 +63,38 @@ export default function EditCommentForm({ commentId, text, onSuccess }: Props) {
         handleBlur,
         handleSubmit,
       }: any) => (
-        <form
-          onSubmit={handleSubmit}
-          className="flex gap-6 items-center w-full"
-        >
+        <form onSubmit={handleSubmit} className="flex gap-6 items-start w-full">
           {status === "authenticated" && (
             <Avatar user={session.user} size={60} />
           )}
 
-          <div className="w-full">
-            <Input
-              name="text"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.text}
-              placeholder="Enter comment"
-              error={errors.text}
-              touched={touched.text}
-            />
-          </div>
+          <div className="flex flex-col items-end gap-4 w-full">
+            <div className="w-full">
+              <Input
+                name="text"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.text}
+                placeholder="Enter comment"
+                error={errors.text}
+                touched={touched.text}
+              />
+            </div>
 
-          <Button text="Add" size="small" loading={commentUpdate.isPending} />
+            <div className="flex gap-4">
+              <Button
+                text="Cancel"
+                size="small"
+                type="cancel"
+                onClick={onSuccess}
+              />
+              <Button
+                text="Update"
+                size="small"
+                loading={commentUpdate.isPending}
+              />
+            </div>
+          </div>
         </form>
       )}
     </Formik>

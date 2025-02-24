@@ -3,6 +3,9 @@ import { IOrder } from "@/types/dtos/Order.types";
 import Button from "../shared/Button";
 import { GrayCardItem } from "../shared/GrayCardItem";
 import GrayCard from "../shared/GrayCard";
+import DownloadAllButton from "./DownloadAllButton";
+import Link from "next/link";
+import DownloadInvoiceButton from "./DownloadInvoiceButton";
 
 interface Props {
   order: IOrder;
@@ -25,17 +28,8 @@ export default function OrderSummary({ order }: Props) {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button
-          text="View Invoice"
-          icon={{ name: "FileText" }}
-          type="secondary"
-          fullWidth
-        />
-        <Button
-          text="Download All"
-          icon={{ name: "DownloadSimple" }}
-          fullWidth
-        />
+        <DownloadInvoiceButton order={order} />
+        <DownloadAllButton order={order} />
       </div>
     </GrayCard>
   );

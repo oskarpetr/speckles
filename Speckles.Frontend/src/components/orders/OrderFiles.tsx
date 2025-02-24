@@ -3,11 +3,10 @@ import FadeIn from "../animation/FadeIn";
 import Image from "next/image";
 import { getAssetFileExtension } from "@/utils/images";
 import { formatFileSize } from "@/utils/formatters";
-import Link from "next/link";
-import RoundedButton from "../shared/RoundedButton";
 import { IOrder } from "@/types/dtos/Order.types";
 import { gridCardDelay } from "../shared/GridCard";
 import GrayCard from "../shared/GrayCard";
+import DownloadFileButton from "./DownloadFileButton";
 
 interface Props {
   order: IOrder;
@@ -33,22 +32,17 @@ export default function OrderFiles({ order }: Props) {
 
               <div>
                 <div className="font-bold text-lg">{file.name}</div>
-                <div className="opacity-50">{formatFileSize(file.size)}</div>
+                <div className="opacity-50">
+                  {file.fileName} • {formatFileSize(file.size)}
+                </div>
               </div>
             </div>
 
-            <Link
-              href={`/api/download?assetId=${order.asset.assetId}&fileName=${file.fileId}`}
-            >
-              <RoundedButton icon="DownloadSimple" colorType="secondary" />
-            </Link>
-            {/* <Link
-              href={`/api/download?assetId=${order.asset.assetId}&fileName=${file.fileName}`}
-              className="flex gap-2 items-center bg-neutral-200 hover:bg-neutral-300 transition-colors px-7 py-2.5 rounded-lg border border-black-primary border-opacity-10 font-semibold"
-            >
-              <DownloadSimple size={20} />
-              Download
-            </Link> */}
+            <DownloadFileButton
+              assetId={order.asset.assetId}
+              fileId={file.fileId}
+              fileName={file.fileName}
+            />
           </FadeIn>
 
           {index !== order.asset.files.length - 1 && (

@@ -2,6 +2,7 @@ import { IFile } from "@/types/dtos/File.types";
 import { IImage } from "@/types/dtos/Image.types";
 import {
   deleteObject,
+  getDownloadURL,
   listAll,
   ref,
   uploadBytes,
@@ -113,4 +114,12 @@ export function getBase64FileSize(base64: string) {
     (base64Data.endsWith("==") ? 2 : base64Data.endsWith("=") ? 1 : 0);
 
   return byteLength;
+}
+
+// get file download url
+export async function getFileDownloadUrl(assetId: string, fileId: string) {
+  const fileRef = ref(storage, `assets/${assetId}/files/${fileId}`);
+  const url = await getDownloadURL(fileRef);
+
+  return url;
 }

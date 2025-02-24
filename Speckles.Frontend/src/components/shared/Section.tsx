@@ -2,6 +2,7 @@ import { cn } from "@/utils/cn";
 import { CaretRight } from "@phosphor-icons/react";
 import { ComponentProps, ReactNode } from "react";
 import FadeIn from "../animation/FadeIn";
+import Heading from "./Heading";
 
 interface Props {
   title: string;
@@ -23,14 +24,14 @@ export default function Section({
   return (
     <FadeIn delay={delay} className={cn("w-full", className)}>
       <div className="flex items-center gap-1 mb-4">
-        <h1
+        <h2
           className={cn(
             "font-bold",
             color === "black" ? "text-black-primary" : "text-white"
           )}
         >
           {title}
-        </h1>
+        </h2>
 
         {chevron && (
           <CaretRight color={color === "black" ? "black" : "white"} />

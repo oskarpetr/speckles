@@ -1,5 +1,3 @@
-using Speckles.Database.Tables;
-
 namespace Speckles.Api.Dto;
 
 public class StudioShortDto

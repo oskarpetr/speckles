@@ -20,3 +20,14 @@ export default function Logo() {
     </Link>
   );
 }
+
+export function SpecklesLogoPDF() {
+  return (
+    <div className="flex items-center gap-2 w-fit">
+      <img src="/images/Logo.png" alt="Speckles Logo" width={15} height={15} />
+      <div className="text-white font-bold text-lg !tracking-tight">
+        Speckles
+      </div>
+    </div>
+  );
+}

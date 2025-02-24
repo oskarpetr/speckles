@@ -78,7 +78,7 @@ export default function Comment({ comment }: Props) {
   );
 
   return !editingMode ? (
-    <div className="flex gap-6">
+    <div className="flex gap-4">
       <Avatar user={comment.author} size={60} link />
 
       <div className="flex flex-col gap-1 w-full">

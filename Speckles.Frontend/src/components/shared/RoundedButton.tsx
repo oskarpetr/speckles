@@ -1,17 +1,20 @@
 import { cn } from "@/utils/cn";
 import Icon from "./Icon";
 import * as Icons from "@phosphor-icons/react/dist/ssr";
+import { ComponentProps } from "react";
 
 interface Props {
   icon: keyof typeof Icons;
   onClick?: () => void;
   colorType?: "primary" | "secondary";
+  className?: ComponentProps<"div">["className"];
 }
 
 export default function RoundedButton({
   icon,
   onClick,
   colorType = "primary",
+  className,
 }: Props) {
   return (
     <div
@@ -20,7 +23,8 @@ export default function RoundedButton({
         "cursor-pointer rounded-full transition-all w-fit h-fit focus:ring-4 ring-0",
         colorType === "primary"
           ? "p-4 bg-green-primary hover:bg-green-primary-hover ring-green-primary ring-opacity-30"
-          : "p-[calc(1rem-1px)] bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-green-primary border-opacity-10 ring-green-light ring-opacity-50"
+          : "p-[calc(1rem-1px)] bg-green-primary bg-opacity-10 hover:bg-opacity-20 border border-green-primary border-opacity-10 ring-green-light ring-opacity-50",
+        className
       )}
     >
       <Icon

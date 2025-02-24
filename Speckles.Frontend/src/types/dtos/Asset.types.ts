@@ -15,7 +15,7 @@ export interface IAsset {
   currency: ICurrency;
   description: string;
   license: ILicense;
-  studio: IStudioShort;
+  studio: IStudio;
   customLicense?: ICustomLicense;
   thumbnail: IImage;
   images: IImage[];

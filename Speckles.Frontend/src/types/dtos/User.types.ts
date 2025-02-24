@@ -17,3 +17,11 @@ export interface IUserShort {
   email: string;
   fullName: string;
 }
+
+export interface IUserAddressShort {
+  userId: string;
+  username: string;
+  email: string;
+  fullName: string;
+  address: IAddress;
+}

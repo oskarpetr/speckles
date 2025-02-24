@@ -96,10 +96,11 @@ public class OrdersController : Controller
             .Include(x => x.Asset).ThenInclude(x => x.Images)
             .Include(x => x.Asset).ThenInclude(x => x.Currency)
             .Include(x => x.Asset).ThenInclude(x => x.License)
-            .Include(x => x.Asset).ThenInclude(x => x.Studio)
+            .Include(x => x.Asset).ThenInclude(x => x.Studio).ThenInclude(x => x.Address)
             .Include(x => x.Asset).ThenInclude(x => x.Files)
+            .Include(x => x.User).ThenInclude(x => x.Address)
             .FirstOrDefault(x => x.OrderId == orderId);
-        // return Ok(new {order, orderExists, orderId});
+
         var orderDto = order.Adapt<OrderDto>();
         var response = new ApiResponse(orderDto);
         

@@ -14,3 +14,7 @@ export interface ICommentPostBody {
   userId: string;
   text: string;
 }
+
+export interface ICommentPutBody {
+  text: string;
+}

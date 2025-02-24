@@ -6,18 +6,22 @@ import Link from "next/link";
 import Avatar from "../shared/Avatar";
 import { formatDistance } from "date-fns";
 import Like from "../shared/Like";
-import { useCommentLikeMutation } from "@/hooks/useApi";
+import { useCommentDelete, useCommentLikeMutation } from "@/hooks/useApi";
 import { IMenuItem } from "@/types/MenuItem.types";
-import Button from "../shared/Button";
 import DropdownMenu from "../shared/DropdownMenu";
 import PopupTooltip from "../shared/PopupTooltip";
 import Icon from "../shared/Icon";
+import { useParams } from "next/navigation";
+import EditCommentForm from "../forms/EditCommentForm";
 
 interface Props {
   comment: IComment;
 }
 
 export default function Comment({ comment }: Props) {
+  // asset id param
+  const { assetId } = useParams();
+
   // session
   const { data: session, status } = useSession();
   const isCommentOwner = comment.author.userId === session?.user.userId;
@@ -28,15 +32,21 @@ export default function Comment({ comment }: Props) {
   // comment like mutation
   const commentLikeMutation = useCommentLikeMutation(comment.commentId, liked);
 
+  // comment delete
+  const commentDelete = useCommentDelete(assetId as string, comment.commentId);
+
+  // edit state
+  const [editingMode, setEditingMode] = useState(false);
+
   // comment items
   const commentItems: IMenuItem[] = [
     {
       text: "Edit comment",
-      // onClick: () => setOpenEditModal(true),
+      onClick: () => setEditingMode(true),
     },
     {
       text: "Delete comment",
-      // onClick: () => setOpenDeleteModal(true),
+      onClick: commentDelete.mutate,
     },
   ];
 
@@ -56,6 +66,10 @@ export default function Comment({ comment }: Props) {
     commentLikeMutation.mutate();
   };
 
+  const onUpdateSuccess = () => {
+    setEditingMode(false);
+  };
+
   // comment distance
   const commentDistance = formatDistance(
     new Date(comment.createdAt),
@@ -63,11 +77,11 @@ export default function Comment({ comment }: Props) {
     { addSuffix: true }
   );
 
-  return (
+  return !editingMode ? (
     <div className="flex gap-6">
       <Avatar user={comment.author} size={60} link />
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href={`/profiles/${comment.author.username}`}>
@@ -105,5 +119,11 @@ export default function Comment({ comment }: Props) {
         </button>
       </div>
     </div>
+  ) : (
+    <EditCommentForm
+      commentId={comment.commentId}
+      text={comment.text}
+      onSuccess={onUpdateSuccess}
+    />
   );
 }

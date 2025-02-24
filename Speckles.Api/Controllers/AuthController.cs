@@ -12,9 +12,9 @@ namespace Speckles.Api.Controllers;
 [Route(ApiEndpoints.API_BASE)]
 public class AuthController : Controller
 {
-    private readonly ApplicationDbContext _database;
+    private readonly DatabaseService _database;
     
-    public AuthController(ApplicationDbContext database)
+    public AuthController(DatabaseService database)
     {
         _database = database;
     }
@@ -31,42 +31,21 @@ public class AuthController : Controller
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 409)]
     [HttpPost(ApiEndpoints.Auth.REGISTER)]
-    public IActionResult Register([FromBody] RegisterBody registerBody)
+    public IActionResult Register([FromBody] RegisterBody body)
     {
-        var usernameExists = _database.Users.Any(x => x.Username == registerBody.username);
+        var usernameExists = _database.UserUsernameExists(body.username);
         
         if (usernameExists)
-            return Conflict(new ApiError("Username", registerBody.username, 409));
-        
-        var emailExists = _database.Users.Any(x => x.Email == registerBody.email);
+            return Conflict(new ApiError("Username", body.username, 409));
+
+        var emailExists = _database.UserEmailExists(body.email);
         
         if (emailExists)
-            return Conflict(new ApiError("Email", registerBody.email, 409));
+            return Conflict(new ApiError("Email", body.email, 409));
 
-        var address = new Address()
-        {
-            Country = registerBody.country,
-            State = registerBody.state,
-            Street = registerBody.street,
-            City = registerBody.city,
-            Zip = registerBody.zip
-        };
-            
-        var user = new User()
-        {
-            FullName = registerBody.fullName,
-            Email = registerBody.email,
-            Username = registerBody.username,
-            Password = registerBody.password,
-            AddressId = address.AddressId
-        };
-
-        _database.Addresses.Add(address);
-        _database.Users.Add(user);
-
-        _database.SaveChanges();
+        _database.CreateUser(body);
         
-        return Ok();
+        return NoContent();
     }
     
     /// <summary>
@@ -81,14 +60,14 @@ public class AuthController : Controller
     [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 201)]
     [ProducesResponseType(typeof(ApiError), 401)]
     [HttpPost(ApiEndpoints.Auth.LOGIN)]
-    public IActionResult Login([FromBody] LoginBody loginBody)
+    public IActionResult Login([FromBody] LoginBody body)
     {
-        var user = _database.Users.FirstOrDefault(x => x.Email == loginBody.email);
+        var user = _database.GetUserByEmail(body.email);
         
         if (user == null)
             return Unauthorized();
         
-        if(user.Password != loginBody.password)
+        if(user.Password != body.password)
             return Unauthorized();
 
         var shortUserDto = user.Adapt<UserShortDto>();

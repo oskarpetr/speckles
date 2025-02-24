@@ -7,6 +7,7 @@ const userMessages = {
   likeComment: "Comment liked",
   unlikeComment: "Comment unliked",
   addedComment: "Comment added",
+  updatedComment: "Comment updated",
   removedComment: "Comment removed",
 
   // studios

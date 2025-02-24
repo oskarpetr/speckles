@@ -3,7 +3,7 @@ import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
 import { IAsset, IAssetShort, IAssetPostBody } from "@/types/dtos/Asset.types";
 import { IRegisterPostBody } from "@/types/dtos/Auth.types";
-import { ICommentPostBody } from "@/types/dtos/Comment.types";
+import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { IEarning } from "@/types/dtos/Earning.types";
 import { IGeo } from "@/types/dtos/Geo.types";
@@ -21,6 +21,7 @@ import { ITag } from "@/types/dtos/Tag.types";
 import { IUser } from "@/types/dtos/User.types";
 import {
   deleteAsset,
+  deleteComment,
   deleteStudioMember,
   fetchAsset,
   fetchAssets,
@@ -53,6 +54,7 @@ import {
   postSaved,
   postStudioMember,
   putStudio,
+  updateComment,
 } from "@/utils/fetchers";
 import { getTotalPrice } from "@/utils/price";
 import {
@@ -63,8 +65,10 @@ import {
   BASKET_COUNT_QUERY_KEY,
   BASKET_MUTATION_KEY,
   BASKET_QUERY_KEY,
+  COMMENT_DELETE_KEY,
   COMMENT_LIKE_MUTATION_KEY,
   COMMENT_MUTATION_KEY,
+  COMMENT_UPDATE_KEY,
   CURRENCIES_QUERY_KEY,
   LICENSES_QUERY_KEY,
   MY_STUDIOS_QUERY_KEY,
@@ -91,12 +95,7 @@ import {
   USER_QUERY_KEY,
 } from "@/utils/query-keys";
 import toastMessages from "@/utils/toastMessages";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 export function useAssetsQuery() {
@@ -118,10 +117,6 @@ export function useAssetQuery(assetId: string) {
   const assetQuery = useQuery<ApiResponse<IAsset>>({
     queryKey: ASSET_QUERY_KEY(assetId),
     queryFn: () => fetchAsset(assetId, userId),
-    enabled:
-      (status === "authenticated" && !!session) ||
-      status === "unauthenticated" ||
-      status === "loading",
   });
 
   return assetQuery;
@@ -530,9 +525,47 @@ export function useSearchPromptsQuery(query: string) {
   return searchPromptsQuery;
 }
 
+export function useCommentUpdate(assetId: string, commentId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const commentMutation = useMutation({
+    mutationKey: COMMENT_UPDATE_KEY(commentId),
+    mutationFn: (body: ICommentPutBody) => updateComment(commentId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ASSET_QUERY_KEY(assetId),
+      });
+      toastSuccess(toastMessages.user.updatedComment);
+    },
+  });
+
+  return commentMutation;
+}
+
+export function useCommentDelete(assetId: string, commentId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const commentMutation = useMutation({
+    mutationKey: COMMENT_DELETE_KEY(commentId),
+    mutationFn: () => deleteComment(commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ASSET_QUERY_KEY(assetId),
+      });
+      toastSuccess(toastMessages.user.removedComment);
+    },
+  });
+
+  return commentMutation;
+}
+
 export function useCommentMutation(assetId: string) {
   // query client
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   // mutation
   const commentMutation = useMutation({

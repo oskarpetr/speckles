@@ -14,9 +14,9 @@ namespace Speckles.Api.Controllers;
 [Route(ApiEndpoints.API_BASE)]
 public class BasketController : Controller
 {
-    private readonly ApplicationDbContext _database;
+    private readonly DatabaseService _database;
     
-    public BasketController(ApplicationDbContext database)
+    public BasketController(DatabaseService database)
     {
         _database = database;
     }
@@ -35,24 +35,12 @@ public class BasketController : Controller
     [HttpGet(ApiEndpoints.Basket.GET_BASKET)]
     public IActionResult GetBasket([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
-        var userExists = _database.Users.Any(x => x.UserId == userId);
+        var userExists = _database.UserExists(userId);
         
         if (!userExists)
             return NotFound(new ApiError("User", userId));
 
-        var basketAssets = _database.BasketAssets
-            .Include(x => x.Asset).ThenInclude(x => x.Studio)
-            .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
-            .Include(x => x.Asset).ThenInclude(x => x.Currency)
-            .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
-            .Where(x => x.UserId == userId)
-            .Select(x => x.Asset).ToList();
-
-        if(offset != null)
-            basketAssets = basketAssets.Skip(offset.Value).ToList();
-            
-        if(limit != null)
-            basketAssets = basketAssets.Take(limit.Value).ToList();
+        var basketAssets = _database.GetBasketAssets(userId, offset, limit);
         
         ApiResponse response;
         
@@ -85,9 +73,9 @@ public class BasketController : Controller
     public IActionResult PostBasket([FromQuery, Required] string userId, [FromBody] PostBasketBody body)
     {
         var assetId = body.assetId;
-        
-        var userExists = _database.Users.Any(x => x.UserId == userId);
-        var assetExists = _database.Assets.Any(x => x.AssetId == assetId);
+
+        var userExists = _database.UserExists(userId);
+        var assetExists = _database.AssetExists(assetId);
         
         if(!userExists)
             return NotFound(new ApiError("User", userId));
@@ -95,23 +83,8 @@ public class BasketController : Controller
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
         
-        var basket = _database.BasketAssets.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
+        _database.ToggleBasketAsset(userId, assetId);
 
-        if (basket != null)
-        {
-            _database.BasketAssets.Remove(basket);
-        }
-        else
-        {
-            _database.BasketAssets.Add(new BasketAsset()
-            {
-                UserId = userId,
-                AssetId = assetId
-            });
-        }
-        
-        _database.SaveChanges();
-
-        return Ok();
+        return NoContent();
     }
 }

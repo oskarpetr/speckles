@@ -8,7 +8,7 @@ import {
   IStudioMemberPostBody,
   IStudioPutBody,
 } from "@/types/dtos/Studio.types";
-import { ICommentPostBody } from "@/types/dtos/Comment.types";
+import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import { IOrderPostBody } from "@/types/dtos/Order.types";
 
@@ -152,6 +152,21 @@ export async function postComment(body: ICommentPostBody) {
     url: "comments",
     method: "POST",
     body,
+  });
+}
+
+export async function updateComment(commentId: string, body: ICommentPutBody) {
+  return fetcher({
+    url: `comments/${commentId}`,
+    method: "PUT",
+    body,
+  });
+}
+
+export async function deleteComment(commentId: string) {
+  return fetcher({
+    url: `comments/${commentId}`,
+    method: "DELETE",
   });
 }
 

@@ -33,6 +33,47 @@ public class DatabaseService
     {
         return _database.Users.Any(x => x.UserId == userId);
     }
+
+    public bool UserUsernameExists(string username)
+    {
+        return _database.Users.Any(x => x.Username == username);
+    }
+
+    public bool UserEmailExists(string email)
+    {
+        return _database.Users.Any(x => x.Email == email);
+    }
+
+    public User? GetUserByEmail(string email)
+    {
+        return _database.Users.FirstOrDefault(x => x.Email == email);
+    }
+
+    public void CreateUser(RegisterBody body)
+    {
+        var address = new Address()
+        {
+            Country = body.country,
+            State = body.state,
+            Street = body.street,
+            City = body.city,
+            Zip = body.zip
+        };
+            
+        var user = new User()
+        {
+            FullName = body.fullName,
+            Email = body.email,
+            Username = body.username,
+            Password = body.password,
+            AddressId = address.AddressId
+        };
+
+        _database.Addresses.Add(address);
+        _database.Users.Add(user);
+
+        _database.SaveChanges();
+    }
     
     public bool StudioExists(string slug)
     {
@@ -274,6 +315,45 @@ public class DatabaseService
         _database.Orders.AddRange(orders);
         _database.SaveChanges();
     }
+
+    public List<Asset> GetBasketAssets(string userId, int? offset, int? limit)
+    {
+        var basketAssets = _database.BasketAssets
+            .Include(x => x.Asset).ThenInclude(x => x.Studio)
+            .Include(x => x.Asset).ThenInclude(x => x.Thumbnail)
+            .Include(x => x.Asset).ThenInclude(x => x.Currency)
+            .Include(x => x.Asset).ThenInclude(x => x.Tags).ThenInclude(x => x.Tag)
+            .Where(x => x.UserId == userId)
+            .Select(x => x.Asset).ToList();
+
+        if(offset != null)
+            basketAssets = basketAssets.Skip(offset.Value).ToList();
+            
+        if(limit != null)
+            basketAssets = basketAssets.Take(limit.Value).ToList();
+
+        return basketAssets;
+    }
+
+    public void ToggleBasketAsset(string userId, string assetId)
+    {
+        var basket = _database.BasketAssets.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
+
+        if (basket != null)
+        {
+            _database.BasketAssets.Remove(basket);
+        }
+        else
+        {
+            _database.BasketAssets.Add(new BasketAsset()
+            {
+                UserId = userId,
+                AssetId = assetId
+            });
+        }
+        
+        _database.SaveChanges();
+    }
     
     public void DeleteAllBasketAssets(string userId)
     {
@@ -315,6 +395,8 @@ public class DatabaseService
             // Asset -> AssetDto
             .Adapt<AssetDto>();
 
+        asset.Comments = asset.Comments.OrderByDescending(x => x.CreatedAt).ToList();
+        
         if (string.IsNullOrEmpty(memberId))
             return asset;
         
@@ -537,6 +619,22 @@ public class DatabaseService
         };
 
         _database.Comments.Add(comment);
+        _database.SaveChanges();
+    }
+
+    public void UpdateComment(string commentId, PutCommentBody body)
+    {
+        var comment = _database.Comments.FirstOrDefault(x => x.CommentId == commentId);
+        comment!.Text = body.text;
+
+        _database.SaveChanges();
+    }
+
+    public void DeleteComment(string commentId)
+    {
+        var comment = _database.Comments.FirstOrDefault(x => x.CommentId == commentId);
+        _database.Comments.Remove(comment!);
+
         _database.SaveChanges();
     }
 }

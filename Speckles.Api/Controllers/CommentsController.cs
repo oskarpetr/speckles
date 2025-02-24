@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.BodyModels;
 using Speckles.Api.Lib;
-using Speckles.Database;
-using Speckles.Database.Tables;
 
 namespace Speckles.Api.Controllers;
 
@@ -57,12 +55,14 @@ public class CommentsController : Controller
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Comments.PUT_COMMENT)]
-    public IActionResult UpdateComment(string commentId)
+    public IActionResult UpdateComment(string commentId, [FromBody, Required] PutCommentBody body)
     {
         var commentExists = _database.CommentExists(commentId);
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
+
+        _database.UpdateComment(commentId, body);
         
         return NoContent();
     }
@@ -85,6 +85,8 @@ public class CommentsController : Controller
         
         if(!commentExists)
             return NotFound(new ApiError("Comment", commentId));
+
+        _database.DeleteComment(commentId);
         
         return NoContent();
     }

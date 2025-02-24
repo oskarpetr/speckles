@@ -99,6 +99,16 @@ export const SEARCH_PROMPTS_QUERY_KEY = (query: string) => [
 
 // comments
 export const COMMENT_MUTATION_KEY = ["POST", "comments"];
+export const COMMENT_UPDATE_KEY = (commentId: string) => [
+  "PUT",
+  "comments",
+  commentId,
+];
+export const COMMENT_DELETE_KEY = (commentId: string) => [
+  "DELETE",
+  "comments",
+  commentId,
+];
 export const COMMENT_LIKE_MUTATION_KEY = (
   userId: string,
   commentId: string

@@ -21,6 +21,13 @@ type Props = {
       autocomplete?: boolean;
     }
   | {
+      type: "textarea";
+      onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+      error?: string | undefined;
+      value: string;
+      autocomplete?: boolean;
+    }
+  | {
       type: "select";
       onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
       icon?: string;
@@ -48,7 +55,7 @@ export default function Input(p: Props) {
   let inputElement: JSX.Element | null = null;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (p.type !== "select" && p.type !== "file") {
+  if (p.type !== "textarea" && p.type !== "select" && p.type !== "file") {
     inputElement = (
       <div className="relative flex items-center">
         {p.icon && (
@@ -75,6 +82,22 @@ export default function Input(p: Props) {
           autoComplete={p.autocomplete ? "on" : "off"}
         />
       </div>
+    );
+  } else if (p.type === "textarea") {
+    inputElement = (
+      <textarea
+        key={p.name}
+        name={p.name}
+        className={cn(
+          "focus:ring-4 ring-opacity-30 ring-green-primary transition-all outline-none min-w-full px-6 py-3 bg-black-primary bg-opacity-5 rounded-lg border border-black-primary border-opacity-10"
+        )}
+        placeholder={p.placeholder}
+        onChange={p.onChange}
+        onBlur={p.onBlur}
+        value={p.value}
+        autoComplete={p.autocomplete ? "on" : "off"}
+        rows={3}
+      />
     );
   } else if (p.type === "select") {
     inputElement = (

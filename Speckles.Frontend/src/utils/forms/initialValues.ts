@@ -1,3 +1,12 @@
+// address
+const initialValuesAddress = {
+  country: "",
+  state: "",
+  street: "",
+  city: "",
+  zip: "",
+};
+
 // assets
 export const initialValuesAssetStep1 = {
   name: "",
@@ -29,13 +38,7 @@ export const initialValuesRegisterStep2 = {
   confirmPassword: "",
 };
 
-export const initialValuesRegisterStep3 = {
-  country: "",
-  state: "",
-  street: "",
-  city: "",
-  zip: "",
-};
+export const initialValuesRegisterStep3 = initialValuesAddress;
 
 // files
 export const initialValuesFile = {
@@ -59,3 +62,18 @@ export const initialValuesTag = {
 export const initialValuesComment = {
   text: "",
 };
+
+// studios
+export const initialValuesStudioStep1 = {
+  logo: "",
+  name: "",
+  slug: "",
+};
+
+export const initialValuesStudioStep2 = {
+  about: "",
+  contactEmail: "",
+  paymentEmail: "",
+};
+
+export const initialValuesStudioStep3 = initialValuesAddress;

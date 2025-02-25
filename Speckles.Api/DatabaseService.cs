@@ -49,7 +49,7 @@ public class DatabaseService
         return _database.Users.FirstOrDefault(x => x.Email == email);
     }
 
-    public void CreateUser(RegisterBody body)
+    public void CreateUser(PostRegisterBody body)
     {
         var address = new Address()
         {
@@ -127,6 +127,51 @@ public class DatabaseService
             
             // Studio -> StudioDto
             .Adapt<StudioDto>();
+    }
+
+    public string CreateStudio(PostStudioBody body)
+    {
+        var address = new Address()
+        {
+            Country = body.country,
+            State = body.state,
+            City = body.city,
+            Zip = body.zip,
+            Street = body.street,
+        };
+
+        _database.Addresses.Add(address);
+        
+        var studio = new Studio()
+        {
+            About = body.about,
+            Name = body.name,
+            Slug = body.slug,
+            ContactEmail = body.contactEmail,
+            PaymentEmail = body.paymentEmail,
+            AddressId = address.AddressId
+        };
+
+        _database.Studios.Add(studio);
+        
+        var member = new StudioMember()
+        {
+            StudioId = studio.StudioId,
+            UserId = body.defaultMember
+        };
+
+        _database.StudioMembers.Add(member);
+        _database.SaveChanges();
+
+        return studio.StudioId;
+    }
+
+    public void DeleteStudio(string slug)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        
+        _database.Studios.Remove(studio!);
+        _database.SaveChanges();
     }
 
     public void CreateStudioMember(string slug, PostStudioMemberBody body)

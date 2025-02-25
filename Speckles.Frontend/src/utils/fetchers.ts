@@ -6,6 +6,7 @@ import { IAssetPostBody } from "@/types/dtos/Asset.types";
 import {
   IStudioMemberDeleteBody,
   IStudioMemberPostBody,
+  IStudioPostBody,
   IStudioPutBody,
 } from "@/types/dtos/Studio.types";
 import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
@@ -21,8 +22,16 @@ export async function fetchMyStudios(userId: string) {
   return fetcher({ url: `studios?userId=${userId}` });
 }
 
-export async function fetchStudio(studioId: string) {
-  return fetcher({ url: `studios/${studioId}` });
+export async function fetchStudio(slug: string) {
+  return fetcher({ url: `studios/${slug}` });
+}
+
+export async function postStudio(body: IStudioPostBody) {
+  return fetcher({ url: "studios", method: "POST", body });
+}
+
+export async function deleteStudio(slug: string) {
+  return fetcher({ url: `studios/${slug}`, method: "DELETE" });
 }
 
 export async function fetchStudioEarnings(slug: string, timeInterval: string) {

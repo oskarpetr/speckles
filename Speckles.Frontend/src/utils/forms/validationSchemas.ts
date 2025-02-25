@@ -18,6 +18,15 @@ export const passwordSchema = string()
   .matches(/[@$!%*?&#]/, "Password must contain at least one special character")
   .notOneOf(commonPasswords, "This password is too common");
 
+// address
+const addressSchema = object({
+  country: string().required("Country is required"),
+  state: string().required("State is required"),
+  street: string().required("Street is required"),
+  city: string().required("City is required"),
+  zip: string().required("ZIP is required"),
+});
+
 // assets
 const assetImageSchema = object().shape({
   imageId: string(),
@@ -71,13 +80,7 @@ export const registerSchemaStep2 = object({
     .required("Confirm password is required"),
 });
 
-export const registerSchemaStep3 = object({
-  country: string().required("Country is required"),
-  state: string().required("State is required"),
-  street: string().required("Street is required"),
-  city: string().required("City is required"),
-  zip: string().required("ZIP is required"),
-});
+export const registerSchemaStep3 = addressSchema;
 
 // files
 export const fileSchema = object().shape({
@@ -98,16 +101,33 @@ export const tagSchema = object().shape({
 });
 
 // studios
-export const studioSchema = object({
+export const studioSchemaStep1 = object({
   logo: mixed().required("Studio logo is required"),
   name: string().required("Studio name is required"),
   slug: string().required("Studio slug is required"),
 });
 
+export const studioSchemaStep2 = object({
+  about: string().required("Studio about is required"),
+  contactEmail: string()
+    .email("Studio contact email must be a valid email")
+    .required("Studio contact email is required"),
+  paymentEmail: string()
+    .email("Studio payment email must be a valid email")
+    .required("Studio payment email is required"),
+});
+
+export const studioSchemaStep3 = addressSchema;
+
+// studio settings
+export const studioSettingsSchema = studioSchemaStep1;
+
 // studio about
 export const studioAboutSchema = object({
   about: string().required("Studio about is required"),
-  contactEmail: string().email().required("Studio contact email is required"),
+  contactEmail: string()
+    .email("Studio contact email must be a valid email")
+    .required("Studio contact email is required"),
 });
 
 // comments

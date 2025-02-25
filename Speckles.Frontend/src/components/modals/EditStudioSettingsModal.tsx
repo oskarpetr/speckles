@@ -10,7 +10,7 @@ interface Props {
   setAvatarChangeDate: Dispatch<SetStateAction<Date>>;
 }
 
-export default function StudioSettingsModal({
+export default function EditStudioSettingsModal({
   studio,
   open,
   setOpen,
@@ -25,6 +25,7 @@ export default function StudioSettingsModal({
     <Modal title="Studio settings" open={open} setOpen={setOpen}>
       <EditStudioForm
         studioId={studio.studioId}
+        assetIds={studio.assets.map((asset) => asset.assetId)}
         name={studio.name}
         onSuccess={onSuccess}
         setAvatarChangeDate={setAvatarChangeDate}

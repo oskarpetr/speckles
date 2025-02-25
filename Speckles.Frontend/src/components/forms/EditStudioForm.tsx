@@ -2,15 +2,17 @@ import { Formik } from "formik";
 import Button from "../shared/Button";
 import Input from "./Input";
 import { useParams, useRouter } from "next/navigation";
-import { useStudioUpdate } from "@/hooks/useApi";
-import { studioSchema } from "@/utils/forms/validationSchemas";
+import { useStudioDelete, useStudioUpdate } from "@/hooks/useApi";
+import { studioSettingsSchema } from "@/utils/forms/validationSchemas";
 import AvatarSelector from "./AvatarSelector";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getStudioLogo } from "@/utils/images";
-import { uploadStudioLogo } from "@/utils/firebase/firebase-fns";
+import { deleteStudio, uploadStudioLogo } from "@/utils/firebase/firebase-fns";
+import DeleteModal from "../modals/DeleteModal";
 
 interface Props {
   studioId: string;
+  assetIds: string[];
   name: string;
   onSuccess: () => void;
   setAvatarChangeDate: Dispatch<SetStateAction<Date>>;
@@ -18,6 +20,7 @@ interface Props {
 
 export default function EditStudioForm({
   studioId,
+  assetIds,
   name,
   onSuccess,
   setAvatarChangeDate,
@@ -31,11 +34,17 @@ export default function EditStudioForm({
   // studio update
   const studioUpdate = useStudioUpdate(slug as string);
 
+  // studio delete
+  const studioDelete = useStudioDelete(slug as string);
+
   // logo
   const [logo, setLogo] = useState(getStudioLogo(studioId));
 
+  // delete modal
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   // validation schema for fields
-  const validationSchema = studioSchema;
+  const validationSchema = studioSettingsSchema;
 
   // initial values for fields
   const initialValues = {
@@ -62,6 +71,16 @@ export default function EditStudioForm({
     onSuccess();
   };
 
+  // on delete handler
+  const onDelete = async () => {
+    await studioDelete.mutateAsync();
+    await deleteStudio(studioId, assetIds);
+
+    onSuccess();
+
+    router.push("/studios");
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -75,15 +94,18 @@ export default function EditStudioForm({
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue,
       }: any) => (
         <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col gap-8">
             <AvatarSelector
               title="Logo"
-              avatarTitle={values.name}
-              avatarSubtitle={values.slug}
+              avatarTitle={values.name ? values.name : "Studio name"}
+              avatarSubtitle={values.slug ? `/${values.slug}` : "/slug"}
               avatar={logo}
               setAvatar={setLogo}
+              error={errors.logo}
+              touched={touched.logo}
             />
 
             <Input
@@ -100,7 +122,12 @@ export default function EditStudioForm({
             <Input
               title="Slug"
               name="slug"
-              onChange={handleChange}
+              onChange={(e) => {
+                setFieldValue(
+                  "slug",
+                  e.target.value.toLowerCase().replaceAll(" ", "-")
+                );
+              }}
               onBlur={handleBlur}
               value={values.slug}
               placeholder="Enter slug"
@@ -108,11 +135,30 @@ export default function EditStudioForm({
               touched={touched.slug}
             />
 
-            <Button
-              icon={{ name: "ArrowRight", iconDirection: "right" }}
-              text="Update studio"
-              loading={studioUpdate.isPending}
+            <DeleteModal
+              name={name}
+              phrase="Delete studio"
+              open={openDeleteModal}
+              setOpen={setOpenDeleteModal}
+              onDelete={onDelete}
             />
+
+            <div className="flex justify-between gap-6">
+              <Button
+                icon={{ name: "Trash", iconDirection: "right" }}
+                text="Delete studio"
+                type="danger"
+                onClick={() => setOpenDeleteModal(true)}
+                loading={studioDelete.isPending}
+                fullWidth
+              />
+              <Button
+                icon={{ name: "ArrowRight", iconDirection: "right" }}
+                text="Update studio"
+                loading={studioUpdate.isPending}
+                fullWidth
+              />
+            </div>
           </div>
         </form>
       )}

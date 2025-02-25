@@ -5,14 +5,14 @@ import Heading from "../shared/Heading";
 import { IStudio } from "@/types/dtos/Studio.types";
 import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toastSuccess } from "../shared/Toast";
 import Like from "../shared/Like";
 import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
 import { cn } from "@/utils/cn";
 import { layoutSectionPadding } from "../layout/LayoutSection";
-import StudioSettingsModal from "../modals/StudioSettingsModal";
+import EditStudioSettingsModal from "../modals/EditStudioSettingsModal";
 
 interface Props {
   studio: IStudio;
@@ -109,7 +109,7 @@ export default function StudioBanner({ studio }: Props) {
             />
           )}
 
-          <StudioSettingsModal
+          <EditStudioSettingsModal
             studio={studio}
             open={openSettingsModal}
             setOpen={setOpenSettingsModal}

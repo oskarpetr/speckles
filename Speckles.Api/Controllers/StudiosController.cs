@@ -81,9 +81,12 @@ public class StudiosController : Controller
     /// <response code="201">Creates studio.</response>
     [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Studios.POST_STUDIO)]
-    public IActionResult PostStudio()
+    public IActionResult PostStudio([FromBody, Required] PostStudioBody body)
     {
-        return Ok();
+        string studioId = _database.CreateStudio(body);
+        ApiResponse response = new ApiResponse(new { studioId });
+        
+        return Ok(response);
     }
     
     /// <summary>
@@ -128,6 +131,8 @@ public class StudiosController : Controller
 
         if (!studioExists)
             return NotFound(new ApiError("Studio", slug));
+        
+        _database.DeleteStudio(slug);
 
         return NoContent();
     }

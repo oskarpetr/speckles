@@ -25,6 +25,20 @@ export interface IStudioShort {
   slug: string;
 }
 
+export interface IStudioPostBody {
+  name: string;
+  slug: string;
+  about: string;
+  contactEmail: string;
+  paymentEmail: string;
+  country: string;
+  state: string;
+  city: string;
+  zip: string;
+  street: string;
+  defaultMember: string;
+}
+
 export interface IStudioMemberPostBody {
   email: string;
 }

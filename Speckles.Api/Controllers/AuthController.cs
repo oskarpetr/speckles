@@ -31,7 +31,7 @@ public class AuthController : Controller
     [ProducesResponseType(201)]
     [ProducesResponseType(typeof(ApiError), 409)]
     [HttpPost(ApiEndpoints.Auth.REGISTER)]
-    public IActionResult Register([FromBody] RegisterBody body)
+    public IActionResult Register([FromBody] PostRegisterBody body)
     {
         var usernameExists = _database.UserUsernameExists(body.username);
         
@@ -60,7 +60,7 @@ public class AuthController : Controller
     [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 201)]
     [ProducesResponseType(typeof(ApiError), 401)]
     [HttpPost(ApiEndpoints.Auth.LOGIN)]
-    public IActionResult Login([FromBody] LoginBody body)
+    public IActionResult Login([FromBody] PostLoginBody body)
     {
         var user = _database.GetUserByEmail(body.email);
         

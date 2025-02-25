@@ -41,6 +41,7 @@ export const MY_STUDIOS_QUERY_KEY = (userId: string) => [
   userId,
 ];
 export const STUDIO_QUERY_KEY = (slug: string) => ["GET", "studios", slug];
+export const STUDIO_MUTATION_KEY = ["POST", "studios"];
 export const STUDIO_UPDATE_KEY = (slug: string) => ["PUT", "studios", slug];
 export const STUDIO_DELETE_KEY = (slug: string) => ["DELETE", "studios", slug];
 export const STUDIO_EARNINGS_QUERY_KEY = (

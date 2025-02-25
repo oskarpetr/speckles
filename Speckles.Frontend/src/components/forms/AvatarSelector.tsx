@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import Section from "../shared/Section";
 import Icon from "../shared/Icon";
 import { cn } from "@/utils/cn";
+import FormError from "./FormError";
 
 interface Props {
   title: string;
@@ -11,6 +12,8 @@ interface Props {
   setAvatar:
     | Dispatch<SetStateAction<string | null>>
     | Dispatch<SetStateAction<string>>;
+  error: string | undefined;
+  touched: boolean;
 }
 
 export default function AvatarSelector({
@@ -19,6 +22,8 @@ export default function AvatarSelector({
   avatarSubtitle,
   avatar,
   setAvatar,
+  error,
+  touched,
 }: Props) {
   // input ref
   const inputRef = useRef<HTMLInputElement>(null);
@@ -82,9 +87,11 @@ export default function AvatarSelector({
 
         <div>
           <div className="font-bold text-lg">{avatarTitle}</div>
-          <div className="opacity-50">/{avatarSubtitle}</div>
+          <div className="opacity-50">{avatarSubtitle}</div>
         </div>
       </div>
+
+      <FormError error={error} touched={touched} />
     </Section>
   );
 }

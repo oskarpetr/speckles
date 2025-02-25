@@ -1,5 +1,6 @@
 import { IPayment } from "@/types/dtos/Payment.types";
 import { postPayout } from "@/utils/fetchers";
+import { AMOUNT_TO_STUDIO } from "@/utils/price";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -22,7 +23,10 @@ async function sendPayout(payment: IPayment) {
     items: [
       {
         recipient_type: "EMAIL",
-        amount: { value: payment.amount, currency: payment.currencyName },
+        amount: {
+          value: payment.amount * AMOUNT_TO_STUDIO,
+          currency: payment.currencyName,
+        },
         receiver: payment.paymentEmail,
         note: payment.assetName,
         sender_item_id: `item_${Date.now()}`,
@@ -31,7 +35,7 @@ async function sendPayout(payment: IPayment) {
   };
 
   try {
-    const res = await postPayout(payout);
+    await postPayout(payout);
   } catch (error) {
     throw error;
   }

@@ -42,7 +42,7 @@ const studioMessages = {
   // studios
   createdStudio: "Studio created",
   updatedStudio: "Studio updated",
-  removedStudio: "Studio removed",
+  deletedStudio: "Studio deleted",
 
   // assets
   addedAsset: "Asset added",

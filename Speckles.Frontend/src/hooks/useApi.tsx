@@ -14,6 +14,7 @@ import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
 import {
   IStudio,
+  IStudioPostBody,
   IStudioPutBody,
   IStudioShort,
 } from "@/types/dtos/Studio.types";
@@ -22,6 +23,7 @@ import { IUser } from "@/types/dtos/User.types";
 import {
   deleteAsset,
   deleteComment,
+  deleteStudio,
   deleteStudioMember,
   fetchAsset,
   fetchAssets,
@@ -52,6 +54,7 @@ import {
   postPayment,
   postRegister,
   postSaved,
+  postStudio,
   postStudioMember,
   putStudio,
   updateComment,
@@ -84,9 +87,11 @@ import {
   SAVED_QUERY_KEY,
   SEARCH_PROMPTS_QUERY_KEY,
   SEARCH_QUERY_KEY,
+  STUDIO_DELETE_KEY,
   STUDIO_EARNINGS_QUERY_KEY,
   STUDIO_MEMBER_DELETE_KEY,
   STUDIO_MEMBER_MUTATION_KEY,
+  STUDIO_MUTATION_KEY,
   STUDIO_QUERY_KEY,
   STUDIO_UPDATE_KEY,
   STUDIOS_QUERY_KEY,
@@ -274,6 +279,40 @@ export function useStudioQuery(slug: string) {
   });
 
   return studioQuery;
+}
+
+export function useStudioMutation() {
+  // session
+  const { data: session } = useSession();
+  const userId = session?.user.userId ?? "";
+
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const studioMutation = useMutation({
+    mutationKey: STUDIO_MUTATION_KEY,
+    mutationFn: (body: IStudioPostBody) => postStudio(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: MY_STUDIOS_QUERY_KEY(userId),
+      });
+      toastSuccess(toastMessages.studio.createdStudio);
+    },
+  });
+
+  return studioMutation;
+}
+
+export function useStudioDelete(slug: string) {
+  // mutation
+  const studioDelete = useMutation({
+    mutationKey: STUDIO_DELETE_KEY(slug),
+    mutationFn: () => deleteStudio(slug),
+    onSuccess: () => toastSuccess(toastMessages.studio.deletedStudio),
+  });
+
+  return studioDelete;
 }
 
 export function useMyStudiosQuery() {

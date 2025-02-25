@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 
 interface Props {
   onClick?: () => void;
-  type?: "primary" | "secondary" | "cancel" | "white" | "black";
+  type?: "primary" | "secondary" | "cancel" | "white" | "black" | "danger";
   submitType?: "submit" | "button";
   size?: "small" | "normal";
 
@@ -64,6 +64,8 @@ export default function Button({
           ? "bg-neutral-100 border border-neutral-200 hover:bg-neutral-200 text-black-primary ring-white"
           : type === "black"
           ? "bg-black-primary hover:bg-neutral-900 text-white ring-neutral-900"
+          : type === "danger"
+          ? "bg-red-700 hover:bg-red-800 ring-red-500 *:font-bold"
           : "",
         fullWidth ? "w-full" : "w-fit",
         icon.iconDirection === "left" ? "flex-row" : "flex-row-reverse",

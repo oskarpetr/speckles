@@ -7,7 +7,6 @@ import {
   ref,
   uploadBytes,
   uploadBytesResumable,
-  uploadString,
 } from "firebase/storage";
 import { storage } from "./firebase";
 import { Dispatch, SetStateAction } from "react";
@@ -90,6 +89,15 @@ export async function deleteAsset(assetId: string) {
   });
 
   await Promise.all(subfolderPromises);
+}
+
+// delete studio
+export async function deleteStudio(studioId: string, assetIds: string[]) {
+  const logoRef = ref(storage, `logos/${studioId}.webp`);
+  await deleteObject(logoRef);
+
+  const deletePromises = assetIds.map((assetId) => deleteAsset(assetId));
+  await Promise.all(deletePromises);
 }
 
 // convert base64 to blob

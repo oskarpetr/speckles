@@ -1,6 +1,6 @@
 namespace Speckles.Api.BodyModels;
 
-public class RegisterBody
+public class PostRegisterBody
 {
     public string fullName { get; set; }
     public string email { get; set; }

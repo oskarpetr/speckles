@@ -9,7 +9,8 @@ public class Studio
     public string Slug { get; set; }
     public string About { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-    public Address Address { get; set; }
+    public string AddressId { get; set; }
+    public virtual Address Address { get; set; }
     
     public ICollection<Project> Projects { get; set; }
     public ICollection<StudioMember> Members { get; set; } = new List<StudioMember>();

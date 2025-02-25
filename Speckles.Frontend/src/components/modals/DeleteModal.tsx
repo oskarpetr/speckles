@@ -28,7 +28,7 @@ export default function DeleteModal({
       <p className="leading-relaxed">
         Are you sure you want to remove "{name}"? This action cannot be undone.
       </p>
-      <Button text={phrase} onClick={onSuccess} />
+      <Button text={phrase} onClick={onSuccess} type="danger" />
     </Modal>
   );
 }

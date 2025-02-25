@@ -82,3 +82,7 @@ select {
   -moz-appearance: none;
   background: transparent;
 }
+
+textarea {
+  resize: none;
+}

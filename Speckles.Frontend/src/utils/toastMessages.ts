@@ -24,7 +24,7 @@ const userMessages = {
   removedFromBasket: "Asset removed from basket",
 
   // profile
-  updatedAvatar: "Avatar updated",
+  updatedProfile: "Profile updated",
 
   // register
   register: "You have been registered",

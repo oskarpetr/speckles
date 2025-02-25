@@ -19,13 +19,13 @@ export const passwordSchema = string()
   .notOneOf(commonPasswords, "This password is too common");
 
 // address
-const addressSchema = object({
+const addressSchema = {
   country: string().required("Country is required"),
   state: string().required("State is required"),
   street: string().required("Street is required"),
   city: string().required("City is required"),
   zip: string().required("ZIP is required"),
-});
+};
 
 // assets
 const assetImageSchema = object().shape({
@@ -101,13 +101,13 @@ export const tagSchema = object().shape({
 });
 
 // studios
-export const studioSchemaStep1 = object({
+export const studioSchemaStep1 = {
   logo: mixed().required("Studio logo is required"),
   name: string().required("Studio name is required"),
   slug: string().required("Studio slug is required"),
-});
+};
 
-export const studioSchemaStep2 = object({
+export const studioSchemaStep2 = {
   about: string().required("Studio about is required"),
   contactEmail: string()
     .email("Studio contact email must be a valid email")
@@ -115,12 +115,15 @@ export const studioSchemaStep2 = object({
   paymentEmail: string()
     .email("Studio payment email must be a valid email")
     .required("Studio payment email is required"),
-});
+};
 
 export const studioSchemaStep3 = addressSchema;
 
-// studio settings
-export const studioSettingsSchema = studioSchemaStep1;
+export const studioSchema = object({
+  ...studioSchemaStep1,
+  ...studioSchemaStep2,
+  ...addressSchema,
+});
 
 // studio about
 export const studioAboutSchema = object({
@@ -133,4 +136,15 @@ export const studioAboutSchema = object({
 // comments
 export const commentSchema = object({
   text: string().required("Comment text is required"),
+});
+
+// users
+export const userSchema = object({
+  avatar: mixed().required("User avatar is required"),
+  fullName: string().required("Full name is required"),
+  username: string().required("Username is required"),
+  email: string()
+    .email("Email address must be in a valid format")
+    .required("Email address is required"),
+  ...addressSchema,
 });

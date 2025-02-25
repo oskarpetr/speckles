@@ -41,6 +41,8 @@ public static class ApiEndpoints
     public static class Users
     {
         public const string GET_USER = "users/{username}";
+        public const string PUT_USER = "users/{username}";
+        public const string DELETE_USER = "users/{username}";
     }
 
     public static class Saved

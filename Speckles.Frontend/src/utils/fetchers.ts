@@ -12,6 +12,7 @@ import {
 import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import { IOrderPostBody } from "@/types/dtos/Order.types";
+import { IUserPutBody } from "@/types/dtos/User.types";
 
 // studios
 export async function fetchStudios() {
@@ -106,6 +107,10 @@ export async function deleteAsset(assetId: string) {
 // user
 export async function fetchUser(username: string) {
   return fetcher({ url: `users/${username}` });
+}
+
+export async function putUser(username: string, body: IUserPutBody) {
+  return fetcher({ url: `users/${username}`, method: "PUT", body });
 }
 
 // promotions

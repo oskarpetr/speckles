@@ -10,7 +10,6 @@ public class MapsterConfiguration
     {
         // User -> UserDto
         TypeAdapterConfig<User, UserDto>.NewConfig()
-            .Map(dest => dest.AddressShort, src => src.Address.Adapt<AddressShortDto>())
             .Map(dest => dest.Studios, src => src.Studios.Adapt<List<StudioShortDto>>())
             .Map(dest => dest.Following, src => src.Following.Adapt<List<StudioShortDto>>());
 

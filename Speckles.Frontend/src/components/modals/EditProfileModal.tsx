@@ -1,32 +1,29 @@
 import { Dispatch, SetStateAction } from "react";
 import Modal from "../shared/Modal";
-import EditStudioForm from "../forms/EditStudioForm";
-import { IStudio } from "@/types/dtos/Studio.types";
+import EditProfileForm from "../forms/EditProfileForm";
+import { IUser } from "@/types/dtos/User.types";
 
 interface Props {
-  studio: IStudio;
+  user: IUser;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setAvatarChangeDate: Dispatch<SetStateAction<Date>>;
 }
 
-export default function EditStudioSettingsModal({
-  studio,
+export default function EditProfileModal({
+  user,
   open,
   setOpen,
   setAvatarChangeDate,
 }: Props) {
-  // on success
   const onSuccess = () => {
     setOpen(false);
   };
 
   return (
-    <Modal title="Studio settings" open={open} setOpen={setOpen}>
-      <EditStudioForm
-        studioId={studio.studioId}
-        assetIds={studio.assets.map((asset) => asset.assetId)}
-        name={studio.name}
+    <Modal title="Edit profile" open={open} setOpen={setOpen}>
+      <EditProfileForm
+        user={user}
         onSuccess={onSuccess}
         setAvatarChangeDate={setAvatarChangeDate}
       />

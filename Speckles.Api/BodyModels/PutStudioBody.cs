@@ -8,6 +8,10 @@ public class PutStudioBody
     public string? ContactEmail { get; set; }
     public string? Slug { get; set; }
     public string? About { get; set; }
-    public Address? Address { get; set; }
+    public string? country { get; set; }
+    public string? state { get; set; }
+    public string? city { get; set; }
+    public string? zip { get; set; }
+    public string? street { get; set; }
     public List<Project>? Projects { get; set; }
 }

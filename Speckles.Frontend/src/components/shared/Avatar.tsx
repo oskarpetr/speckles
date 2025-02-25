@@ -8,12 +8,18 @@ interface Props {
   user: IUserShort;
   size: number;
   link?: boolean;
+  changeDate?: Date;
 }
 
-export default function Avatar({ user, size, link = false }: Props) {
+export default function Avatar({
+  user,
+  size,
+  link = false,
+  changeDate,
+}: Props) {
   const AvatarImage = () => (
     <Image
-      src={getAvatar(user.userId)}
+      src={getAvatar(user.userId, changeDate)}
       alt={getAvatarAlt(user.fullName)}
       width={100}
       height={100}

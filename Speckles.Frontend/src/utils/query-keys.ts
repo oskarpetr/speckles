@@ -31,6 +31,7 @@ export const ORDER_MUTATION_KEY = ["POST", "orders"];
 
 // user
 export const USER_QUERY_KEY = (username: string) => ["GET", "users", username];
+export const USER_PUT_KEY = ["PUT", "users"];
 
 // studios
 export const STUDIOS_QUERY_KEY = ["GET", "studios"];

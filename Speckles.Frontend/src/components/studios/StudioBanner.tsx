@@ -5,20 +5,27 @@ import Heading from "../shared/Heading";
 import { IStudio } from "@/types/dtos/Studio.types";
 import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { toastSuccess } from "../shared/Toast";
 import Like from "../shared/Like";
 import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
 import { cn } from "@/utils/cn";
 import { layoutSectionPadding } from "../layout/LayoutSection";
-import EditStudioSettingsModal from "../modals/EditStudioSettingsModal";
+import EditStudioModal from "../modals/EditStudioModal";
+import DeleteModal from "../modals/DeleteModal";
+import { deleteStudio } from "@/utils/firebase/firebase-fns";
+import { useRouter } from "next/navigation";
+import { useStudioDelete } from "@/hooks/useApi";
 
 interface Props {
   studio: IStudio;
 }
 
 export default function StudioBanner({ studio }: Props) {
+  // router
+  const router = useRouter();
+
   // session
   const { data: session } = useSession();
 
@@ -28,8 +35,14 @@ export default function StudioBanner({ studio }: Props) {
   // settings modal
   const [openSettingsModal, setOpenSettingsModal] = useState(false);
 
+  // delete modal
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   // avatar change date
   const [avatarChangeDate, setAvatarChangeDate] = useState(new Date());
+
+  // studio delete
+  const studioDelete = useStudioDelete(studio.slug);
 
   // permission
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
@@ -42,6 +55,17 @@ export default function StudioBanner({ studio }: Props) {
       followed ? `You unfollowed ${studio.name}` : `You followed ${studio.name}`
     );
   }
+
+  // on delete handler
+  const onDelete = async () => {
+    await studioDelete.mutateAsync();
+    await deleteStudio(
+      studio.studioId,
+      studio.assets.map((asset) => asset.assetId)
+    );
+
+    router.push("/studios");
+  };
 
   return (
     <div className="relative">
@@ -100,20 +124,38 @@ export default function StudioBanner({ studio }: Props) {
 
         <FadeIn delay={0.1}>
           {canEdit && (
-            <Button
-              icon={{ name: "GearSix" }}
-              text="Settings"
-              type="white"
-              size="small"
-              onClick={() => setOpenSettingsModal(true)}
-            />
+            <div className="flex gap-4">
+              <Button
+                icon={{ name: "Trash" }}
+                text="Delete"
+                type="white"
+                size="small"
+                onClick={() => setOpenDeleteModal(true)}
+              />
+
+              <Button
+                icon={{ name: "GearSix" }}
+                text="Settings"
+                type="white"
+                size="small"
+                onClick={() => setOpenSettingsModal(true)}
+              />
+            </div>
           )}
 
-          <EditStudioSettingsModal
+          <EditStudioModal
             studio={studio}
             open={openSettingsModal}
             setOpen={setOpenSettingsModal}
             setAvatarChangeDate={setAvatarChangeDate}
+          />
+
+          <DeleteModal
+            name={studio.name}
+            phrase="Delete studio"
+            open={openDeleteModal}
+            setOpen={setOpenDeleteModal}
+            onDelete={onDelete}
           />
           {/* <div className="text-white">{studio.contactEmail}</div> */}
           {/* <div className="flex items-center gap-2">

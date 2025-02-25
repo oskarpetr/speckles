@@ -19,7 +19,7 @@ import {
   IStudioShort,
 } from "@/types/dtos/Studio.types";
 import { ITag } from "@/types/dtos/Tag.types";
-import { IUser } from "@/types/dtos/User.types";
+import { IUser, IUserPutBody } from "@/types/dtos/User.types";
 import {
   deleteAsset,
   deleteComment,
@@ -57,6 +57,7 @@ import {
   postStudio,
   postStudioMember,
   putStudio,
+  putUser,
   updateComment,
 } from "@/utils/fetchers";
 import { getTotalPrice } from "@/utils/price";
@@ -259,6 +260,25 @@ export function useUserQuery(username: string) {
   });
 
   return userQuery;
+}
+
+export function useUserUpdate(username: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const userMutation = useMutation({
+    mutationKey: USER_QUERY_KEY(username),
+    mutationFn: (body: IUserPutBody) => putUser(username, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: USER_QUERY_KEY(username),
+      });
+      toastSuccess(toastMessages.user.updatedProfile);
+    },
+  });
+
+  return userMutation;
 }
 
 export function useStudiosQuery() {

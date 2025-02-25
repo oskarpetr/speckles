@@ -25,3 +25,14 @@ export interface IUserAddressShort {
   fullName: string;
   address: IAddress;
 }
+
+export interface IUserPutBody {
+  fullName: string;
+  username: string;
+  email: string;
+  country: string;
+  state: string;
+  city: string;
+  zip: string;
+  street: string;
+}

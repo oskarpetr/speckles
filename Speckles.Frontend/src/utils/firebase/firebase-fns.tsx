@@ -19,6 +19,14 @@ export async function uploadStudioLogo(studioId: string, base64: string) {
   await uploadBytes(logoRef, blob, { contentType: "image/webp" });
 }
 
+// upload avatar
+export async function uploadAvatar(userId: string, base64: string) {
+  const avatarRef = ref(storage, `avatars/${userId}.webp`);
+  const blob = base64ToBlob(base64, "image/webp");
+
+  await uploadBytes(avatarRef, blob, { contentType: "image/webp" });
+}
+
 // upload asset images
 export async function uploadAssetImages(
   assetId: string,

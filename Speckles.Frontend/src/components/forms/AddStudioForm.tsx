@@ -2,6 +2,11 @@ import { Formik, FormikProps, FormikValues } from "formik";
 import { useRouter } from "next/navigation";
 import AvatarSelector from "./AvatarSelector";
 import { useEffect, useRef, useState } from "react";
+import FormButtons, { goForward } from "./FormButtons";
+import Input from "./Input";
+import { useStudioMutation } from "@/hooks/useApi";
+import { useSession } from "next-auth/react";
+import { uploadStudioLogo } from "@/utils/firebase/firebase-fns";
 import {
   studioSchemaStep1,
   studioSchemaStep2,
@@ -12,11 +17,7 @@ import {
   initialValuesStudioStep2,
   initialValuesStudioStep3,
 } from "@/utils/forms/initialValues";
-import FormButtons, { goForward } from "./FormButtons";
-import Input from "./Input";
-import { useStudioMutation } from "@/hooks/useApi";
-import { useSession } from "next-auth/react";
-import { uploadStudioLogo } from "@/utils/firebase/firebase-fns";
+import { object } from "yup";
 
 interface Props {
   onSuccess: () => void;
@@ -44,9 +45,9 @@ export default function AddStudioForm({ onSuccess }: Props) {
 
   // validation schema for fields
   const validationSchema = [
-    studioSchemaStep1,
-    studioSchemaStep2,
-    studioSchemaStep3,
+    object(studioSchemaStep1),
+    object(studioSchemaStep2),
+    object(studioSchemaStep3),
   ];
 
   // initial values for fields

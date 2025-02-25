@@ -74,6 +74,49 @@ public class DatabaseService
 
         _database.SaveChanges();
     }
+
+    public UserDto GetUser(string username)
+    {
+       return _database.Users
+            .Include(x => x.Following).ThenInclude(x => x.Studio)
+            .Include(x => x.Studios).ThenInclude(x => x.Studio)
+            .Include(x => x.Address)
+            
+            // Search user by username
+            .FirstOrDefault(x => x.Username == username)
+            
+            // User -> UserDto
+            .Adapt<UserDto>();
+    }
+
+    public void UpdateUser(string username, PutUserBody body)
+    {
+        var user = _database.Users
+            .Include(x => x.Address)
+            .FirstOrDefault(x => x.Username == username)!;
+
+        if(body.username != null) user.Username = body.username;
+        if(body.username != null) user.FullName = body.fullName;
+        if(body.email != null) user.Email = body.email;
+        if (body is {street: not null, city: not null, state: not null, country: not null, zip: not null})
+        {
+            user.Address.Street = body.street;
+            user.Address.City = body.city;
+            user.Address.State = body.state;
+            user.Address.Country = body.country;
+            user.Address.Zip = body.zip;
+        }
+
+        _database.SaveChanges();
+    }
+
+    public void DeleteUser(string username)
+    {
+        var user = _database.Users.FirstOrDefault(x => x.Username == username);
+        
+        _database.Users.Remove(user!);
+        _database.SaveChanges();
+    }
     
     public bool StudioExists(string slug)
     {
@@ -203,31 +246,37 @@ public class DatabaseService
 
     public void UpdateStudio(string slug, PutStudioBody body)
     {
-        var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug);
+        var studio = _database.Studios
+            .Include(x => x.Address)
+            .FirstOrDefault(x => x.Slug == slug)!;
 
         if (body.Name != null)
         {
-            studio!.Name = body.Name;
+            studio.Name = body.Name;
         }
         
         if (body.ContactEmail != null)
         {
-            studio!.ContactEmail = body.ContactEmail;
+            studio.ContactEmail = body.ContactEmail;
         }
         
         if (body.Slug != null)
         {
-            studio!.Slug = body.Slug;
+            studio.Slug = body.Slug;
         }
         
         if (body.About != null)
         {
-            studio!.About = body.About;
+            studio.About = body.About;
         }
         
-        if (body.Address != null)
+        if (body is { street: not null, city: not null, state: not null, country: not null, zip: not null })
         {
-            studio!.Address = body.Address;
+            studio.Address.Street = body.street;
+            studio.Address.City = body.city;
+            studio.Address.State = body.state;
+            studio.Address.Country = body.country;
+            studio.Address.Zip = body.zip;
         }
         
         if (body.Projects != null)

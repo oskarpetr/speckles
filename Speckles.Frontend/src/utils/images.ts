@@ -2,9 +2,9 @@ const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export function getStudioLogo(studioId: string, date?: Date) {
   const uri = encodeURIComponent(`logos/${studioId}.webp`);
-  const timestamp = date ? `date=${date.toISOString()}` : "";
+  const timestamp = date ? `&date=${date.toISOString()}` : "";
 
-  return `${STORAGE_URL}/${uri}?alt=media&${timestamp}`;
+  return `${STORAGE_URL}/${uri}?alt=media${timestamp}`;
 }
 
 export function getAssetImage(assetId: string, imageId: string) {
@@ -12,9 +12,11 @@ export function getAssetImage(assetId: string, imageId: string) {
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 
-export function getAvatar(userId: string) {
+export function getAvatar(userId: string, date?: Date) {
   const uri = encodeURIComponent(`avatars/${userId}.webp`);
-  return `${STORAGE_URL}/${uri}?alt=media`;
+  const timestamp = date ? `&date=${date.toISOString()}` : "";
+
+  return `${STORAGE_URL}/${uri}?alt=media${timestamp}`;
 }
 
 export function getAssetFile(assetId: string, fileId: string) {

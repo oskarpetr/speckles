@@ -77,3 +77,9 @@ export const initialValuesStudioStep2 = {
 };
 
 export const initialValuesStudioStep3 = initialValuesAddress;
+
+export const initialValuesStudio = {
+  ...initialValuesStudioStep1,
+  ...initialValuesStudioStep2,
+  ...initialValuesAddress,
+};

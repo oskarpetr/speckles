@@ -8,9 +8,10 @@ import NoItemsYet from "../shared/NoItemsYet";
 
 interface Props {
   assets: IAssetShort[];
+  canEdit?: boolean;
 }
 
-export default function StudioAssets({ assets }: Props) {
+export default function StudioAssets({ assets, canEdit }: Props) {
   const [selectedTag, setSelectedTag] = useState("all");
 
   // assets by tag
@@ -45,6 +46,7 @@ export default function StudioAssets({ assets }: Props) {
               assets={assets}
               tags={assetsByTag}
               selectedTag={selectedTag}
+              canEdit={canEdit}
             />
           </div>
         </Fragment>

@@ -124,3 +124,9 @@ export const LICENSES_QUERY_KEY = ["GET", "licenses"];
 
 // payments
 export const PAYMENT_MUTATION_KEY = ["POST", "payments"];
+
+// follows
+export const FOLLOW_MUTATION_KEY = ["POST", "follows"];
+
+// avatar
+export const AVATAR_QUERY_KEY = (userId: string) => ["GET", "avatar", userId];

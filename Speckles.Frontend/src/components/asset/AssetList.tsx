@@ -10,6 +10,7 @@ interface Props {
   delay?: number;
   skeleton?: boolean;
   menu?: boolean;
+  canEdit?: boolean;
 }
 
 export default function AssetList({
@@ -17,6 +18,7 @@ export default function AssetList({
   delay = 0,
   skeleton = false,
   menu,
+  canEdit,
 }: Props) {
   return (
     <Grid>
@@ -28,7 +30,7 @@ export default function AssetList({
               key={`asset_${asset.assetId}`}
               delay={gridCardDelay(delay, index)}
             >
-              <AssetItem asset={asset} menu={menu} />
+              <AssetItem asset={asset} menu={menu} canEdit={canEdit} />
             </FadeIn>
           ))
         ) : (

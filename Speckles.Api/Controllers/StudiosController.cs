@@ -58,14 +58,14 @@ public class StudiosController : Controller
     [ProducesResponseType(typeof(ApiResponse<StudioDto>), 200)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIO)]
-    public IActionResult GetStudio(string slug)
+    public IActionResult GetStudio(string slug, [FromQuery] string? userId)
     {
         var studioExists = _database.StudioExists(slug);
         
         if (!studioExists)
             return NotFound(new ApiError("Studio", slug));
         
-        var studio = _database.GetStudio(slug);
+        var studio = _database.GetStudio(slug, userId);
         var response = new ApiResponse(studio);
         
         return Ok(response);

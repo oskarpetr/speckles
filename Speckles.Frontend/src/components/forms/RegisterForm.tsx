@@ -1,6 +1,6 @@
-import { Formik } from "formik";
+import { Formik, FormikProps, FormikValues } from "formik";
 import Input from "./Input";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   registerSchemaStep1,
   registerSchemaStep2,
@@ -15,6 +15,18 @@ import {
   initialValuesRegisterStep3,
 } from "@/utils/forms/initialValues";
 import bcrypt from "bcryptjs-react";
+import { useSession } from "next-auth/react";
+import {
+  getLocalBasket,
+  getLocalFollowing,
+  getLocalSaved,
+  localBasketDeleteAll,
+  localFollowingDeleteAll,
+  localSavedDeleteAll,
+} from "@/utils/local";
+import { IRegisterPostBody } from "@/types/dtos/Auth.types";
+import AvatarSelector from "./AvatarSelector";
+import { uploadAvatar } from "@/utils/firebase/firebase-fns";
 
 interface Props {
   step: number;
@@ -30,6 +42,12 @@ export default function RegisterForm({ step, setStep }: Props) {
 
   // register mutation
   const registerMutation = useRegisterMutation();
+
+  // formik ref
+  const formikRef = useRef<FormikProps<FormikValues>>(null);
+
+  // avatar state
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   // validation schemas
   const validationSchemas = [
@@ -47,29 +65,52 @@ export default function RegisterForm({ step, setStep }: Props) {
 
   // on submit handler
   const onSubmit = async (values: any) => {
-    if (step < maxSteps) {
-      goForward(step, setStep, maxSteps);
-    } else {
+    goForward(step, setStep, maxSteps);
+
+    if (step === maxSteps) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { confirmPassword, password, ...data } = values;
+      const { confirmPassword, password, avatar, ...data } = values;
 
       const encryptedPassword = await bcrypt.hashSync(
         password,
         bcrypt.genSaltSync(10)
       );
 
-      await registerMutation.mutateAsync({
+      const notLoggedInteractions = {
+        basketAssets: getLocalBasket(),
+        savedAssets: getLocalSaved(),
+        following: getLocalFollowing(),
+      };
+
+      const body: IRegisterPostBody = {
         ...data,
         password: encryptedPassword,
-      });
+        ...notLoggedInteractions,
+      };
+
+      const res = await registerMutation.mutateAsync(body);
+      const userId = res.data.userId;
+
+      // upload avatar
+      uploadAvatar(userId, avatar);
+
       router.push("/login");
+
+      localBasketDeleteAll();
+      localSavedDeleteAll();
+      localFollowingDeleteAll();
     }
   };
+
+  useEffect(() => {
+    formikRef.current?.setFieldValue("avatar", avatar);
+  }, [avatar]);
 
   return (
     <Formik
       initialValues={initialValues[step - 1]}
       validationSchema={validationSchemas[step - 1]}
+      innerRef={formikRef}
       onSubmit={onSubmit}
     >
       {({
@@ -110,6 +151,18 @@ export default function RegisterForm({ step, setStep }: Props) {
 
           {step === 2 && (
             <div className="flex flex-col gap-8">
+              <AvatarSelector
+                avatar={avatar}
+                setAvatar={setAvatar}
+                avatarTitle={values.fullName}
+                avatarSubtitle={
+                  values.username ? `@${values.username}` : `@username`
+                }
+                title="Avatar"
+                error={errors.avatar}
+                touched={touched.avatar}
+              />
+
               <Input
                 title="Username"
                 name="username"

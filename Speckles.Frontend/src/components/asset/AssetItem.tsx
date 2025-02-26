@@ -18,6 +18,7 @@ interface Props {
   type?: "asset" | "order";
   orderId?: string;
   menu?: boolean;
+  canEdit?: boolean;
 }
 
 export default function AssetItem({
@@ -25,6 +26,7 @@ export default function AssetItem({
   type = "asset",
   orderId,
   menu = false,
+  canEdit,
 }: Props) {
   // slug param
   const { slug } = useParams();
@@ -68,6 +70,7 @@ export default function AssetItem({
           type === "asset" ? `/assets/${asset.assetId}` : `/orders/${orderId}`
         }
         menuItems={menu ? menuItems : undefined}
+        canEdit={canEdit}
         imageSrc={src}
         imageAlt={getAssetThumbnailAlt(asset.name)}
       />

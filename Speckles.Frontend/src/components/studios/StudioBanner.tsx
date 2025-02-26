@@ -5,7 +5,7 @@ import Heading from "../shared/Heading";
 import { IStudio } from "@/types/dtos/Studio.types";
 import FadeIn from "../animation/FadeIn";
 import Button from "../shared/Button";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { toastSuccess } from "../shared/Toast";
 import Like from "../shared/Like";
 import { canEditStudio } from "@/utils/permissions";
@@ -17,6 +17,7 @@ import DeleteModal from "../modals/DeleteModal";
 import { deleteStudio } from "@/utils/firebase/firebase-fns";
 import { useRouter } from "next/navigation";
 import { useStudioDelete } from "@/hooks/useApi";
+import StudioFollow from "./StudioFollow";
 
 interface Props {
   studio: IStudio;
@@ -28,9 +29,6 @@ export default function StudioBanner({ studio }: Props) {
 
   // session
   const { data: session } = useSession();
-
-  // followed state
-  const [followed, setFollowed] = useState(false);
 
   // settings modal
   const [openSettingsModal, setOpenSettingsModal] = useState(false);
@@ -46,15 +44,6 @@ export default function StudioBanner({ studio }: Props) {
 
   // permission
   const canEdit = canEditStudio(studio, session?.user.userId ?? "");
-
-  // toggle follow
-  function toggleFollow() {
-    setFollowed(!followed);
-
-    toastSuccess(
-      followed ? `You unfollowed ${studio.name}` : `You followed ${studio.name}`
-    );
-  }
 
   // on delete handler
   const onDelete = async () => {
@@ -97,21 +86,11 @@ export default function StudioBanner({ studio }: Props) {
               className="w-24 h-24 rounded-full object-cover"
             />
 
-            <div className="absolute -top-2 -right-3">
-              <Button
-                type="white"
-                size="small"
-                circle={true}
-                onClick={toggleFollow}
-              >
-                <Like
-                  liked={followed}
-                  setLiked={setFollowed}
-                  iconSize="small"
-                  color="black"
-                />
-              </Button>
-            </div>
+            <StudioFollow
+              slug={studio.slug}
+              studioName={studio.name}
+              following={studio.following}
+            />
           </FadeIn>
 
           <div className="flex flex-col gap-1">

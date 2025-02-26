@@ -73,6 +73,7 @@ export const registerSchemaStep1 = object({
 });
 
 export const registerSchemaStep2 = object({
+  avatar: mixed().required("Avatar is required"),
   username: string().required("Username is required"),
   password: passwordSchema.required("Password is required"),
   confirmPassword: string()
@@ -80,7 +81,7 @@ export const registerSchemaStep2 = object({
     .required("Confirm password is required"),
 });
 
-export const registerSchemaStep3 = addressSchema;
+export const registerSchemaStep3 = object(addressSchema);
 
 // files
 export const fileSchema = object().shape({

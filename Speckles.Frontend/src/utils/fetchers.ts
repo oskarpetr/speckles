@@ -13,6 +13,7 @@ import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import { IOrderPostBody } from "@/types/dtos/Order.types";
 import { IUserPutBody } from "@/types/dtos/User.types";
+import { IUserFollowPostBody } from "@/types/dtos/UserFollow.types";
 
 // studios
 export async function fetchStudios() {
@@ -23,8 +24,9 @@ export async function fetchMyStudios(userId: string) {
   return fetcher({ url: `studios?userId=${userId}` });
 }
 
-export async function fetchStudio(slug: string) {
-  return fetcher({ url: `studios/${slug}` });
+export async function fetchStudio(slug: string, userId?: string) {
+  const user = userId ? `?userId=${userId}` : "";
+  return fetcher({ url: `studios/${slug}${user}` });
 }
 
 export async function postStudio(body: IStudioPostBody) {
@@ -279,8 +281,13 @@ export async function fetchLicenses() {
   return fetcher({ url: "licenses" });
 }
 
+// follows
+export async function postUserFollow(body: IUserFollowPostBody) {
+  return fetcher({ url: "follows", method: "POST", body });
+}
+
 // fetcher
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 const FRONTEND_API_URL = "http://localhost:3000/api/";
 const PAYPAL_API_URL = "https://api-m.sandbox.paypal.com/";
 

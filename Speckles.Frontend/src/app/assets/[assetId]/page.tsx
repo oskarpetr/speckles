@@ -7,7 +7,6 @@ import AssetDetail from "@/components/asset/AssetDetail";
 import AssetTabs from "@/components/asset/AssetTabs";
 import LayoutSection from "@/components/layout/LayoutSection";
 import { useAssetQuery } from "@/hooks/useApi";
-import { useEffect } from "react";
 
 export default function AssetPage() {
   // asset id param
@@ -16,10 +15,6 @@ export default function AssetPage() {
   // fetch asset
   const assetQuery = useAssetQuery(assetId as string);
   const asset = assetQuery.data?.data as IAsset;
-
-  useEffect(() => {
-    console.log(asset);
-  }, [asset]);
 
   return (
     <Layout>

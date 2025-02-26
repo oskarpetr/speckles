@@ -49,7 +49,7 @@ public class DatabaseService
         return _database.Users.FirstOrDefault(x => x.Email == email);
     }
 
-    public void CreateUser(PostRegisterBody body)
+    public string CreateUser(PostRegisterBody body)
     {
         var address = new Address()
         {
@@ -71,8 +71,42 @@ public class DatabaseService
 
         _database.Addresses.Add(address);
         _database.Users.Add(user);
+        
+        // Add basket assets
+        foreach (var assetId in body.basketAssets)
+        {
+            _database.BasketAssets.Add(new BasketAsset()
+            {
+                UserId = user.UserId,
+                AssetId = assetId
+            });
+        }
+        
+        // Add saved assets
+        foreach (var assetId in body.savedAssets)
+        {
+            _database.SavedAssets.Add(new SavedAsset()
+            {
+                UserId = user.UserId,
+                AssetId = assetId
+            });
+        }
+        
+        // Add following studios
+        foreach (var slug in body.following)
+        {
+            var studio = _database.Studios.FirstOrDefault(x => x.Slug == slug)!;
+            
+            _database.UserFollows.Add(new UserFollow()
+            {
+                UserId = user.UserId,
+                StudioId = studio.StudioId
+            });
+        }
 
         _database.SaveChanges();
+
+        return user.UserId;
     }
 
     public UserDto GetUser(string username)
@@ -154,9 +188,9 @@ public class DatabaseService
             .Adapt<List<StudioShortDto>>();
     }
     
-    public StudioDto GetStudio(string slug)
+    public StudioDto GetStudio(string slug, string? userId)
     {
-        return _database.Studios
+        var studio = _database.Studios
             .Include(x => x.Projects)
             .Include(x => x.Address)
             .Include(x => x.Assets).ThenInclude(x => x.Thumbnail)
@@ -170,6 +204,17 @@ public class DatabaseService
             
             // Studio -> StudioDto
             .Adapt<StudioDto>();
+        
+        if (string.IsNullOrEmpty(userId))
+            return studio;
+        
+        var followingExists = _database.UserFollows
+            .Include(x => x.Studio)
+            .FirstOrDefault(x => x.UserId == userId && x.StudioId == studio.StudioId);
+        
+        studio.Following = followingExists != null;
+
+        return studio;
     }
 
     public string CreateStudio(PostStudioBody body)
@@ -469,7 +514,7 @@ public class DatabaseService
         return _database.Assets.Any(x => x.AssetId == assetId);
     }
     
-    public AssetDto GetAsset(string assetId, string? memberId)
+    public AssetDto GetAsset(string assetId, string? userId)
     {
         var asset = _database.Assets
             .Include(x => x.CustomLicense)
@@ -491,10 +536,10 @@ public class DatabaseService
 
         asset.Comments = asset.Comments.OrderByDescending(x => x.CreatedAt).ToList();
         
-        if (string.IsNullOrEmpty(memberId))
+        if (string.IsNullOrEmpty(userId))
             return asset;
         
-        var assetInteraction = AssetInteraction(assetId, memberId);
+        var assetInteraction = AssetInteraction(assetId, userId);
 
         foreach (var comment in asset.Comments)
             comment.Liked = assetInteraction.LikedComments.Contains(comment.CommentId);
@@ -729,6 +774,27 @@ public class DatabaseService
         var comment = _database.Comments.FirstOrDefault(x => x.CommentId == commentId);
         _database.Comments.Remove(comment!);
 
+        _database.SaveChanges();
+    }
+
+    public void ToggleUserFollow(PostFollowBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == body.slug)!;
+        var follow = _database.UserFollows.FirstOrDefault(x => x.UserId == body.userId && x.StudioId == studio.StudioId);
+        
+        if (follow != null)
+        {
+            _database.UserFollows.Remove(follow);
+        }
+        else
+        {
+            _database.UserFollows.Add(new UserFollow()
+            {
+                UserId = body.userId,
+                StudioId = studio.StudioId
+            });
+        }
+        
         _database.SaveChanges();
     }
 }

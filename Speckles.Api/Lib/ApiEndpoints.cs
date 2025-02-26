@@ -100,4 +100,9 @@ public static class ApiEndpoints
     {
         public const string GET_CURRENCIES = "currencies";
     }
+
+    public static class Follow
+    {
+        public const string POST_FOLLOW = "follows";
+    }
 }

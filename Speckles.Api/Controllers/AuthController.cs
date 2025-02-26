@@ -43,9 +43,10 @@ public class AuthController : Controller
         if (emailExists)
             return Conflict(new ApiError("Email", body.email, 409));
 
-        _database.CreateUser(body);
+        var userId = _database.CreateUser(body);
+        ApiResponse response = new ApiResponse(new { userId });
         
-        return NoContent();
+        return Ok(response);
     }
     
     /// <summary>

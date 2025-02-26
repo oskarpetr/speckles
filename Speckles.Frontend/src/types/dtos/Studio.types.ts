@@ -15,6 +15,7 @@ export interface IStudio {
   assets: IAssetShort[];
   projects: IProject[];
   createdAt: string;
+  following: boolean;
 }
 
 export interface IStudioShort {

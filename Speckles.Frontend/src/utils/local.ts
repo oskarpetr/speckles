@@ -8,6 +8,7 @@ const LOCAL_SAVED = "local-saved";
 const LOCAL_CURRENCY = "local-currency";
 const LOCAL_CURRENCY_SET = "local-currency-set";
 const LOCAL_PROMOTION_SEEN = "local-promotion-seen";
+const LOCAL_FOLLOWING = "local-following";
 
 const defaultValues = {
   [LOCAL_BASKET]: [] as string[],
@@ -15,6 +16,7 @@ const defaultValues = {
   [LOCAL_CURRENCY]: BASE_CURRENCY as string,
   [LOCAL_CURRENCY_SET]: false as boolean,
   [LOCAL_PROMOTION_SEEN]: false as boolean,
+  [LOCAL_FOLLOWING]: [] as string[],
 };
 
 function getLocal(): typeof defaultValues {
@@ -64,6 +66,10 @@ export function localBasketToggle(assetId: string, inBasket: boolean) {
   }
 }
 
+export function localBasketDeleteAll() {
+  setLocal(LOCAL_BASKET, []);
+}
+
 // saved
 export function getLocalSaved() {
   const local = getLocal();
@@ -92,6 +98,11 @@ export function localSavedToggle(assetId: string, saved: boolean) {
   }
 }
 
+export function localSavedDeleteAll() {
+  setLocal(LOCAL_SAVED, []);
+}
+
+// currency
 export function getLocalCurrency() {
   const local = getLocal();
   return local[LOCAL_CURRENCY] ?? defaultValues[LOCAL_CURRENCY];
@@ -118,4 +129,36 @@ export function getPromotionSeen() {
 
 export function setPromotionSeen(value: boolean) {
   setLocal(LOCAL_PROMOTION_SEEN, value);
+}
+
+// following
+export function getLocalFollowing() {
+  const local = getLocal();
+  return local[LOCAL_FOLLOWING] ?? defaultValues[LOCAL_FOLLOWING];
+}
+
+export function existsInLocalFollowing(slug: string) {
+  const localFollowing = getLocalFollowing();
+  return localFollowing.includes(slug);
+}
+
+export function localFollowingToggle(slug: string, following: boolean) {
+  const localFollowing = getLocalFollowing();
+
+  // add to following
+  if (!following) {
+    localFollowing.push(slug);
+    setLocal(LOCAL_FOLLOWING, localFollowing);
+  }
+
+  // remove from following
+  else {
+    const index = localFollowing.indexOf(slug);
+    localFollowing.splice(index, 1);
+    setLocal(LOCAL_FOLLOWING, localFollowing);
+  }
+}
+
+export function localFollowingDeleteAll() {
+  setLocal(LOCAL_FOLLOWING, []);
 }

@@ -11,4 +11,7 @@ public class PostRegisterBody
     public string city { get; set; }
     public string zip { get; set; }
     public string street { get; set; }
+    public List<string> basketAssets { get; set; }
+    public List<string> savedAssets { get; set; }
+    public List<string> following { get; set; }
 }

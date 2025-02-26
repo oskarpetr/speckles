@@ -8,7 +8,6 @@ import StudioAnalytics from "./StudioAnalytics";
 import Button from "../shared/Button";
 import { canEditStudio } from "@/utils/permissions";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import AddAssetModal from "../modals/AddAssetModal";
 import { useState } from "react";
 import EditAboutStudioModal from "../modals/EditAboutStudioModal";
@@ -59,7 +58,7 @@ export default function StudioTabs({ studio }: Props) {
           ) : null
         }
       >
-        <StudioAssets assets={studio?.assets} />
+        <StudioAssets assets={studio?.assets} canEdit={canEdit} />
         <AddAssetModal
           open={openAddAssetModal}
           setOpen={setOpenAddAssetModal}

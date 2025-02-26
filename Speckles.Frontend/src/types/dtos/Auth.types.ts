@@ -8,6 +8,9 @@ export interface IRegisterPostBody {
   city: string;
   zip: string;
   street: string;
+  basketAssets: string[];
+  savedAssets: string[];
+  following: string[];
 }
 
 export interface ILoginPostBody {

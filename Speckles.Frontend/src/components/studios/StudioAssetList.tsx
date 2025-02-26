@@ -6,14 +6,20 @@ interface Props {
   tags: ITag[];
   assets: IAssetShort[];
   selectedTag: string;
+  canEdit?: boolean;
 }
 
-export default function StudioAssetList({ tags, assets, selectedTag }: Props) {
+export default function StudioAssetList({
+  tags,
+  assets,
+  selectedTag,
+  canEdit,
+}: Props) {
   // assets by tag
   const studioAssets =
     selectedTag === "All"
       ? assets
       : tags.find((x) => x.tagId == selectedTag)?.assets ?? [];
 
-  return <AssetList assets={studioAssets} menu />;
+  return <AssetList assets={studioAssets} menu canEdit={canEdit} />;
 }

@@ -3,6 +3,7 @@ import { IImage } from "@/types/dtos/Image.types";
 import {
   deleteObject,
   getDownloadURL,
+  getMetadata,
   listAll,
   ref,
   uploadBytes,
@@ -25,6 +26,22 @@ export async function uploadAvatar(userId: string, base64: string) {
   const blob = base64ToBlob(base64, "image/webp");
 
   await uploadBytes(avatarRef, blob, { contentType: "image/webp" });
+}
+
+// check if avatar exists
+export async function checkAvatarExists(userId: string) {
+  const avatarRef = ref(storage, `avatars/${userId}.webp`);
+
+  try {
+    await getMetadata(avatarRef);
+    return true;
+  } catch (error: any) {
+    if (error.code === "storage/object-not-found") {
+      return false;
+    } else {
+      return false;
+    }
+  }
 }
 
 // upload asset images

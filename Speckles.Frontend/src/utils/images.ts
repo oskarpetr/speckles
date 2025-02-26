@@ -1,3 +1,5 @@
+import { checkAvatarExists } from "./firebase/firebase-fns";
+
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export function getStudioLogo(studioId: string, date?: Date) {

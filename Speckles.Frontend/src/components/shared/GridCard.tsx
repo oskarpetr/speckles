@@ -14,6 +14,7 @@ interface Props {
   imageSrc: string;
   imageAlt: string;
   menuItems?: IMenuItem[];
+  canEdit?: boolean;
 }
 
 export default function GridCard({
@@ -23,6 +24,7 @@ export default function GridCard({
   imageSrc,
   imageAlt,
   menuItems,
+  canEdit,
 }: Props) {
   // hovered state
   const [hovered, setHovered] = useState(false);
@@ -33,7 +35,9 @@ export default function GridCard({
       onMouseLeave={() => setHovered(false)}
       className="rounded-lg overflow-hidden group w-full aspect-w-16 aspect-h-10 bg-neutral-300"
     >
-      {menuItems && <GridCardMenu hovered={hovered} menuItems={menuItems} />}
+      {menuItems && canEdit && (
+        <GridCardMenu hovered={hovered} menuItems={menuItems} />
+      )}
 
       <Link href={link} className="z-0">
         <Image

@@ -20,6 +20,7 @@ import {
 } from "@/types/dtos/Studio.types";
 import { ITag } from "@/types/dtos/Tag.types";
 import { IUser, IUserPutBody } from "@/types/dtos/User.types";
+import { IUserFollowPostBody } from "@/types/dtos/UserFollow.types";
 import {
   deleteAsset,
   deleteComment,
@@ -56,6 +57,7 @@ import {
   postSaved,
   postStudio,
   postStudioMember,
+  postUserFollow,
   putStudio,
   putUser,
   updateComment,
@@ -74,6 +76,7 @@ import {
   COMMENT_MUTATION_KEY,
   COMMENT_UPDATE_KEY,
   CURRENCIES_QUERY_KEY,
+  FOLLOW_MUTATION_KEY,
   LICENSES_QUERY_KEY,
   MY_STUDIOS_QUERY_KEY,
   ORDER_MUTATION_KEY,
@@ -291,11 +294,11 @@ export function useStudiosQuery() {
   return studiosQuery;
 }
 
-export function useStudioQuery(slug: string) {
+export function useStudioQuery(slug: string, userId?: string) {
   // query
   const studioQuery = useQuery<ApiResponse<IStudio>>({
     queryKey: STUDIO_QUERY_KEY(slug),
-    queryFn: () => fetchStudio(slug),
+    queryFn: () => fetchStudio(slug, userId),
   });
 
   return studioQuery;
@@ -700,4 +703,21 @@ export function usePaymentMutation() {
   });
 
   return paymentMutation;
+}
+
+export function useFollowMutation(studioName: string, follow: boolean) {
+  // mutation
+  const followMutation = useMutation({
+    mutationKey: FOLLOW_MUTATION_KEY,
+    mutationFn: (body: IUserFollowPostBody) => postUserFollow(body),
+    onSuccess: () => {
+      toastSuccess(
+        follow
+          ? toastMessages.user.followStudio(studioName)
+          : toastMessages.user.unfollowStudio(studioName)
+      );
+    },
+  });
+
+  return followMutation;
 }

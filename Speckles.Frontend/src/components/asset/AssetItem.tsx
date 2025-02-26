@@ -5,13 +5,13 @@ import { getAssetThumbnailAlt } from "@/utils/alts";
 import { formatPrice } from "@/utils/formatters";
 import { getAssetImage } from "@/utils/images";
 import AssetPrice from "./AssetPrice";
-import { getLocalCurrency } from "@/utils/local";
 import GridCard, { SkeletonGridCard } from "../shared/GridCard";
 import { IMenuItem } from "@/types/MenuItem.types";
 import { Fragment, useState } from "react";
 import DeleteAssetModal from "../modals/DeleteAssetModal";
 import EditAssetModal from "../modals/EditAssetModal";
 import { useParams } from "next/navigation";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 interface Props {
   asset: IAssetShort;
@@ -90,8 +90,8 @@ export default function AssetItem({
 
 export function SkeletonAssetItem() {
   const userLocale = navigator.language;
-  const localCurrency = getLocalCurrency();
-  const price = formatPrice(userLocale, localCurrency, 0);
+  const currencyStore = useCurrencyStore();
+  const price = formatPrice(userLocale, currencyStore.localCurrency, 0);
 
   return (
     <SkeletonGridCard

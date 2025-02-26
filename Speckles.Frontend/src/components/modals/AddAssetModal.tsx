@@ -10,15 +10,19 @@ interface Props {
 }
 
 export default function AddAssetModal({ open, setOpen }: Props) {
+  // currencies & licenses queries
   const currenciesQuery = useCurrenciesQuery();
   const licensesQuery = useLicensesQuery();
 
+  // currencies & licenses data
   const currencies = currenciesQuery.data?.data ?? [];
   const licenses = licensesQuery.data?.data ?? [];
 
+  // format currencies & licenses
   const formattedCurrencies = formatCurrencies(currencies);
   const formattedLicenses = formatLicenses(licenses);
 
+  // on success
   const onSuccess = () => {
     setOpen(false);
   };

@@ -1,11 +1,11 @@
 import { IRates } from "@/types/dtos/Rates.types";
-import { getLocalCurrency } from "./local";
 import { convertPrice } from "./price";
 import { ICurrency } from "@/types/dtos/Currency.types";
 import { SelectOption } from "@/components/forms/Input";
 import { ILicense } from "@/types/dtos/License.types";
 import { IAssetShort } from "@/types/dtos/Asset.types";
 import { IPayment } from "@/types/dtos/Payment.types";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 export function formatPrice(locale: string, currency: string, price: number) {
   // currency formatter
@@ -24,7 +24,8 @@ export function formatPriceToLocal(price: number, rates?: IRates["rates"]) {
   const userLocale = navigator.language;
 
   // currency from local storage
-  const localCurrency = getLocalCurrency();
+  const currencyStore = useCurrencyStore();
+  const localCurrency = currencyStore.localCurrency;
 
   // no conversion needed
   if (rates === undefined) {

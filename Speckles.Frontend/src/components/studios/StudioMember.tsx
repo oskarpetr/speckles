@@ -50,7 +50,7 @@ export default function StudioMember({ slug, member }: Props) {
 
       <div>
         <div className="text-lg font-bold">{member.fullName}</div>
-        <div className="opacity-80">Graphic designer</div>
+        <div className="opacity-80">{member.email}</div>
       </div>
 
       <DeleteStudioMemberModal

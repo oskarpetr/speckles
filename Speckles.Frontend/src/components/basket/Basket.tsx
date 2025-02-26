@@ -3,13 +3,13 @@ import Section from "../shared/Section";
 import BasketItem from "./BasketItem";
 import NoItemsYet from "../shared/NoItemsYet";
 import { formatPrice } from "@/utils/formatters";
-import { getLocalCurrency } from "@/utils/local";
 import { useBasketTotalPriceQuery } from "@/hooks/useApi";
 import { IAssetShort } from "@/types/dtos/Asset.types";
 import GrayCard from "../shared/GrayCard";
 import { GrayCardItem } from "../shared/GrayCardItem";
 import Separator from "../shared/Separator";
 import PaymentButton from "./PaymentButton";
+import useCurrencyStore from "@/stores/useCurrencyStore";
 
 interface Props {
   basket: IAssetShort[];
@@ -18,12 +18,19 @@ interface Props {
 export default function Basket({ basket }: Props) {
   // total price
   const locale = navigator.language;
-  const localCurrency = getLocalCurrency();
+  const currencyStore = useCurrencyStore();
 
   // basket total price
-  const basketTotalPriceQuery = useBasketTotalPriceQuery(basket, localCurrency);
+  const basketTotalPriceQuery = useBasketTotalPriceQuery(
+    basket,
+    currencyStore.localCurrency
+  );
   const totalPrice = basketTotalPriceQuery.data ?? 0;
-  const totalPriceFormatted = formatPrice(locale, localCurrency, totalPrice);
+  const totalPriceFormatted = formatPrice(
+    locale,
+    currencyStore.localCurrency,
+    totalPrice
+  );
 
   useEffect(() => {
     basketTotalPriceQuery.refetch();
@@ -73,7 +80,7 @@ export default function Basket({ basket }: Props) {
 
               <PaymentButton
                 basket={basket}
-                currencyName={localCurrency}
+                currencyName={currencyStore.localCurrency}
                 totalPrice={totalPrice}
               />
             </Fragment>

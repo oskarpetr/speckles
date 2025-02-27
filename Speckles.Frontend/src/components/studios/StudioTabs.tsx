@@ -39,11 +39,11 @@ export default function StudioTabs({ studio }: Props) {
 
   return (
     <Tabs>
-      {/* {canEdit ? (
+      {canEdit ? (
         <TabItem title="Analytics">
           <StudioAnalytics slug={studio.slug} />
         </TabItem>
-      ) : null} */}
+      ) : null}
 
       <TabItem
         title="Assets"

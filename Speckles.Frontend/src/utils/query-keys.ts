@@ -49,6 +49,13 @@ export const STUDIO_EARNINGS_QUERY_KEY = (
   slug: string,
   timeInterval: string
 ) => ["GET", "studios", slug, "earnings", timeInterval];
+export const STUDIO_SALES_QUERY_KEY = (slug: string, timeInterval: string) => [
+  "GET",
+  "studios",
+  slug,
+  "sales",
+  timeInterval,
+];
 export const STUDIO_MEMBER_MUTATION_KEY = (slug: string) => [
   "POST",
   "studios",

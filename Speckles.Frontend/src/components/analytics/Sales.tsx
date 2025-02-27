@@ -1,40 +1,57 @@
 import { useState } from "react";
 import SalesChart from "./SalesChart";
-import SelectTimeInterval, { timeIntervals } from "./SelectTimeInterval";
+import SelectTimeInterval, { TIME_INTERVALS } from "./SelectTimeInterval";
+import { useStudioSalesQuery } from "@/hooks/useApi";
+import { format } from "date-fns";
+import { ISale } from "@/types/dtos/Sale.types";
 
-export default function Sales() {
-  const data = [
-    {
-      name: "10/17",
-      value: 24,
-    },
-    {
-      name: "10/18",
-      value: 54,
-    },
-    {
-      name: "10/19",
-      value: 33,
-    },
-    {
-      name: "10/20",
-      value: 54,
-    },
-    {
-      name: "10/21",
-      value: 34,
-    },
-    {
-      name: "10/23",
-      value: 23,
-    },
-    {
-      name: "10/24",
-      value: 53,
-    },
-  ];
+interface Props {
+  slug: string;
+}
 
-  const [timeInterval, setTimeInterval] = useState(timeIntervals[0]);
+export default function Sales({ slug }: Props) {
+  // time interval state
+  const [timeInterval, setTimeInterval] = useState(TIME_INTERVALS[1]);
+
+  // sales query
+  const studioSalesQuery = useStudioSalesQuery(slug, timeInterval);
+  const sales = studioSalesQuery.data?.data ?? [];
+
+  // sales formatted
+  const formatIntervalDateLabel = (date: Date) => {
+    if (timeInterval === "1d") {
+      return format(date, "H") + "h";
+    } else if (timeInterval === "1w") {
+      return format(date, "E");
+    } else if (timeInterval === "1m") {
+      return format(date, "MMM dd");
+    } else if (timeInterval === "1y") {
+      return format(date, "MMM");
+    } else if (timeInterval === "all time") {
+      return format(date, "yyyy");
+    }
+  };
+
+  const formatIntervalDateTooltip = (date: Date) => {
+    if (timeInterval === "1d") {
+      return format(date, "dd MMMM, HH:00");
+    } else if (timeInterval === "1w") {
+      return format(date, "dd MMMM, yyyy");
+    } else if (timeInterval === "1m") {
+      return format(date, "dd MMMM, yyyy");
+    } else if (timeInterval === "1y") {
+      return format(date, "MMMM yyyy");
+    } else if (timeInterval === "all time") {
+      return format(date, "yyyy");
+    }
+  };
+
+  const salesFormatted: ISale[] = sales.map((sale) => ({
+    date: sale.date,
+    dateLabel: formatIntervalDateLabel(new Date(sale.date)),
+    dateTooltip: formatIntervalDateTooltip(new Date(sale.date)),
+    sales: sale.sales,
+  }));
 
   return (
     <div className="flex flex-col w-full p-8 gap-6 bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
@@ -50,7 +67,7 @@ export default function Sales() {
         />
       </div>
 
-      <SalesChart data={data} />
+      <SalesChart data={salesFormatted} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { IOrder, IOrderPostBody, IOrderShort } from "@/types/dtos/Order.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
+import { ISale } from "@/types/dtos/Sale.types";
 import {
   IStudio,
   IStudioPostBody,
@@ -45,6 +46,7 @@ import {
   fetchStudio,
   fetchStudioEarnings,
   fetchStudios,
+  fetchStudioSales,
   fetchTag,
   fetchUser,
   postAsset,
@@ -97,6 +99,7 @@ import {
   STUDIO_MEMBER_MUTATION_KEY,
   STUDIO_MUTATION_KEY,
   STUDIO_QUERY_KEY,
+  STUDIO_SALES_QUERY_KEY,
   STUDIO_UPDATE_KEY,
   STUDIOS_QUERY_KEY,
   TAG_QUERY_KEY,
@@ -361,6 +364,16 @@ export function useStudioEarningsQuery(slug: string, timeInterval: string) {
   });
 
   return studioEarningsQuery;
+}
+
+export function useStudioSalesQuery(slug: string, timeInterval: string) {
+  // query
+  const studioSalesQuery = useQuery<ApiResponse<ISale[]>>({
+    queryKey: STUDIO_SALES_QUERY_KEY(slug, timeInterval),
+    queryFn: () => fetchStudioSales(slug, timeInterval),
+  });
+
+  return studioSalesQuery;
 }
 
 export function useStudioMemberMutation(slug: string) {

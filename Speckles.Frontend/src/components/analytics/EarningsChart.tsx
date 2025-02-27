@@ -37,6 +37,13 @@ export default function EarningsChart({ data }: Props) {
             imageId: "",
             alt: "",
           },
+          studio: {
+            studioId: "",
+            name: "",
+            slug: "",
+            contactEmail: "",
+            paymentEmail: "",
+          },
           name: "No earnings",
           price: 0,
           tags: [],
@@ -53,28 +60,26 @@ export default function EarningsChart({ data }: Props) {
   }
 
   return (
-    <ResponsiveContainer width={250} height={250}>
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          outerRadius={90}
-          innerRadius={40}
-          paddingAngle={0}
-          dataKey="value"
-          animationDuration={800}
-          animationBegin={0}
-          animationEasing="ease"
-        >
-          {data.map((_, index) => (
-            <Cell key={`cell_${index}`} fill={colors[index % colors.length]} />
-          ))}
-        </Pie>
+    <PieChart width={250} height={250}>
+      <Pie
+        data={data}
+        cx="50%"
+        cy="50%"
+        outerRadius={90}
+        innerRadius={40}
+        paddingAngle={0}
+        dataKey="value"
+        animationDuration={800}
+        animationBegin={0}
+        animationEasing="ease"
+      >
+        {data.map((_, index) => (
+          <Cell key={`cell_${index}`} fill={colors[index % colors.length]} />
+        ))}
+      </Pie>
 
-        <Tooltip content={<CustomTooltip />} animationEasing="ease" />
-      </PieChart>
-    </ResponsiveContainer>
+      <Tooltip content={<CustomTooltip />} animationEasing="ease" />
+    </PieChart>
   );
 }
 
@@ -85,53 +90,52 @@ function CustomTooltip({
   active?: boolean;
   payload?: any[];
 }) {
-  const newPayload = payload![0].payload.payload;
-  const isEmpty = payload![0].name === "No earnings";
+  if (!active || !payload || payload.length === 0) {
+    return null;
+  }
+
+  const newPayload = payload[0]?.payload;
+  if (!newPayload) return null;
+
+  const isEmpty = payload[0]?.name === "No earnings";
 
   return (
     <AnimatePresence>
-      {active && payload && payload.length && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 100, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
-          // style={{
-          //   top: y + 20,
-          //   left: x + 20,
-          // }}
-          className="flex gap-3 items-center bg-black-primary rounded-lg px-4 py-2 text-white"
-        >
-          {!isEmpty ? (
-            <Fragment>
-              <Image
-                src={getAssetImage(
-                  newPayload.asset.assetId,
-                  newPayload.asset.thumbnail.imageId
-                )}
-                alt={newPayload.asset.name}
-                width={50}
-                height={30}
-                className="rounded-lg"
-              />
-              <div>
-                <div className="font-bold">
-                  {payload[0].name} ({newPayload.ordered}x)
-                </div>
-                <div className="opacity-80 font-semibold">
-                  {formatPrice(
-                    newPayload.currency.locale,
-                    newPayload.currency.name,
-                    payload[0].value
-                  )}
-                </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0 }}
+        className="flex gap-3 items-center bg-black-primary rounded-lg px-4 py-2 text-white"
+      >
+        {!isEmpty ? (
+          <Fragment>
+            <Image
+              src={getAssetImage(
+                newPayload.asset.assetId,
+                newPayload.asset.thumbnail.imageId
+              )}
+              alt={newPayload.asset.name}
+              width={50}
+              height={30}
+              className="rounded-lg"
+            />
+            <div>
+              <div className="font-bold">
+                {payload[0].name} ({newPayload.ordered}x)
               </div>
-            </Fragment>
-          ) : (
-            <div className="opacity-80 font-semibold">No earnings</div>
-          )}
-          {/* <div className="absolute -left-2 m-auto top-0 bottom-0 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-black-primary"></div> */}
-        </motion.div>
-      )}
+              <div className="opacity-70 font-semibold mt-[-5px]">
+                {formatPrice(
+                  newPayload.currency.locale,
+                  newPayload.currency.name,
+                  payload[0].value
+                )}
+              </div>
+            </div>
+          </Fragment>
+        ) : (
+          <div className="opacity-80 font-semibold">No earnings</div>
+        )}
+      </motion.div>
     </AnimatePresence>
   );
 }

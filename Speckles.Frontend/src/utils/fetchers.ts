@@ -43,6 +43,12 @@ export async function fetchStudioEarnings(slug: string, timeInterval: string) {
   });
 }
 
+export async function fetchStudioSales(slug: string, timeInterval: string) {
+  return fetcher({
+    url: `studios/${slug}/sales?timeInterval=${timeInterval}`,
+  });
+}
+
 export async function postStudioMember(
   slug: string,
   body: IStudioMemberPostBody

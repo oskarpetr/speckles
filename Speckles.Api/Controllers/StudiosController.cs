@@ -199,6 +199,91 @@ public class StudiosController : Controller
         
         return Ok(response);
     }
+    
+    /// <summary>
+    /// Retrieves studio's sales.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a studio's sales.
+    /// </remarks>
+    /// <returns>Retrieves studio's sales.</returns>
+    /// <response code="200">Retrieves studio's sales.</response>
+    /// <response code="404">Studio was not found.</response>
+    [ProducesResponseType(typeof(ApiResponse<List<EarningDto>>), 200)]
+    [ProducesResponseType(typeof(ApiError), 404)]
+    [HttpGet(ApiEndpoints.Studios.GET_STUDIO_SALES)]
+    public IActionResult GetStudioSales(string slug, [FromQuery, Required] string timeInterval)
+    {
+        var studioExists = _database.StudioExists(slug);
+        
+        if (!studioExists) 
+            return NotFound(new ApiError("Studio", slug));
+
+        var orders = _database.GetStudioSales(slug);
+        
+        DateTimeOffset now = DateTimeOffset.Now;
+        DateTimeOffset startDate;
+        var sales = new List<SaleDto>();
+
+        switch (timeInterval)
+        {
+            case "1d":
+                startDate = now.AddHours(-23);
+                sales = Enumerable.Range(0, 24)
+                    .Select(hour => new SaleDto
+                    {
+                        Date = startDate.AddHours(hour),
+                        Sales = orders.Count(o => o.Date >= startDate.AddHours(hour) && o.Date < startDate.AddHours(hour + 1))
+                    })
+                    .ToList();
+                break;
+            case "1w":
+                startDate = now.AddDays(-6);
+                sales = Enumerable.Range(0, 7)
+                    .Select(day => new SaleDto
+                    {
+                        Date = startDate.AddDays(day),
+                        Sales = orders.Count(o => o.Date >= startDate.AddDays(day) && o.Date < startDate.AddDays(day + 1))
+                    })
+                    .ToList();
+                break;
+            case "1m":
+                startDate = now.AddDays(-29);
+                sales = Enumerable.Range(0, 30)
+                    .Select(day => new SaleDto
+                    {
+                        Date = startDate.AddDays(day),
+                        Sales = orders.Count(o => o.Date >= startDate.AddDays(day) && o.Date < startDate.AddDays(day + 1))
+                    })
+                    .ToList();
+                break;
+            case "1y":
+                startDate = now.AddMonths(-11);
+                sales = Enumerable.Range(0, 12)
+                    .Select(month => new SaleDto
+                    {
+                        Date = new DateTime(startDate.Year, startDate.Month, 1).AddMonths(month),
+                        Sales = orders.Count(o => o.Date >= new DateTime(startDate.Year, startDate.Month, 1).AddMonths(month) && o.Date < new DateTime(startDate.Year, startDate.Month, 1).AddMonths(month + 1))
+                    })
+                    .ToList();
+                break;
+            case "all time":
+                startDate = orders.Min(o => o.Date);
+                int totalYears = now.Year - startDate.Year + 1;
+                sales = Enumerable.Range(0, totalYears)
+                    .Select(year => new SaleDto
+                    {
+                        Date = new DateTime(startDate.Year + year, 1, 1),
+                        Sales = orders.Count(o => o.Date.Year == startDate.Year + year)
+                    })
+                    .ToList();
+                break;
+        }
+        
+        ApiResponse response = new ApiResponse(sales);
+        
+        return Ok(response);
+    }
 
     [HttpGet("gen")]
     public IActionResult Gen()

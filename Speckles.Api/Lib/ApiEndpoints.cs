@@ -36,6 +36,7 @@ public static class ApiEndpoints
         public const string DELETE_STUDIO_MEMBER = "studios/{slug}/members";
         
         public const string GET_STUDIO_EARNINGS = "studios/{slug}/earnings";
+        public const string GET_STUDIO_SALES = "studios/{slug}/sales";
     }
 
     public static class Users

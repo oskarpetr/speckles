@@ -166,6 +166,13 @@ public class DatabaseService
             .Where(x => x.Asset.Studio.Slug == slug)
             .ToList();
     }
+
+    public List<Order> GetStudioSales(string slug)
+    {
+        return _database.Orders.
+            Include(x => x.Asset).ThenInclude(x => x.Studio)
+            .Where(x => x.Asset.Studio.Slug == slug).ToList();
+    }
     
     public List<StudioShortDto> GetStudios()
     {

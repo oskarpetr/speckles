@@ -27,15 +27,6 @@ export default function Footer() {
               height={50}
             />
           </div>
-
-          <div className="flex justify-center items-center bg-white bg-opacity-10 rounded-lg px-6 w-fit h-10">
-            <Image
-              src="/images/providers/stripe.svg"
-              alt="Stripe"
-              width={50}
-              height={50}
-            />
-          </div>
         </div>
       </div>
 

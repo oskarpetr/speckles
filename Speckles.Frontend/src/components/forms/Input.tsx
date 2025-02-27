@@ -15,7 +15,6 @@ type Props = {
   | {
       type?: "text" | "email" | "password" | "number";
       onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-      error?: string | undefined;
       icon?: string;
       value: string;
       autocomplete?: boolean;
@@ -23,7 +22,6 @@ type Props = {
   | {
       type: "textarea";
       onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-      error?: string | undefined;
       value: string;
       autocomplete?: boolean;
     }
@@ -42,7 +40,11 @@ type Props = {
       acceptText: string;
       chooseText: string;
       uploadedText: string;
-      error?: string | undefined;
+    }
+  | {
+      type: "toggle";
+      onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+      value: boolean;
     }
 );
 
@@ -55,7 +57,12 @@ export default function Input(p: Props) {
   let inputElement: JSX.Element | null = null;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (p.type !== "textarea" && p.type !== "select" && p.type !== "file") {
+  if (
+    p.type !== "textarea" &&
+    p.type !== "select" &&
+    p.type !== "file" &&
+    p.type !== "toggle"
+  ) {
     inputElement = (
       <div className="relative flex items-center">
         {p.icon && (
@@ -159,6 +166,20 @@ export default function Input(p: Props) {
           ref={inputRef}
           onChange={p.onChange}
         />
+      </div>
+    );
+  } else if (p.type === "toggle") {
+    inputElement = (
+      <div className="flex items-center gap-4">
+        <input
+          type="checkbox"
+          name={p.name}
+          checked={p.value}
+          onChange={p.onChange}
+          className="w-6 h-6"
+        />
+
+        <div>{p.value ? "On" : "Off"}</div>
       </div>
     );
   }

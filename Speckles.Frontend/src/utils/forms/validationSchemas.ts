@@ -1,4 +1,4 @@
-import { array, mixed, number, object, ref, string } from "yup";
+import { array, boolean, mixed, number, object, ref, string } from "yup";
 
 // passwords
 const commonPasswords = [
@@ -148,4 +148,20 @@ export const userSchema = object({
     .email("Email address must be in a valid format")
     .required("Email address is required"),
   ...addressSchema,
+});
+
+// projects
+export const projectSchemaStep1 = object({
+  name: string().required("Project name is required"),
+  description: string().required("Project description is required"),
+  personal: boolean().required(),
+  client: string().required("Project client is required"),
+});
+
+export const projectSchemaStep2 = object({
+  images: array()
+    .of(assetImageSchema)
+    .min(1, "At least one image is required")
+    .required("Asset images are required"),
+  thumbnailId: string().required("Asset thumbnail is required"),
 });

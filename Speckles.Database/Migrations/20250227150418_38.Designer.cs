@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Speckles.Database;
@@ -11,9 +12,11 @@ using Speckles.Database;
 namespace Speckles.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250227150418_38")]
+    partial class _38
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,7 +350,6 @@ namespace Speckles.Database.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("StudioId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ThumbnailId")
@@ -730,18 +732,14 @@ namespace Speckles.Database.Migrations
 
             modelBuilder.Entity("Speckles.Database.Tables.Project", b =>
                 {
-                    b.HasOne("Speckles.Database.Tables.Studio", "Studio")
+                    b.HasOne("Speckles.Database.Tables.Studio", null)
                         .WithMany("Projects")
-                        .HasForeignKey("StudioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudioId");
 
                     b.HasOne("Speckles.Database.Tables.Image", "Thumbnail")
                         .WithMany()
                         .HasForeignKey("ThumbnailId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Studio");
 
                     b.Navigation("Thumbnail");
                 });

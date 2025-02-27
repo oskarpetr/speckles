@@ -198,7 +198,8 @@ public class DatabaseService
     public StudioDto GetStudio(string slug, string? userId)
     {
         var studio = _database.Studios
-            .Include(x => x.Projects)
+            .Include(x => x.Projects).ThenInclude(x => x.Thumbnail)
+            .Include(x => x.Projects).ThenInclude(x => x.Images)
             .Include(x => x.Address)
             .Include(x => x.Assets).ThenInclude(x => x.Thumbnail)
             .Include(x => x.Assets).ThenInclude(x => x.Images)
@@ -418,6 +419,11 @@ public class DatabaseService
     
         _database.SaveChanges();
     }
+
+    public void UpdateAsset()
+    {
+        
+    }
     
     public bool TagExists(string tagId)
     {
@@ -519,6 +525,11 @@ public class DatabaseService
     public bool AssetExists(string assetId)
     {
         return _database.Assets.Any(x => x.AssetId == assetId);
+    }
+
+    public bool ProjectExists(string projectId)
+    {
+        return _database.Projects.Any(x => x.ProjectId == projectId);
     }
     
     public AssetDto GetAsset(string assetId, string? userId)
@@ -802,6 +813,54 @@ public class DatabaseService
             });
         }
         
+        _database.SaveChanges();
+    }
+
+    public void CreateProject(PostProjectBody body)
+    {
+        var studio = _database.Studios.FirstOrDefault(x => x.Slug == body.slug)!;
+        
+        var project = new Project()
+        {
+            ProjectId = body.projectId,
+            Name = body.name,
+            Description = body.description,
+            Personal = body.personal,
+            Client = body.personal ? null : body.client,
+            StudioId = studio.StudioId
+        };
+
+        _database.Projects.Add(project);
+        
+        // Add images
+        foreach (var image in body.images)
+        {
+            _database.Images.Add(new Image()
+            {
+                ProjectId = project.ProjectId,
+                ImageId = image.imageId,
+                Alt = image.alt,
+            });
+        }
+
+        _database.SaveChanges();
+        
+        // Thumbnail
+        project.ThumbnailId = body.thumbnailId;
+    
+        _database.SaveChanges();
+    }
+
+    public void UpdateProject()
+    {
+        
+    }
+
+    public void DeleteProject(string projectId)
+    {  
+        var project = _database.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+        
+        _database.Projects.Remove(project!);
         _database.SaveChanges();
     }
 }

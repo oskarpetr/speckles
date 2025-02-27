@@ -11,7 +11,7 @@ public class StudioDto
     public string Slug { get; set; }
     public string About { get; set; }
     public Address Address { get; set; }
-    public List<Project> Projects { get; set; }
+    public List<ProjectDto> Projects { get; set; }
     public List<UserShortDto> Members { get; set; }
     public List<AssetShortDto> Assets { get; set; }
     public DateTimeOffset CreatedAt { get; set; }

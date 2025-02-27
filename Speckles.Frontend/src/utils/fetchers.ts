@@ -14,6 +14,7 @@ import { IPayment } from "@/types/dtos/Payment.types";
 import { IOrderPostBody } from "@/types/dtos/Order.types";
 import { IUserPutBody } from "@/types/dtos/User.types";
 import { IUserFollowPostBody } from "@/types/dtos/UserFollow.types";
+import { IProjectPostBody } from "@/types/dtos/Project.types";
 
 // studios
 export async function fetchStudios() {
@@ -290,6 +291,15 @@ export async function fetchLicenses() {
 // follows
 export async function postUserFollow(body: IUserFollowPostBody) {
   return fetcher({ url: "follows", method: "POST", body });
+}
+
+// projects
+export async function postProject(body: IProjectPostBody) {
+  return fetcher({ url: "projects", method: "POST", body });
+}
+
+export async function deleteProject(projectId: string) {
+  return fetcher({ url: `projects/${projectId}`, method: "DELETE" });
 }
 
 // fetcher

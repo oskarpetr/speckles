@@ -6,6 +6,7 @@ import { ILicense } from "@/types/dtos/License.types";
 import { IAssetShort } from "@/types/dtos/Asset.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import useCurrencyStore from "@/stores/useCurrencyStore";
+import { format } from "date-fns";
 
 export function formatPrice(locale: string, currency: string, price: number) {
   // currency formatter
@@ -95,3 +96,33 @@ export function formatPayments(basket: IAssetShort[]) {
 
   return payments;
 }
+
+// format interval date label
+export const formatIntervalDateLabel = (date: Date, timeInterval: string) => {
+  if (timeInterval === "1d") {
+    return format(date, "H") + "h";
+  } else if (timeInterval === "1w") {
+    return format(date, "E");
+  } else if (timeInterval === "1m") {
+    return format(date, "MMM dd");
+  } else if (timeInterval === "1y") {
+    return format(date, "MMM");
+  } else if (timeInterval === "all time") {
+    return format(date, "yyyy");
+  }
+};
+
+// format interval date tooltip
+export const formatIntervalDateTooltip = (date: Date, timeInterval: string) => {
+  if (timeInterval === "1d") {
+    return format(date, "dd MMMM, HH:00");
+  } else if (timeInterval === "1w") {
+    return format(date, "dd MMMM, yyyy");
+  } else if (timeInterval === "1m") {
+    return format(date, "dd MMMM, yyyy");
+  } else if (timeInterval === "1y") {
+    return format(date, "MMMM yyyy");
+  } else if (timeInterval === "all time") {
+    return format(date, "yyyy");
+  }
+};

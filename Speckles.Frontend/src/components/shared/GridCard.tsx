@@ -1,7 +1,7 @@
 import { IMenuItem } from "@/types/MenuItem.types";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import PopupTooltip from "./PopupTooltip";
 import { cn } from "@/utils/cn";
 import Button from "./Button";
@@ -89,9 +89,10 @@ export function gridCardDelay(delay: number, index: number) {
 interface MenuProps {
   hovered: boolean;
   menuItems: IMenuItem[];
+  className?: ComponentProps<"div">["className"];
 }
 
-export function GridCardMenu({ hovered, menuItems }: MenuProps) {
+export function GridCardMenu({ hovered, menuItems, className }: MenuProps) {
   return (
     <PopupTooltip
       button={
@@ -105,7 +106,7 @@ export function GridCardMenu({ hovered, menuItems }: MenuProps) {
         </div>
       }
       anchor="right start"
-      className="ml-2 mt-2"
+      className={cn("ml-2 mt-2", className)}
     >
       <DropdownMenu items={menuItems} />
     </PopupTooltip>

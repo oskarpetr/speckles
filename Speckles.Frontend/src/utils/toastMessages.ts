@@ -60,6 +60,11 @@ const studioMessages = {
 
   // about
   updatedAbout: "About updated",
+
+  // projects
+  createdProject: "Project created",
+  updatedProject: "Project updated",
+  removedProject: "Project removed",
 };
 
 const toastMessages = {

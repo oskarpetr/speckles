@@ -13,6 +13,7 @@ import { useState } from "react";
 import EditAboutStudioModal from "../modals/EditAboutStudioModal";
 import AddMemberModal from "../modals/AddMemberModal";
 import StudioProjects from "./StudioProjects";
+import AddProjectModal from "../modals/AddProjectModal";
 
 interface Props {
   studio: IStudio;
@@ -79,12 +80,10 @@ export default function StudioTabs({ studio }: Props) {
         }
       >
         <StudioProjects projects={studio?.projects} />
-        {/* <EditAboutStudioModal
-          about={studio.about}
-          contactEmail={studio.contactEmail}
-          open={openEditStudioModal}
-          setOpen={setOpenEditStudioModal}
-        /> */}
+        <AddProjectModal
+          open={openAddProjectModal}
+          setOpen={setOpenAddProjectModal}
+        />
       </TabItem>
 
       <TabItem

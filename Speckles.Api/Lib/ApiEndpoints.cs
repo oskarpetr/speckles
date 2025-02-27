@@ -15,6 +15,13 @@ public static class ApiEndpoints
         public const string DELETE_ASSET = "assets/{assetId}";
     }
 
+    public static class Projects
+    {
+        public const string POST_PROJECT = "projects";
+        public const string PUT_PROJECT = "projects/{projectId}";
+        public const string DELETE_PROJECT = "projects/{projectId}";
+    }
+
     public static class Orders
     {
         public const string GET_ORDERS = "orders";

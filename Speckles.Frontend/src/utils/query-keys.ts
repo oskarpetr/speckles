@@ -137,3 +137,11 @@ export const FOLLOW_MUTATION_KEY = ["POST", "follows"];
 
 // avatar
 export const AVATAR_QUERY_KEY = (userId: string) => ["GET", "avatar", userId];
+
+// projects
+export const PROJECT_MUTATION_KEY = ["POST", "projects"];
+export const PROJECT_DELETE_KEY = (projectId: string) => [
+  "DELETE",
+  "projects",
+  projectId,
+];

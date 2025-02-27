@@ -83,3 +83,15 @@ export const initialValuesStudio = {
   ...initialValuesStudioStep2,
   ...initialValuesAddress,
 };
+
+// projects
+export const initialValuesProjectStep1 = {
+  name: "",
+  description: "",
+  personal: true,
+  client: "",
+};
+
+export const initialValuesProjectStep2 = {
+  images: [],
+};

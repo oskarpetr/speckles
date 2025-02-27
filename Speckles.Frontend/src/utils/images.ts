@@ -1,5 +1,3 @@
-import { checkAvatarExists } from "./firebase/firebase-fns";
-
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export function getStudioLogo(studioId: string, date?: Date) {
@@ -11,6 +9,11 @@ export function getStudioLogo(studioId: string, date?: Date) {
 
 export function getAssetImage(assetId: string, imageId: string) {
   const uri = encodeURIComponent(`assets/${assetId}/images/${imageId}.webp`);
+  return `${STORAGE_URL}/${uri}?alt=media`;
+}
+
+export function getProjectImage(projectId: string, imageId: string) {
+  const uri = encodeURIComponent(`projects/${projectId}/${imageId}.webp`);
   return `${STORAGE_URL}/${uri}?alt=media`;
 }
 

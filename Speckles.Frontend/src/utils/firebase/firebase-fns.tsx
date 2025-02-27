@@ -97,6 +97,34 @@ export async function uploadAssetFiles(
   await Promise.all(uploadPromises);
 }
 
+// upload project images
+export async function uploadProjectImages(
+  projectId: string,
+  images: IImage[],
+  setPercetange: Dispatch<SetStateAction<number>>
+) {
+  const uploadPromises = images.map(async (image) => {
+    const imageRef = ref(
+      storage,
+      `projects/${projectId}/${image.imageId}.webp`
+    );
+    const blob = base64ToBlob(image.base64!, "image/webp");
+
+    const uploadTask = uploadBytesResumable(imageRef, blob, {
+      contentType: "image/webp",
+    });
+
+    uploadTask.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setPercetange(progress);
+    });
+
+    await uploadTask;
+  });
+
+  await Promise.all(uploadPromises);
+}
+
 // delete asset
 export async function deleteAsset(assetId: string) {
   const folderRef = ref(storage, `assets/${assetId}`);
@@ -114,6 +142,15 @@ export async function deleteAsset(assetId: string) {
   });
 
   await Promise.all(subfolderPromises);
+}
+
+// delete project
+export async function deleteProject(projectId: string) {
+  const folderRef = ref(storage, `projects/${projectId}`);
+
+  const result = await listAll(folderRef);
+  const deletePromises = result.items.map((fileRef) => deleteObject(fileRef));
+  await Promise.all(deletePromises);
 }
 
 // delete studio

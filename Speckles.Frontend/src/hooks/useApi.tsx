@@ -10,6 +10,7 @@ import { IGeo } from "@/types/dtos/Geo.types";
 import { ILicense } from "@/types/dtos/License.types";
 import { IOrder, IOrderPostBody, IOrderShort } from "@/types/dtos/Order.types";
 import { IPayment } from "@/types/dtos/Payment.types";
+import { IProjectPostBody } from "@/types/dtos/Project.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
 import { ISale } from "@/types/dtos/Sale.types";
@@ -25,6 +26,7 @@ import { IUserFollowPostBody } from "@/types/dtos/UserFollow.types";
 import {
   deleteAsset,
   deleteComment,
+  deleteProject,
   deleteStudio,
   deleteStudioMember,
   fetchAsset,
@@ -55,6 +57,7 @@ import {
   postCommentLike,
   postOrder,
   postPayment,
+  postProject,
   postRegister,
   postSaved,
   postStudio,
@@ -85,6 +88,8 @@ import {
   ORDER_QUERY_KEY,
   ORDERS_QUERY_KEY,
   PAYMENT_MUTATION_KEY,
+  PROJECT_DELETE_KEY,
+  PROJECT_MUTATION_KEY,
   PROMOTION_QUERY_KEY,
   RATES_QUERY_KEY,
   REGISTER_MUTATION_KEY,
@@ -438,7 +443,7 @@ export function useAssetMutation(slug: string) {
   const queryClient = useQueryClient();
 
   // mutation
-  const postAssetMutation = useMutation({
+  const assetMutation = useMutation({
     mutationKey: ASSET_MUTATION_KEY,
     mutationFn: (body: IAssetPostBody) => postAsset(body),
     onSuccess: () => {
@@ -449,7 +454,7 @@ export function useAssetMutation(slug: string) {
     },
   });
 
-  return postAssetMutation;
+  return assetMutation;
 }
 
 export function useAssetDelete(slug: string, assetId: string) {
@@ -733,4 +738,43 @@ export function useFollowMutation(studioName: string, follow: boolean) {
   });
 
   return followMutation;
+}
+
+// projects
+export function useProjectMutation(slug: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const projectMutation = useMutation({
+    mutationKey: PROJECT_MUTATION_KEY,
+    mutationFn: (body: IProjectPostBody) => postProject(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
+      toastSuccess(toastMessages.studio.createdProject);
+    },
+  });
+
+  return projectMutation;
+}
+
+export function useProjectDelete(projectId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const projectDelete = useMutation({
+    mutationKey: PROJECT_DELETE_KEY(projectId),
+    mutationFn: () => deleteProject(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(projectId),
+      });
+      toastSuccess(toastMessages.studio.removedProject);
+    },
+  });
+
+  return projectDelete;
 }

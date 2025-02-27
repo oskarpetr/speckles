@@ -58,5 +58,19 @@ public class ApplicationDbContext : DbContext
             .WithOne(f => f.Asset)
             .HasForeignKey(f => f.AssetId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // One project has one thumbnail
+        modelBuilder.Entity<Project>()
+            .HasOne(p => p.Thumbnail)
+            .WithMany()
+            .HasForeignKey(p => p.ThumbnailId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // One project has many images
+        modelBuilder.Entity<Project>()
+            .HasMany(p => p.Images)
+            .WithOne(i => i.Project)
+            .HasForeignKey(i => i.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

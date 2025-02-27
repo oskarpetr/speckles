@@ -11,8 +11,8 @@ public class Studio
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public string AddressId { get; set; }
     public virtual Address Address { get; set; }
-    
-    public ICollection<Project> Projects { get; set; }
+
+    public ICollection<Project> Projects { get; set; } = new List<Project>();
     public ICollection<StudioMember> Members { get; set; } = new List<StudioMember>();
     public ICollection<Asset> Assets { get; set; } = new List<Asset>();
 }

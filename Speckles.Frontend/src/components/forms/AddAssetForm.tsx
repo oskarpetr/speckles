@@ -87,7 +87,7 @@ export default function AddAssetForm({
     if (step === maxSteps - 1) {
       const assetId = uuidv4();
 
-      const imagesWithoutBsase64 = images.map((image) => ({
+      const imagesWithoutBase64 = images.map((image) => ({
         ...image,
         base64: undefined,
       }));
@@ -99,7 +99,7 @@ export default function AddAssetForm({
       const asset: IAssetPostBody = {
         ...values,
         assetId,
-        images: imagesWithoutBsase64,
+        images: imagesWithoutBase64,
         files: filesWithoutBase64,
         thumbnailId,
         tags,

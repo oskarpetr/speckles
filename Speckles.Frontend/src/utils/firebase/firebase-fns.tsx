@@ -186,6 +186,23 @@ export function getBase64FileSize(base64: string) {
   return byteLength;
 }
 
+// fetch file as base64
+export async function fetchFileAsBase64(url: string) {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+  } catch (error) {
+    return null;
+  }
+}
+
 // get file download url
 export async function getFileDownloadUrl(assetId: string, fileId: string) {
   const fileRef = ref(storage, `assets/${assetId}/files/${fileId}`);

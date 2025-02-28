@@ -51,14 +51,14 @@ public class ProjectsController : Controller
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Projects.PUT_PROJECT)]
-    public IActionResult UpdateProject(string projectId)
+    public IActionResult UpdateProject(string projectId, [FromBody, Required] PutProjectBody body)
     {
         var projectExists = _database.ProjectExists(projectId);
         
         if (!projectExists)
             return NotFound(new ApiError("Project", projectId));
         
-        _database.UpdateProject();
+        _database.UpdateProject(projectId, body);
         
         return NoContent();
     }

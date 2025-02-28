@@ -2,7 +2,7 @@ import { toastError, toastSuccess } from "@/components/shared/Toast";
 import { ILoginPostBody, IRegisterPostBody } from "@/types/dtos/Auth.types";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { ApiOffsetLimit } from "@/types/ApiResponse.types";
-import { IAssetPostBody } from "@/types/dtos/Asset.types";
+import { IAssetPostBody, IAssetPutBody } from "@/types/dtos/Asset.types";
 import {
   IStudioMemberDeleteBody,
   IStudioMemberPostBody,
@@ -14,7 +14,7 @@ import { IPayment } from "@/types/dtos/Payment.types";
 import { IOrderPostBody } from "@/types/dtos/Order.types";
 import { IUserPutBody } from "@/types/dtos/User.types";
 import { IUserFollowPostBody } from "@/types/dtos/UserFollow.types";
-import { IProjectPostBody } from "@/types/dtos/Project.types";
+import { IProjectPostBody, IProjectPutBody } from "@/types/dtos/Project.types";
 
 // studios
 export async function fetchStudios() {
@@ -102,6 +102,14 @@ export async function postAsset(body: IAssetPostBody) {
   return fetcher({
     url: "assets",
     method: "POST",
+    body,
+  });
+}
+
+export async function putAsset(assetId: string, body: IAssetPutBody) {
+  return fetcher({
+    url: `assets/${assetId}`,
+    method: "PUT",
     body,
   });
 }
@@ -296,6 +304,10 @@ export async function postUserFollow(body: IUserFollowPostBody) {
 // projects
 export async function postProject(body: IProjectPostBody) {
   return fetcher({ url: "projects", method: "POST", body });
+}
+
+export async function putProject(projectId: string, body: IProjectPutBody) {
+  return fetcher({ url: `projects/${projectId}`, method: "PUT", body });
 }
 
 export async function deleteProject(projectId: string) {

@@ -101,12 +101,14 @@ public class AssetsController : Controller
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Assets.PUT_ASSET)]
-    public IActionResult UpdateAsset(string assetId)
+    public IActionResult UpdateAsset(string assetId, [FromBody, Required] PutAssetBody body)
     {
         var assetExists = _database.AssetExists(assetId);
         
         if (!assetExists)
             return NotFound(new ApiError("Asset", assetId));
+        
+        _database.UpdateAsset(assetId, body);
         
         return NoContent();
     }

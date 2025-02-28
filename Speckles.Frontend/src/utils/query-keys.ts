@@ -2,6 +2,7 @@
 export const ASSETS_QUERY_KEY = ["GET", "assets"];
 export const ASSET_QUERY_KEY = (assetId: string) => ["GET", "assets", assetId];
 export const ASSET_MUTATION_KEY = ["POST", "assets"];
+export const ASSET_UPDATE_KEY = (assetId: string) => ["PUT", "assets", assetId];
 export const ASSET_DELETE_KEY = (assetId: string) => [
   "DELETE",
   "assets",
@@ -140,6 +141,11 @@ export const AVATAR_QUERY_KEY = (userId: string) => ["GET", "avatar", userId];
 
 // projects
 export const PROJECT_MUTATION_KEY = ["POST", "projects"];
+export const PROJECT_UPDATE_KEY = (projectId: string) => [
+  "PUT",
+  "projects",
+  projectId,
+];
 export const PROJECT_DELETE_KEY = (projectId: string) => [
   "DELETE",
   "projects",

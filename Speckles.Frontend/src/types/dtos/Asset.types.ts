@@ -50,6 +50,18 @@ export interface IAssetPostBody {
   thumbnailId: string;
 }
 
+export interface IAssetPutBody {
+  name: string;
+  price: number;
+  description: string;
+  currencyId: string;
+  licenseId: string;
+  images: IImage[];
+  files: IFile[];
+  tags: ITagShort[];
+  thumbnailId: string;
+}
+
 export interface IAssetDeleteBody {
   assetId: string;
 }

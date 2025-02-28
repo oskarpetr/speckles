@@ -10,6 +10,7 @@ services:
       - "db_storage:/var/lib/postgresql/data/"
     ports:
       - "5432:5432"
+
   api:
     build:
       context: ./
@@ -20,6 +21,19 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - JWT_SECRET=${JWT_SECRET}
+  
+#  frontend:
+#    depends_on:
+#      - api
+#      - database
+#    restart: always
+#    build:
+#      context: ./
+#      dockerfile: ./Speckles.Frontend/Dockerfile
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      - NODE_ENV=production
 
 volumes:
   db_storage:

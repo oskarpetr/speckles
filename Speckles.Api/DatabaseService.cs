@@ -420,9 +420,91 @@ public class DatabaseService
         _database.SaveChanges();
     }
 
-    public void UpdateAsset()
+    public void UpdateAsset(string assetId, PutAssetBody body)
     {
+        var asset = _database.Assets.FirstOrDefault(x => x.AssetId == assetId);
         
+        if (body.name != null) asset!.Name = body.name;
+        if (body.price != null) asset!.Price = (decimal)body.price;
+        if (body.description != null) asset!.Description = body.description;
+        if (body.currencyId != null) asset!.CurrencyId = body.currencyId;
+        if (body.licenseId != null) asset!.LicenseId = body.licenseId;
+        
+        if (body.files != null)
+        {
+            var files = _database.Files.Where(x => x.AssetId == assetId).ToList();
+            _database.Files.RemoveRange(files);
+            
+            foreach (var file in body.files)
+            {
+                _database.Files.Add(new File()
+                {
+                    AssetId = assetId,
+                    FileId = file.fileId,
+                    Name = file.name,
+                    FileName = file.fileName,
+                    Size = file.size,
+                });
+            }
+        }
+
+        if (body.images != null)
+        {
+            var images = _database.Images.Where(x => x.AssetId == assetId).ToList();
+            _database.Images.RemoveRange(images);
+
+            foreach (var image in body.images)
+            {
+                _database.Images.Add(new Image()
+                {
+                    AssetId = assetId,
+                    ImageId = image.imageId,
+                    Alt = image.alt,
+                });
+            }
+        }
+
+        if (body.tags != null)
+        {
+            var tags = _database.AssetsTags.Where(x => x.AssetId == assetId).ToList();
+            _database.AssetsTags.RemoveRange(tags);
+            
+            foreach (var tag in body.tags)
+            {
+                var tagDb = _database.Tags.FirstOrDefault(x => x.Name.ToLower() == tag.name.ToLower());
+
+                if (tagDb != null)
+                {
+                    _database.AssetsTags.Add(new AssetTag()
+                    {
+                        AssetId = assetId,
+                        TagId = tagDb.TagId,
+                    });           
+                }
+                else
+                {
+                    _database.Tags.Add(new Tag()
+                    {
+                        TagId = tag.tagId,
+                        Name = tag.name
+                    });
+
+                    _database.SaveChanges();
+                    
+                    _database.AssetsTags.Add(new AssetTag()
+                    {
+                        AssetId = assetId,
+                        TagId = tag.tagId,
+                    });    
+                }
+            }
+        }
+        
+        _database.SaveChanges();
+        
+        if (body.thumbnailId != null) asset!.ThumbnailId = body.thumbnailId;
+
+        _database.SaveChanges();
     }
     
     public bool TagExists(string tagId)
@@ -851,9 +933,36 @@ public class DatabaseService
         _database.SaveChanges();
     }
 
-    public void UpdateProject()
+    public void UpdateProject(string projectId, PutProjectBody body)
     {
+        var project = _database.Projects.FirstOrDefault(x => x.ProjectId == projectId);
         
+        if (body.name != null) project!.Name = body.name;
+        if (body.description != null) project!.Description = body.description;
+        if (body.personal != null) project!.Personal = (bool)body.personal;
+        if (body.client != null) project!.Client = body.client;
+        
+        if (body.images != null)
+        {
+            var images = _database.Images.Where(x => x.ProjectId == projectId).ToList();
+            _database.Images.RemoveRange(images);
+            
+            foreach (var image in body.images)
+            {
+                _database.Images.Add(new Image()
+                {
+                    ProjectId = projectId,
+                    ImageId = image.imageId,
+                    Alt = image.alt,
+                });
+            }
+        }
+        
+        _database.SaveChanges();
+        
+        if (body.thumbnailId != null) project!.ThumbnailId = body.thumbnailId;
+        
+        _database.SaveChanges();
     }
 
     public void DeleteProject(string projectId)

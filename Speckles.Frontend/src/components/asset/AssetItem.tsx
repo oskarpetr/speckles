@@ -83,7 +83,7 @@ export default function AssetItem({
       />
 
       <EditAssetModal
-        asset={asset}
+        assetId={asset.assetId}
         open={openEditModal}
         setOpen={setOpenEditModal}
       />

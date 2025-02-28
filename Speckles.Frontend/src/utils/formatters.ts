@@ -6,7 +6,12 @@ import { ILicense } from "@/types/dtos/License.types";
 import { IAssetShort } from "@/types/dtos/Asset.types";
 import { IPayment } from "@/types/dtos/Payment.types";
 import useCurrencyStore from "@/stores/useCurrencyStore";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
+import { IImage } from "@/types/dtos/Image.types";
+import { fetchFileAsBase64 } from "./firebase/firebase-fns";
+import { getAssetFile, getAssetImage, getProjectImage } from "./images";
+import { IFile } from "@/types/dtos/File.types";
+import { Dispatch, SetStateAction } from "react";
 
 export function formatPrice(locale: string, currency: string, price: number) {
   // currency formatter
@@ -125,4 +130,69 @@ export const formatIntervalDateTooltip = (date: Date, timeInterval: string) => {
   } else if (timeInterval === "all time") {
     return format(date, "yyyy");
   }
+};
+
+// format asset images
+export const formatAssetImages = async (
+  assetId: string,
+  images: IImage[],
+  setImages: Dispatch<SetStateAction<IImage[]>>
+) => {
+  const i = await Promise.all(
+    images.map(async (image) => {
+      const base64 = await fetchFileAsBase64(
+        getAssetImage(assetId, image.imageId)
+      );
+
+      return {
+        ...image,
+        base64: base64 as string,
+      };
+    })
+  );
+
+  setImages(i);
+};
+
+// format images
+export const formatProjectImages = async (
+  projectId: string,
+  images: IImage[],
+  setImages: Dispatch<SetStateAction<IImage[]>>
+) => {
+  const i = await Promise.all(
+    images.map(async (image) => {
+      const base64 = await fetchFileAsBase64(
+        getProjectImage(projectId, image.imageId)
+      );
+
+      return {
+        ...image,
+        base64: base64 as string,
+      };
+    })
+  );
+
+  setImages(i);
+};
+
+export const formatFiles = async (
+  assetId: string,
+  files: IFile[],
+  setFiles: Dispatch<SetStateAction<IFile[]>>
+) => {
+  const f = await Promise.all(
+    files.map(async (file) => {
+      const base64 = await fetchFileAsBase64(
+        getAssetFile(assetId, file.fileId)
+      );
+
+      return {
+        ...file,
+        base64: base64 as string,
+      };
+    })
+  );
+
+  setFiles(f);
 };

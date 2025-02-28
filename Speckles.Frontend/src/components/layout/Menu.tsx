@@ -24,22 +24,14 @@ export default function Menu() {
     {
       link: `/profiles/${session?.user.username}`,
       text: "Profile",
-      icon: "User",
     },
     {
       link: "/studios",
       text: "My studios",
-      icon: "Acorn",
-    },
-    {
-      link: "/settings",
-      text: "Settings",
-      icon: "GearSix",
     },
     {
       onClick: signOut,
       text: "Log out",
-      icon: "SignOut",
     },
   ];
 
@@ -47,32 +39,22 @@ export default function Menu() {
     {
       link: `/profiles/${session?.user.username}`,
       text: "Profile",
-      icon: "User",
-    },
-    {
-      link: "/settings",
-      text: "Settings",
-      icon: "GearSix",
     },
     {
       link: "/orders",
       text: "Orders",
-      icon: "Package",
     },
     {
       link: "/saved",
       text: "Saved",
-      icon: "Heart",
     },
     {
       link: "/basket",
       text: "Basket",
-      icon: "Basket",
     },
     {
       onClick: signOut,
       text: "Log out",
-      icon: "SignOut",
     },
   ];
 

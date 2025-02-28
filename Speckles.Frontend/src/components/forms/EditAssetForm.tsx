@@ -1,6 +1,6 @@
 import { Formik, FormikProps, FormikValues } from "formik";
 import Input, { SelectOption } from "./Input";
-import { useAssetMutation } from "@/hooks/useApi";
+import { useAssetUpdate } from "@/hooks/useApi";
 import { useParams } from "next/navigation";
 import FormButtons, { goForward } from "./FormButtons";
 import {
@@ -8,19 +8,14 @@ import {
   assetSchemaStep2,
   assetSchemaStep3,
 } from "@/utils/forms/validationSchemas";
-import {
-  initialValuesAssetStep1,
-  initialValuesAssetStep2,
-  initialValuesAssetStep3,
-} from "@/utils/forms/initialValues";
 import { useEffect, useRef, useState } from "react";
 import FileSelector from "./FileSelector";
 import ImageSelector from "./ImageSelector";
 import { IImage } from "@/types/dtos/Image.types";
 import { IFile } from "@/types/dtos/File.types";
-import { IAssetPostBody } from "@/types/dtos/Asset.types";
-import { v4 as uuidv4 } from "uuid";
+import { IAsset, IAssetPostBody } from "@/types/dtos/Asset.types";
 import {
+  deleteAsset,
   getBase64FileSize,
   uploadAssetFiles,
   uploadAssetImages,
@@ -29,14 +24,17 @@ import FormError from "./FormError";
 import TagSelector from "./TagSelector";
 import { ITagShort } from "@/types/dtos/Tag.types";
 import UploadProgress from "../asset/UploadProgress";
+import { formatAssetImages, formatFiles } from "@/utils/formatters";
 
 interface Props {
+  asset: IAsset;
   onSuccess: () => void;
   currencies: SelectOption[];
   licenses: SelectOption[];
 }
 
-export default function AddAssetForm({
+export default function EditAssetForm({
+  asset,
   onSuccess,
   currencies,
   licenses,
@@ -48,8 +46,8 @@ export default function AddAssetForm({
   const [step, setStep] = useState(1);
   const maxSteps = 4;
 
-  // asset mutation
-  const assetMutation = useAssetMutation(slug as string);
+  // asset update
+  const assetUpdate = useAssetUpdate(slug as string, asset.assetId);
 
   // validation schemas
   const validationSchemas = [
@@ -61,17 +59,36 @@ export default function AddAssetForm({
 
   // initial values
   const initialValues = [
-    initialValuesAssetStep1,
-    initialValuesAssetStep2,
-    initialValuesAssetStep3,
+    {
+      name: asset.name,
+      description: asset.description,
+      price: asset.price,
+      currencyId: asset.currency.currencyId,
+      licenseId: asset.license.licenseId,
+    },
+    {
+      images: asset.images,
+      files: asset.files,
+      thumbnail: asset.thumbnail,
+    },
+    {
+      tags: asset.tags,
+    },
     {},
   ];
 
+  useEffect(() => {
+    formatAssetImages(asset.assetId, asset.images, setImages);
+    formatFiles(asset.assetId, asset.files, setFiles);
+  }, []);
+
   // images, files & tags
   const [images, setImages] = useState<IImage[]>([]);
-  const [thumbnailId, setThumbnailId] = useState<string | null>(null);
+  const [thumbnailId, setThumbnailId] = useState<string | null>(
+    asset.thumbnail.imageId
+  );
   const [files, setFiles] = useState<IFile[]>([]);
-  const [tags, setTags] = useState<ITagShort[]>([]);
+  const [tags, setTags] = useState<ITagShort[]>(asset.tags);
 
   // uploads
   const [percentageImage, setPercentageImage] = useState(0);
@@ -85,8 +102,6 @@ export default function AddAssetForm({
     goForward(step, setStep, maxSteps);
 
     if (step === maxSteps - 1) {
-      const assetId = uuidv4();
-
       const imagesWithoutBase64 = images.map((image) => ({
         ...image,
         base64: undefined,
@@ -96,19 +111,18 @@ export default function AddAssetForm({
         base64: undefined,
       }));
 
-      const asset: IAssetPostBody = {
+      const assetObj: IAssetPostBody = {
         ...values,
-        slug: slug as string,
-        assetId,
         images: imagesWithoutBase64,
         files: filesWithoutBase64,
         thumbnailId,
         tags,
       };
 
-      await assetMutation.mutateAsync(asset);
-      await uploadAssetImages(assetId, images, setPercentageImage);
-      await uploadAssetFiles(assetId, files, setPercentageFiles);
+      await assetUpdate.mutateAsync(assetObj);
+      await deleteAsset(asset.assetId);
+      await uploadAssetImages(asset.assetId, images, setPercentageImage);
+      await uploadAssetFiles(asset.assetId, files, setPercentageFiles);
 
       onSuccess();
     }
@@ -261,8 +275,8 @@ export default function AddAssetForm({
 
           {step !== maxSteps && (
             <FormButtons
-              loading={assetMutation.isPending}
-              buttonText="Create asset"
+              loading={assetUpdate.isPending}
+              buttonText="Update asset"
               maxSteps={maxSteps - 1}
               step={step}
               setStep={setStep}

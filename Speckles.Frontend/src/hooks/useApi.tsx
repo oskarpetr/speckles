@@ -1,7 +1,12 @@
 import { PAGINATION_LIMIT } from "@/components/shared/LoadMore";
 import { toastSuccess } from "@/components/shared/Toast";
 import { ApiCount, ApiResponse } from "@/types/ApiResponse.types";
-import { IAsset, IAssetShort, IAssetPostBody } from "@/types/dtos/Asset.types";
+import {
+  IAsset,
+  IAssetShort,
+  IAssetPostBody,
+  IAssetPutBody,
+} from "@/types/dtos/Asset.types";
 import { IRegisterPostBody } from "@/types/dtos/Auth.types";
 import { ICommentPostBody, ICommentPutBody } from "@/types/dtos/Comment.types";
 import { ICurrency } from "@/types/dtos/Currency.types";
@@ -10,7 +15,7 @@ import { IGeo } from "@/types/dtos/Geo.types";
 import { ILicense } from "@/types/dtos/License.types";
 import { IOrder, IOrderPostBody, IOrderShort } from "@/types/dtos/Order.types";
 import { IPayment } from "@/types/dtos/Payment.types";
-import { IProjectPostBody } from "@/types/dtos/Project.types";
+import { IProjectPostBody, IProjectPutBody } from "@/types/dtos/Project.types";
 import { IPromotion } from "@/types/dtos/Promotion.types";
 import { IRates } from "@/types/dtos/Rates.types";
 import { ISale } from "@/types/dtos/Sale.types";
@@ -63,6 +68,8 @@ import {
   postStudio,
   postStudioMember,
   postUserFollow,
+  putAsset,
+  putProject,
   putStudio,
   putUser,
   updateComment,
@@ -72,6 +79,7 @@ import {
   ASSET_DELETE_KEY,
   ASSET_MUTATION_KEY,
   ASSET_QUERY_KEY,
+  ASSET_UPDATE_KEY,
   ASSETS_QUERY_KEY,
   BASKET_COUNT_QUERY_KEY,
   BASKET_MUTATION_KEY,
@@ -90,6 +98,7 @@ import {
   PAYMENT_MUTATION_KEY,
   PROJECT_DELETE_KEY,
   PROJECT_MUTATION_KEY,
+  PROJECT_UPDATE_KEY,
   PROMOTION_QUERY_KEY,
   RATES_QUERY_KEY,
   REGISTER_MUTATION_KEY,
@@ -127,7 +136,7 @@ export function useAssetsQuery() {
 
 export function useAssetQuery(assetId: string) {
   // session
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const userId = session?.user.userId ?? "";
 
   // query
@@ -457,6 +466,25 @@ export function useAssetMutation(slug: string) {
   return assetMutation;
 }
 
+export function useAssetUpdate(slug: string, assetId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const updateAssetUpdate = useMutation({
+    mutationKey: ASSET_UPDATE_KEY(assetId),
+    mutationFn: (body: IAssetPutBody) => putAsset(assetId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ASSET_QUERY_KEY(slug),
+      });
+      toastSuccess(toastMessages.studio.updatedAsset);
+    },
+  });
+
+  return updateAssetUpdate;
+}
+
 export function useAssetDelete(slug: string, assetId: string) {
   // query client
   const queryClient = useQueryClient();
@@ -760,7 +788,26 @@ export function useProjectMutation(slug: string) {
   return projectMutation;
 }
 
-export function useProjectDelete(projectId: string) {
+export function useProjectUpdate(slug: string, projectId: string) {
+  // query client
+  const queryClient = useQueryClient();
+
+  // mutation
+  const projectUpdate = useMutation({
+    mutationKey: PROJECT_UPDATE_KEY(projectId),
+    mutationFn: (body: IProjectPutBody) => putProject(projectId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: STUDIO_QUERY_KEY(slug),
+      });
+      toastSuccess(toastMessages.studio.updatedProject);
+    },
+  });
+
+  return projectUpdate;
+}
+
+export function useProjectDelete(slug: string, projectId: string) {
   // query client
   const queryClient = useQueryClient();
 
@@ -770,7 +817,7 @@ export function useProjectDelete(projectId: string) {
     mutationFn: () => deleteProject(projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: STUDIO_QUERY_KEY(projectId),
+        queryKey: STUDIO_QUERY_KEY(slug),
       });
       toastSuccess(toastMessages.studio.removedProject);
     },

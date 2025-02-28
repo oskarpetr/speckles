@@ -20,3 +20,12 @@ export interface IProjectPostBody {
   images: string[];
   thumbnailId: string;
 }
+
+export interface IProjectPutBody {
+  name: string;
+  description: string;
+  personal: boolean;
+  client: string;
+  images: string[];
+  thumbnailId: string;
+}

@@ -1,33 +1,31 @@
 import { Formik, FormikProps, FormikValues } from "formik";
 import Input from "./Input";
-import { useParams } from "next/navigation";
 import FormButtons, { goForward } from "./FormButtons";
 import {
   projectSchemaStep1,
   projectSchemaStep2,
 } from "@/utils/forms/validationSchemas";
-import {
-  initialValuesProjectStep1,
-  initialValuesProjectStep2,
-} from "@/utils/forms/initialValues";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import ImageSelector from "./ImageSelector";
 import { IImage } from "@/types/dtos/Image.types";
-import { v4 as uuidv4 } from "uuid";
 import {
+  deleteProject,
   getBase64FileSize,
   uploadProjectImages,
 } from "@/utils/firebase/firebase-fns";
 import FormError from "./FormError";
 import UploadProgress from "../asset/UploadProgress";
-import { IProjectPostBody } from "@/types/dtos/Project.types";
-import { useProjectMutation } from "@/hooks/useApi";
+import { IProject, IProjectPutBody } from "@/types/dtos/Project.types";
+import { useProjectUpdate } from "@/hooks/useApi";
+import { formatProjectImages } from "@/utils/formatters";
+import { useParams } from "next/navigation";
 
 interface Props {
+  project: IProject;
   onSuccess: () => void;
 }
 
-export default function AddProjectForm({ onSuccess }: Props) {
+export default function EditProjectForm({ project, onSuccess }: Props) {
   // slug param
   const { slug } = useParams();
 
@@ -35,18 +33,34 @@ export default function AddProjectForm({ onSuccess }: Props) {
   const [step, setStep] = useState(1);
   const maxSteps = 3;
 
-  // project mutation
-  const projectMutation = useProjectMutation(slug as string);
+  // project update
+  const projectUpdate = useProjectUpdate(slug as string, project.projectId);
 
   // validation schemas
   const validationSchemas = [projectSchemaStep1, projectSchemaStep2];
 
   // initial values
-  const initialValues = [initialValuesProjectStep1, initialValuesProjectStep2];
+  const initialValues = [
+    {
+      name: project.name,
+      description: project.description,
+      personal: project.personal,
+      client: project.client,
+    },
+    {
+      images: project.images,
+    },
+  ];
+
+  useEffect(() => {
+    formatProjectImages(project.projectId, project.images, setImages);
+  }, []);
 
   // images
   const [images, setImages] = useState<IImage[]>([]);
-  const [thumbnailId, setThumbnailId] = useState<string | null>(null);
+  const [thumbnailId, setThumbnailId] = useState<string | null>(
+    project.thumbnail.imageId
+  );
 
   // uploads
   const [percentageImage, setPercentageImage] = useState(0);
@@ -59,23 +73,20 @@ export default function AddProjectForm({ onSuccess }: Props) {
     goForward(step, setStep, maxSteps);
 
     if (step === maxSteps - 1) {
-      const projectId = uuidv4();
-
       const imagesWithoutBase64 = images.map((image) => ({
         ...image,
         base64: undefined,
       }));
 
-      const project: IProjectPostBody = {
+      const projectObj: IProjectPutBody = {
         ...values,
-        slug: slug as string,
-        projectId,
         images: imagesWithoutBase64,
         thumbnailId,
       };
 
-      await projectMutation.mutateAsync(project);
-      await uploadProjectImages(projectId, images, setPercentageImage);
+      await projectUpdate.mutateAsync(projectObj);
+      await deleteProject(project.projectId);
+      await uploadProjectImages(project.projectId, images, setPercentageImage);
 
       onSuccess();
     }
@@ -119,7 +130,9 @@ export default function AddProjectForm({ onSuccess }: Props) {
           if (formikRef.current?.values.personal) {
             formikRef.current?.setFieldValue("client", "client");
           } else {
-            formikRef.current?.setFieldValue("client", "");
+            if (formikRef.current?.values.client === "client") {
+              formikRef.current.setFieldValue("client", "");
+            }
           }
         }, [formikRef.current?.values.personal]);
 
@@ -192,8 +205,8 @@ export default function AddProjectForm({ onSuccess }: Props) {
 
             {step !== maxSteps && (
               <FormButtons
-                loading={projectMutation.isPending}
-                buttonText="Create project"
+                loading={projectUpdate.isPending}
+                buttonText="Update project"
                 maxSteps={maxSteps - 1}
                 step={step}
                 setStep={setStep}

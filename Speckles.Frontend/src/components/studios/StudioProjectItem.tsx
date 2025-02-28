@@ -10,6 +10,8 @@ import { IMenuItem } from "@/types/MenuItem.types";
 import DeleteModal from "../modals/DeleteModal";
 import { useProjectDelete } from "@/hooks/useApi";
 import { deleteProject } from "@/utils/firebase/firebase-fns";
+import EditProjectModal from "../modals/EditProjectModal";
+import { useParams } from "next/navigation";
 
 interface Props {
   project: IProject;
@@ -17,6 +19,9 @@ interface Props {
 }
 
 export default function StudioProjectItem({ project, delay }: Props) {
+  // slug param
+  const { slug } = useParams();
+
   // active image state
   const [activeImage, setActiveImage] = useState(0);
 
@@ -24,7 +29,10 @@ export default function StudioProjectItem({ project, delay }: Props) {
   const [hovered, setHovered] = useState(false);
 
   // project delete
-  const projectDelete = useProjectDelete(project.projectId);
+  const projectDelete = useProjectDelete(slug as string, project.projectId);
+
+  // project edit modal
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   // project delete modal
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -33,7 +41,7 @@ export default function StudioProjectItem({ project, delay }: Props) {
   const menuItems: IMenuItem[] = [
     {
       text: "Edit project",
-      onClick: () => {},
+      onClick: () => setOpenEditModal(true),
     },
     {
       text: "Delete project",
@@ -107,6 +115,12 @@ export default function StudioProjectItem({ project, delay }: Props) {
             className="mt-20"
           />
         </div>
+
+        <EditProjectModal
+          project={project}
+          open={openEditModal}
+          setOpen={setOpenEditModal}
+        />
 
         <DeleteModal
           name={project.name}

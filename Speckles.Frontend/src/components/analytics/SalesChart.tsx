@@ -8,7 +8,6 @@ import {
   YAxis,
 } from "recharts";
 import { motion } from "framer-motion";
-import { formatDate } from "@/utils/formatters";
 import { ISale } from "@/types/dtos/Sale.types";
 
 interface Props {
@@ -18,7 +17,7 @@ interface Props {
 export default function SalesChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart width={800} height={150} data={data}>
+      <AreaChart width={650} height={150} data={data}>
         <XAxis
           dataKey="dateLabel"
           tickMargin={15}

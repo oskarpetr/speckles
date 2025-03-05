@@ -37,7 +37,7 @@ export default function Earnings({ slug }: Props) {
 
   return (
     studioEarningsQuery.isSuccess && (
-      <div className="flex items-center w-full bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
+      <div className="flex items-center w-1/2 bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
         <EarningsChart data={earningsChartData} />
 
         <div className="flex flex-col gap-6">

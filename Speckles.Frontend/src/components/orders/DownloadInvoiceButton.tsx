@@ -14,7 +14,7 @@ export default function DownloadInvoiceButton({ order }: Props) {
 
   // download invoice
   const downloadInvoice = async () => {
-    var options = {
+    const options = {
       margin: 0,
       filename: `Invoice for ${order.asset.name}.pdf`,
       image: { type: "jpeg", quality: 1 },

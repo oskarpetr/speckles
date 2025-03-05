@@ -32,7 +32,7 @@ export default function Sales({ slug }: Props) {
   const totalSales = salesFormatted.reduce((acc, curr) => acc + curr.sales, 0);
 
   return (
-    <div className="flex flex-col w-full p-8 gap-6 bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
+    <div className="flex flex-col w-1/2 p-8 gap-6 bg-neutral-100 border border-black-primary border-opacity-10 rounded-lg">
       <div className="flex justify-between">
         <div className="flex flex-col gap-1">
           <div>Sales Trend</div>

@@ -153,4 +153,6 @@ const Invoice = forwardRef<HTMLDivElement, Props>(({ order }, ref) => {
   );
 });
 
+Invoice.displayName = "Invoice";
+
 export default Invoice;

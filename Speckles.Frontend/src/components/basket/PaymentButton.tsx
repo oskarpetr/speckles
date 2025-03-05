@@ -114,12 +114,6 @@ export default function PaymentButton({
         onError={onError}
         disabled={status !== "authenticated"}
       />
-
-      <Button
-        text="Continue with PayPal"
-        icon={{ name: "ArrowRight" }}
-        fullWidth
-      />
     </PayPalScriptProvider>
   );
 }

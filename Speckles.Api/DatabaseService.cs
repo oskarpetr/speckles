@@ -617,7 +617,6 @@ public class DatabaseService
     public AssetDto GetAsset(string assetId, string? userId)
     {
         var asset = _database.Assets
-            .Include(x => x.CustomLicense)
             .Include(x => x.Thumbnail)
             .Include(x => x.Images)
             .Include(x => x.Currency)
@@ -688,14 +687,13 @@ public class DatabaseService
     {
         string[] assetIds = new string[]
         {
-            "87d14f19-69e7-4340-b80d-152e6006d178",
-            "dea96a97-8511-4782-b005-57b60f05b551",
-            "198fc68b-dc01-4158-9ab3-b1e84a259c73"
+            "3a7eb1e6-b2b3-4f6f-bf74-37743460b9da",
+            "c65df8e9-b67c-40b6-a871-2485baf2b7a0",
+            "bcbdfb4d-d736-425a-96d0-eb7455f72dca"
         };
     
         string[] paymentMethods = new string[]
         {
-            "Stripe",
             "PayPal"
         };
     

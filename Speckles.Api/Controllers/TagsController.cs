@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
 namespace Speckles.Api.Controllers;
@@ -24,8 +23,8 @@ public class TagsController : Controller
     /// <returns>Retrieves all assets in short form by tag id.</returns>
     /// <response code="200">Retrieves all assets in short form by tag id.</response>
     /// <response code="404">Tag was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<TagDto>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<TagDto>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Tags.GET_ASSETS)]
     public IActionResult GetAssetsByTag([FromRoute] string tagId, [FromQuery] int? limit, [FromQuery] int? offset)
     {
@@ -46,20 +45,5 @@ public class TagsController : Controller
         var response = new ApiResponse(tag, totalCount);
         
         return Ok(response);
-    }
-
-    /// <summary>
-    /// Creates tag.
-    /// </summary>
-    /// <remarks>
-    /// This endpoint creates a tag.
-    /// </remarks>
-    /// <returns>Creates tag.</returns>
-    /// <response code="201">Creates tag.</response>
-    [ProducesResponseType(201)]
-    [HttpPost(ApiEndpoints.Tags.POST_TAG)]
-    public IActionResult PostTag()
-    {
-        return Ok();
     }
 }

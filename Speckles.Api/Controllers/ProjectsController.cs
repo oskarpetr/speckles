@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.BodyModels;
-using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
 namespace Speckles.Api.Controllers;
@@ -25,7 +24,7 @@ public class ProjectsController : Controller
     /// </remarks>
     /// <returns>Creates project.</returns>
     /// <response code="201">Creates project.</response>
-    [ProducesResponseType(201)]
+    // [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Projects.POST_PROJECT)]
     public IActionResult CreateProject([FromBody, Required] PostProjectBody body)
     {
@@ -48,8 +47,8 @@ public class ProjectsController : Controller
     /// <returns>Updates project.</returns>
     /// <response code="204">Updates project.</response>
     /// <response code="404">Project was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Projects.PUT_PROJECT)]
     public IActionResult UpdateProject(string projectId, [FromBody, Required] PutProjectBody body)
     {
@@ -72,8 +71,8 @@ public class ProjectsController : Controller
     /// <returns>Deletes project.</returns>
     /// <response code="204">Deletes project.</response>
     /// <response code="404">Project was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Projects.DELETE_PROJECT)]
     public IActionResult DeleteProject(string projectId)
     {

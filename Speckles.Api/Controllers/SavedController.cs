@@ -30,8 +30,8 @@ public class SavedController : Controller
     /// <returns>Retrieves all saved assets in short form by user id.</returns>
     /// <response code="200">Retrieves all saved assets in short form by user id.</response>
     /// <response code="404">User was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Saved.GET_SAVED)]
     public IActionResult GetSaved([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
@@ -78,8 +78,8 @@ public class SavedController : Controller
     /// <returns>Creates saved asset for user id.</returns>
     /// <response code="201">Creates saved asset for user id.</response>
     /// <response code="404">User or asset was not found.</response>
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Saved.POST_SAVED)]
     public IActionResult PostSaved([FromQuery, Required] string userId, [FromBody] SavedBody savedBody)
     {

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.Lib;
 using Speckles.Database;
-using Speckles.Database.Tables;
 
 namespace Speckles.Api.Controllers;
 
@@ -24,7 +23,7 @@ public class PromotionsController : Controller
     /// </remarks>
     /// <returns>Retrieves promotion in default form</returns>
     /// <response code="200">Retrieves promotion in default form</response>
-    [ProducesResponseType(typeof(ApiResponse<Promotion>), 200)]
+    // [ProducesResponseType(typeof(ApiResponse<Promotion>), 200)]
     [HttpGet(ApiEndpoints.Promotions.GET_PROMOTION)]
     public IActionResult GetPromotion()
     {

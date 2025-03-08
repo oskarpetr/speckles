@@ -6,9 +6,6 @@ using Speckles.Api.Lib;
 
 namespace Speckles.Api.Controllers;
 
-/// <remarks>
-/// Manages operations related to assets.
-/// </remarks>
 [ApiController]
 [Route(ApiEndpoints.API_BASE)]
 public class AssetsController : Controller
@@ -28,7 +25,7 @@ public class AssetsController : Controller
     /// </remarks>
     /// <returns>Retrieves all assets in short form.</returns>
     /// <response code="200">Retrieves all assets in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSETS)]
     public IActionResult GetAssets([FromQuery] int? limit, [FromQuery] int? offset)
     {
@@ -47,8 +44,8 @@ public class AssetsController : Controller
     /// <returns>Retrieves asset in default form.</returns>
     /// <response code="200">Retrieves asset in default form.</response>
     /// <response code="404">Asset was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<AssetDto>>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<List<AssetDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Assets.GET_ASSET)]
     public IActionResult GetAsset(string assetId, [FromQuery] string? userId)
     {
@@ -80,7 +77,7 @@ public class AssetsController : Controller
     /// </remarks>
     /// <returns>Creates asset.</returns>
     /// <response code="201">Creates asset.</response>
-    [ProducesResponseType(201)]
+    // [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Assets.POST_ASSET)]
     public IActionResult CreateAsset([FromBody, Required] PostAssetBody body)
     {
@@ -98,8 +95,8 @@ public class AssetsController : Controller
     /// <returns>Updates asset.</returns>
     /// <response code="204">Updates asset.</response>
     /// <response code="404">Asset was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Assets.PUT_ASSET)]
     public IActionResult UpdateAsset(string assetId, [FromBody, Required] PutAssetBody body)
     {
@@ -122,8 +119,8 @@ public class AssetsController : Controller
     /// <returns>Deletes asset.</returns>
     /// <response code="204">Deletes asset.</response>
     /// <response code="404">Asset was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Assets.DELETE_ASSET)]
     public IActionResult DeleteAsset(string assetId)
     {

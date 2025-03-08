@@ -26,7 +26,7 @@ public class StudiosController : Controller
     /// </remarks>
     /// <returns>Retrieves all studios or user's studios in short form.</returns>
     /// <response code="200">Retrieves all studios or user's studios in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<StudioShortDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiResponse<List<StudioShortDto>>), 200)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIOS)]
     public IActionResult GetStudios([FromQuery] string? userId)
     {
@@ -55,8 +55,8 @@ public class StudiosController : Controller
     /// <returns>Retrieves studio in default form.</returns>
     /// <response code="200">Retrieves studio in default form.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<StudioDto>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<StudioDto>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIO)]
     public IActionResult GetStudio(string slug, [FromQuery] string? userId)
     {
@@ -79,7 +79,7 @@ public class StudiosController : Controller
     /// </remarks>
     /// <returns>Creates studio.</returns>
     /// <response code="201">Creates studio.</response>
-    [ProducesResponseType(201)]
+    // [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Studios.POST_STUDIO)]
     public IActionResult PostStudio([FromBody, Required] PostStudioBody body)
     {
@@ -98,8 +98,8 @@ public class StudiosController : Controller
     /// <returns>Updates studio.</returns>
     /// <response code="204">Updates studio.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Studios.PUT_STUDIO)]
     public IActionResult UpdateStudio(string slug, [FromBody, Required] PutStudioBody body)
     {
@@ -122,8 +122,8 @@ public class StudiosController : Controller
     /// <returns>Deletes studio.</returns>
     /// <response code="204">Deletes studio.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Studios.DELETE_STUDIO)]
     public IActionResult DeleteStudio(string slug)
     {
@@ -146,8 +146,8 @@ public class StudiosController : Controller
     /// <returns>Retrieves studio's earnings.</returns>
     /// <response code="200">Retrieves studio's earnings.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<EarningDto>>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<List<EarningDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIO_EARNINGS)]
     public IActionResult GetStudioEarnings(string slug, [FromQuery, Required] string timeInterval)
     {
@@ -209,8 +209,8 @@ public class StudiosController : Controller
     /// <returns>Retrieves studio's sales.</returns>
     /// <response code="200">Retrieves studio's sales.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<EarningDto>>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<List<EarningDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Studios.GET_STUDIO_SALES)]
     public IActionResult GetStudioSales(string slug, [FromQuery, Required] string timeInterval)
     {
@@ -301,8 +301,8 @@ public class StudiosController : Controller
     /// <returns>Creates studio member.</returns>
     /// <response code="201">Creates studio member.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Studios.POST_STUDIO_MEMBER)]
     public IActionResult CreateStudioMember(string slug, [FromBody, Required] PostStudioMemberBody body)
     {
@@ -325,8 +325,8 @@ public class StudiosController : Controller
     /// <returns>Deletes studio member.</returns>
     /// <response code="204">Deletes studio member.</response>
     /// <response code="404">Studio was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Studios.DELETE_STUDIO_MEMBER)]
     public IActionResult DeleteStudioMember(string slug, [FromBody, Required] DeleteStudioMemberBody body)
     {

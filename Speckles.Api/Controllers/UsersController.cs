@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Speckles.Api.BodyModels;
-using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
 namespace Speckles.Api.Controllers;
@@ -25,8 +24,8 @@ public class UsersController : Controller
     /// </remarks>
     /// <returns>Retrieves user in short form.</returns>
     /// <response code="200">Retrieves user in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<UserDto>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<UserDto>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Users.GET_USER)]
     public IActionResult GetUser([FromRoute] string username)
     {
@@ -49,7 +48,7 @@ public class UsersController : Controller
     /// </remarks>
     /// <returns>Updates user.</returns>
     /// <response code="200">Updates user.</response>
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Users.PUT_USER)]
     public IActionResult PutUser([FromRoute] string username, [FromBody, Required] PutUserBody body)
     {
@@ -71,7 +70,7 @@ public class UsersController : Controller
     /// </remarks>
     /// <returns>Deletes user.</returns>
     /// <response code="200">Deletes user.</response>
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Users.DELETE_USER)]
     public IActionResult DeleteUser([FromRoute] string username)
     {

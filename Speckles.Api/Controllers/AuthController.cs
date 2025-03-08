@@ -28,8 +28,8 @@ public class AuthController : Controller
     /// <returns>This endpoint creates a user.</returns>
     /// <response code="201">This endpoint creates a user.</response>
     /// <response code="409">User with that username or email already exists.</response>
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(ApiError), 409)]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(typeof(ApiError), 409)]
     [HttpPost(ApiEndpoints.Auth.REGISTER)]
     public IActionResult Register([FromBody] PostRegisterBody body)
     {
@@ -58,8 +58,8 @@ public class AuthController : Controller
     /// <returns>This endpoint validates a user.</returns>
     /// <response code="201">This endpoint validates a user.</response>
     /// <response code="401">User's email or password is incorrect.</response>
-    [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 201)]
-    [ProducesResponseType(typeof(ApiError), 401)]
+    // [ProducesResponseType(typeof(ApiResponse<UserShortDto>), 201)]
+    // [ProducesResponseType(typeof(ApiError), 401)]
     [HttpPost(ApiEndpoints.Auth.LOGIN)]
     public IActionResult Login([FromBody] PostLoginBody body)
     {

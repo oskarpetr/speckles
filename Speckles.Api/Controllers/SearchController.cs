@@ -27,7 +27,7 @@ public class SearchController : Controller
     /// </remarks>
     /// <returns>Retrieves all assets in short form.</returns>
     /// <response code="200">Retrieves all assets in short form.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<string>>), 200)]
+    // [ProducesResponseType(typeof(ApiResponse<List<string>>), 200)]
     [HttpGet(ApiEndpoints.Search.GET_SEARCH_PROMPTS)]
     public IActionResult GetSearchPrompts([FromQuery] string query, [FromQuery] int? limit)
     {

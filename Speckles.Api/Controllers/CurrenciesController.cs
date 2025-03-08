@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Speckles.Api.Dto;
 using Speckles.Api.Lib;
 
 namespace Speckles.Api.Controllers;
@@ -17,6 +14,15 @@ public class CurrenciesController : Controller
         _database = database;
     }
     
+    /// <summary>
+    /// Retrieves all currencies.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint retrieves a list of all currencies.
+    /// </remarks>
+    /// <returns>Retrieves all currencies.</returns>
+    /// <response code="200">Retrieves all currencies.</response>
+    // [ProducesResponseType(typeof(ApiResponse<List<Currency>>), 200)]
     [HttpGet(ApiEndpoints.Currencies.GET_CURRENCIES)]
     public IActionResult GetCurrencies()
     {

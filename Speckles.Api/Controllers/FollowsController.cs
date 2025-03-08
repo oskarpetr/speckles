@@ -25,8 +25,8 @@ public class FollowsController : Controller
     /// <returns>Creates user follow for user id.</returns>
     /// <response code="201">Creates user follow for user id.</response>
     /// <response code="404">User or studio was not found.</response>
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Follow.POST_FOLLOW)]
     public IActionResult PostFollow([FromBody, Required] PostFollowBody body)
     {

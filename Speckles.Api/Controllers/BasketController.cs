@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Speckles.Api.BodyModels;
 using Speckles.Api.Dto;
 using Speckles.Api.Lib;
-using Speckles.Database;
-using Speckles.Database.Tables;
 
 namespace Speckles.Api.Controllers;
 
@@ -30,8 +27,8 @@ public class BasketController : Controller
     /// <returns>Retrieves all basket assets in short form by user id.</returns>
     /// <response code="200">Retrieves all basket assets in short form by user id.</response>
     /// <response code="404">User was not found.</response>
-    [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(typeof(ApiResponse<List<AssetShortDto>>), 200)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpGet(ApiEndpoints.Basket.GET_BASKET)]
     public IActionResult GetBasket([FromQuery, Required] string userId, [FromQuery] string? format, [FromQuery] int? limit, [FromQuery] int? offset)
     {
@@ -67,8 +64,8 @@ public class BasketController : Controller
     /// <returns>Creates basket asset for user id.</returns>
     /// <response code="201">Creates basket asset for user id.</response>
     /// <response code="404">User or asset was not found.</response>
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Basket.POST_BASKET)]
     public IActionResult PostBasket([FromQuery, Required] string userId, [FromBody] PostBasketBody body)
     {

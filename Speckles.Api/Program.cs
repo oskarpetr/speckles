@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Speckles.Api;
+using Speckles.Api.Lib;
 using Speckles.Api.Mappings;
 using Speckles.Database;
 
@@ -72,7 +73,7 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact()
         {
             Name = "Speckles",
-            Email = "info@speckles.com",
+            Email = "info@speckles.store",
         },
         License = new OpenApiLicense()
         {
@@ -80,38 +81,6 @@ builder.Services.AddSwaggerGen(c =>
             Url = new Uri("https://speckles.store/license"),
         },
         Description = "The Speckles Developer API provides seamless access to the Speckles platform, empowering developers to integrate with our vibrant community of graphic designers and their high-quality digital products. Designed for flexibility and ease of use, the API enables e-commerce, design, and creative applications to interact directly with Speckles' rich catalog of premium assets, helping developers build personalized shopping experiences, integrate with third-party applications, and unlock new ways to support and monetize creative products."
-    });
-    
-    c.CustomSchemaIds(type =>
-    {
-        if (type.IsGenericType)
-        {
-            var genericTypeName = type.GetGenericTypeDefinition().Name;
-            var genericArguments = string.Join(",", type.GenericTypeArguments.Select(t => t.Name));
-            return $"{genericTypeName.TrimEnd('`')}<{genericArguments}>";
-        }
-
-        return type.Name;
-    });
-    
-    c.CustomSchemaIds(type =>
-    {   
-        // if (type == typeof(AssetDto)) return "Asset";
-        // if (type == typeof(CommentDto)) return "Comment";
-        // if (type == typeof(CustomLicenseDto)) return "CustomLicense";
-        // if (type == typeof(EarningDto)) return "Earning";
-        // if (type == typeof(FileDto)) return "File";
-        // if (type == typeof(ImageDto)) return "Image";
-        // if (type == typeof(OrderDto)) return "Order";
-        // if (type == typeof(ShortAssetDto)) return "ShortAsset";
-        // if (type == typeof(ShortMemberDto)) return "ShortMember";
-        // if (type == typeof(ShortOrderDto)) return "ShortOrder";
-        // if (type == typeof(ShortStudioDto)) return "ShortStudio";
-        // if (type == typeof(ShortTagDto)) return "ShortTag";
-        // if (type == typeof(StudioDto)) return "Studio";
-        // if (type == typeof(TagDto)) return "Tag";
-        
-        return type.Name;
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

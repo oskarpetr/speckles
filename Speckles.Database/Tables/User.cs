@@ -11,7 +11,6 @@ public class User
     public string Email { get; set; }
     
     public ICollection<Order> Purchases { get; set; }
-    public ICollection<Recommendation> Recommendations { get; set; }
     public ICollection<BasketAsset> BasketAssets { get; set; }
     public ICollection<SavedAsset> SavedAssets { get; set; }
     public ICollection<StudioMember> Studios { get; set; }

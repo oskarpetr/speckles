@@ -13,7 +13,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Currency> Currencies { get; set; }
-    public DbSet<CustomLicense> CustomLicenses { get; set; }
     public DbSet<File> Files { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<License> Licenses { get; set; }
@@ -21,7 +20,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
-    public DbSet<Recommendation> Recommendations { get; set; }
     public DbSet<SavedAsset> SavedAssets { get; set; }
     public DbSet<Studio> Studios { get; set; }
     public DbSet<StudioMember> StudioMembers { get; set; }

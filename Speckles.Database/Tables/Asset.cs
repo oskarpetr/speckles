@@ -11,7 +11,6 @@ public class Asset
     public string StudioId { get; set; }
     public virtual Studio Studio { get; set; }
     
-    public CustomLicense? CustomLicense { get; set; }
     public IEnumerable<Image> Images { get; set; } = new List<Image>();
     public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
     public IEnumerable<AssetTag> Tags { get; set; } = new List<AssetTag>();

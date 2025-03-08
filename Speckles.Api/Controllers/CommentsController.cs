@@ -24,7 +24,7 @@ public class CommentsController : Controller
     /// </remarks>
     /// <returns>Creates comment.</returns>
     /// <response code="201">Creates comment.</response>
-    [ProducesResponseType(201)]
+    // [ProducesResponseType(201)]
     [HttpPost(ApiEndpoints.Comments.POST_COMMENT)]
     public IActionResult CreateComment([FromBody, Required] PostCommentBody body)
     {
@@ -52,8 +52,8 @@ public class CommentsController : Controller
     /// <returns>Updates comment.</returns>
     /// <response code="204">Updates comment.</response>
     /// <response code="404">Comment was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPut(ApiEndpoints.Comments.PUT_COMMENT)]
     public IActionResult UpdateComment(string commentId, [FromBody, Required] PutCommentBody body)
     {
@@ -76,8 +76,8 @@ public class CommentsController : Controller
     /// <returns>Deletes comment.</returns>
     /// <response code="204">Deletes comment.</response>
     /// <response code="404">Comment was not found.</response>
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(204)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpDelete(ApiEndpoints.Comments.DELETE_COMMENT)]
     public IActionResult DeleteComment(string commentId)
     {
@@ -100,8 +100,8 @@ public class CommentsController : Controller
     /// <returns>Creates comment's like.</returns>
     /// <response code="201">Creates comment's like.</response>
     /// <response code="404">Comment was not found.</response>
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(ApiError), 404)]
+    // [ProducesResponseType(201)]
+    // [ProducesResponseType(typeof(ApiError), 404)]
     [HttpPost(ApiEndpoints.Comments.POST_LIKE)]
     public IActionResult CreateCommentLike([FromRoute] string commentId, [FromQuery] string userId)
     {

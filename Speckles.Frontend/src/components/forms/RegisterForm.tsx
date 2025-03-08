@@ -15,7 +15,6 @@ import {
   initialValuesRegisterStep3,
 } from "@/utils/forms/initialValues";
 import bcrypt from "bcryptjs-react";
-import { useSession } from "next-auth/react";
 import {
   getLocalBasket,
   getLocalFollowing,

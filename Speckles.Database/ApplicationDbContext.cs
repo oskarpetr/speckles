@@ -11,7 +11,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<AssetTag> AssetsTags { get; set; }
     public DbSet<BasketAsset> BasketAssets { get; set; }
     public DbSet<Comment> Comments { get; set; }
-    public DbSet<Country> Countries { get; set; }
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<File> Files { get; set; }
     public DbSet<Image> Images { get; set; }

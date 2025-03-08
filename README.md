@@ -4,9 +4,28 @@ A place for studios. This space is for graphic studios and freelance creators to
 
 ![Main image](https://github.com/user-attachments/assets/e9c1b39c-7cf5-48ea-9454-42abbbddc1ee)
 
+## List of technologies
+
+- Next.js
+- React.js
+- Typescript
+- Tailwind
+- ASP\.NET
+- REST API
+
+## Key features
+
+- Creating and selling assets
+- Having a place as a studio
+- Generating PDF invoices
+- User preferences
+- Currency conversion 
+- Studio analytics
+- 40+ API endpoints
+
 ## Database design
 
-![Database design](https://github.com/user-attachments/assets/4c13620d-2f8d-4193-a473-a8aff1a1403e)
+![Database design](https://github.com/user-attachments/assets/d89adda6-3252-4a74-9a38-452df1e62500)
 
 ## API endpoints
 
